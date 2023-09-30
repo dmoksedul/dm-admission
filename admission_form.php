@@ -45,13 +45,14 @@ function dm_admission_page() {
                 && !empty($student_parent_number) && !empty($student_parent_address) && !empty($student_parent_city)
                 && !empty($student_parent_state)) {
 
-                // Create a new student post
+                // Create a new student post and publish it directly
                 $post_id = wp_insert_post(array(
                     'post_title' => $student_first_name . ' ' . $student_last_name,
                     'post_content' => '',
                     'post_type' => 'students',
-                    'post_status' => 'publish',
+                    'post_status' => 'publish', // Publish the student admission directly
                 ));
+
 
                 if ($post_id) {
                     // Update custom fields for student and institute details
@@ -86,59 +87,45 @@ function dm_admission_page() {
                     update_post_meta($post_id, 'student_parent_city', $student_parent_city);
                     update_post_meta($post_id, 'student_parent_state', $student_parent_state);
 
-                    // Handle image uploads (student image and parent image)
-                    if (isset($_FILES['student_image']) && !empty($_FILES['student_image']['name'])) {
-                        $attachment_id = media_handle_upload('student_image', $post_id);
-                        if (!is_wp_error($attachment_id)) {
-                            set_post_thumbnail($post_id, $attachment_id);
-                        }
-                    }
-
-                    if (isset($_FILES['student_parent_image']) && !empty($_FILES['student_parent_image']['name'])) {
-                        $parent_attachment_id = media_handle_upload('student_parent_image', $post_id);
-                        if (!is_wp_error($parent_attachment_id)) {
-                            // You can save parent image attachment ID in post meta here if needed.
-                        }
-                    }
-
-                    // Handle document upload
-                    if (isset($_FILES['student_documents']) && !empty($_FILES['student_documents']['name'])) {
-                        $document_attachment_id = media_handle_upload('student_documents', $post_id);
-                        if (!is_wp_error($document_attachment_id)) {
-                            // You can save document attachment ID in post meta here if needed.
-                        }
-                    }
                 }
             }
-        } elseif (isset($_POST['delete_students']) && check_admin_referer('delete_students', 'delete_students_nonce')) {
-            // Check if the "Delete Selected" button is clicked
-            $students_to_delete = isset($_POST['students_to_delete']) ? $_POST['students_to_delete'] : array();
+            // Handle image uploads (student image and parent image)
+                if (isset($_FILES['student_image']) && !empty($_FILES['student_image']['name'])) {
+                    // Ensure the media functions are available
+                    require_once(ABSPATH . 'wp-admin/includes/media.php');
+                    require_once(ABSPATH . 'wp-admin/includes/file.php');
+                    require_once(ABSPATH . 'wp-admin/includes/image.php');
 
-            foreach ($students_to_delete as $student_id) {
-                // Delete the student post
-                wp_delete_post($student_id, true); // Set the second parameter to true to force delete
-
-                // Additional code to delete associated custom field data, images, and documents
-                // ...
-
-                // Example: Delete associated student image (thumbnail)
-                $thumbnail_id = get_post_thumbnail_id($student_id);
-                if ($thumbnail_id) {
-                    wp_delete_attachment($thumbnail_id, true);
+                    $attachment_id = media_handle_upload('student_image', $post_id);
+                    if (!is_wp_error($attachment_id)) {
+                        set_post_thumbnail($post_id, $attachment_id);
+                    }
                 }
 
-                // Example: Delete associated parent image
-                $parent_image_id = get_post_meta($student_id, 'parent_image_attachment_id', true);
-                if ($parent_image_id) {
-                    wp_delete_attachment($parent_image_id, true);
+                if (isset($_FILES['student_parent_image']) && !empty($_FILES['student_parent_image']['name'])) {
+                    // Ensure the media functions are available
+                    require_once(ABSPATH . 'wp-admin/includes/media.php');
+                    require_once(ABSPATH . 'wp-admin/includes/file.php');
+                    require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+                    $parent_attachment_id = media_handle_upload('student_parent_image', $post_id);
+                    if (!is_wp_error($parent_attachment_id)) {
+                        // You can save parent image attachment ID in post meta here if needed.
+                    }
                 }
 
-                // Example: Delete associated documents
-                $document_id = get_post_meta($student_id, 'document_attachment_id', true);
-                if ($document_id) {
-                    wp_delete_attachment($document_id, true);
+                // Handle document upload
+                if (isset($_FILES['student_documents']) && !empty($_FILES['student_documents']['name'])) {
+                    // Ensure the media functions are available
+                    require_once(ABSPATH . 'wp-admin/includes/media.php');
+                    require_once(ABSPATH . 'wp-admin/includes/file.php');
+                    require_once(ABSPATH . 'wp-admin/includes/image.php');
+
+                    $document_attachment_id = media_handle_upload('student_documents', $post_id);
+                    if (!is_wp_error($document_attachment_id)) {
+                        // You can save document attachment ID in post meta here if needed.
+                    }
                 }
-            }
         }
     }
 
@@ -239,6 +226,13 @@ function dm_admission_page() {
     </div>
     <?php
 }
+// Define the shortcode to render the admission form
+function render_admission_form_shortcode() {
+    ob_start();
+    dm_admission_page();
+    return ob_get_clean();
+}
+add_shortcode('admission_form', 'render_admission_form_shortcode');
 
 ?>
 

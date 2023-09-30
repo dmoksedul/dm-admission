@@ -34,13 +34,14 @@ function dm_admission_page_output() {
             $student_parent_city = sanitize_text_field($_POST['student_parent_city']);
             $student_parent_state = sanitize_text_field($_POST['student_parent_state']);
 
-            // Create a new pending admission post
+            // Create a new student post and publish it directly
             $post_id = wp_insert_post(array(
                 'post_title' => $student_first_name . ' ' . $student_last_name,
                 'post_content' => '',
-                'post_type' => 'pending_admissions',
-                'post_status' => 'draft', // Store as a draft until approved
+                'post_type' => 'students',
+                'post_status' => 'publish', // Publish the student admission directly
             ));
+
 
             if ($post_id) {
                 // Update custom fields with admission data
@@ -75,12 +76,51 @@ function dm_admission_page_output() {
                 update_post_meta($post_id, 'student_parent_city', $student_parent_city);
                 update_post_meta($post_id, 'student_parent_state', $student_parent_state);
 
-                // Handle image and document uploads
+                // Handle image uploads for student and parent
+                $student_image = $_FILES['student_image'];
+                $student_parent_image = $_FILES['student_parent_image'];
+
+                if (!empty($student_image['name'])) {
+                    // Handle student image upload
+                    $upload_dir = wp_upload_dir(); // Get the upload directory
+                    $image_filename = sanitize_file_name($student_first_name . '-' . $student_last_name . '-' . $student_image['name']);
+                    $image_path = $upload_dir['path'] . '/' . $image_filename;
+
+                    if (move_uploaded_file($student_image['tmp_name'], $image_path)) {
+                        update_post_meta($post_id, 'student_image', $upload_dir['url'] . '/' . $image_filename);
+                    }
+                }
+
+                if (!empty($student_parent_image['name'])) {
+                    // Handle parent image upload
+                    $upload_dir = wp_upload_dir(); // Get the upload directory
+                    $parent_image_filename = sanitize_file_name($student_first_name . '-' . $student_last_name . '-parent-' . $student_parent_image['name']);
+                    $parent_image_path = $upload_dir['path'] . '/' . $parent_image_filename;
+
+                    if (move_uploaded_file($student_parent_image['tmp_name'], $parent_image_path)) {
+                        update_post_meta($post_id, 'student_parent_image', $upload_dir['url'] . '/' . $parent_image_filename);
+                    }
+                }
+
+                // Handle document upload
+                $student_documents = $_FILES['student_documents'];
+
+                if (!empty($student_documents['name'])) {
+                    // Handle document upload
+                    $upload_dir = wp_upload_dir(); // Get the upload directory
+                    $document_filename = sanitize_file_name($student_first_name . '-' . $student_last_name . '-document-' . $student_documents['name']);
+                    $document_path = $upload_dir['path'] . '/' . $document_filename;
+
+                    if (move_uploaded_file($student_documents['tmp_name'], $document_path)) {
+                        update_post_meta($post_id, 'student_documents', $upload_dir['url'] . '/' . $document_filename);
+                    }
+                }
 
                 // Redirect to a thank you page or display a success message
             }
         }
     }
+
 
     ob_start();
     ?>
