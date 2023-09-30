@@ -45,12 +45,15 @@ function dm_admission_page() {
                 && !empty($student_parent_number) && !empty($student_parent_address) && !empty($student_parent_city)
                 && !empty($student_parent_state)) {
 
+                // Change the post status to 'pending'
+                $post_status = 'pending';
+
                 // Create a new student post and publish it directly
                 $post_id = wp_insert_post(array(
                     'post_title' => $student_first_name . ' ' . $student_last_name,
                     'post_content' => '',
                     'post_type' => 'students',
-                    'post_status' => 'publish', // Publish the student admission directly
+                    'post_status' => $post_status, // Publish the student admission directly
                 ));
 
 
@@ -89,7 +92,9 @@ function dm_admission_page() {
 
                 }
             }
-            // Handle image uploads (student image and parent image)
+                // Set the approval status to 'pending' for admin review
+                update_post_meta($post_id, 'approval_status', 'pending');
+                // Handle image uploads (student image and parent image)
                 if (isset($_FILES['student_image']) && !empty($_FILES['student_image']['name'])) {
                     // Ensure the media functions are available
                     require_once(ABSPATH . 'wp-admin/includes/media.php');
