@@ -14,6 +14,8 @@ function dm_admission_page() {
             $student_last_name = sanitize_text_field($_POST['student_last_name']);
             $student_gender = sanitize_text_field($_POST['student_gender']);
             $student_birthdate = sanitize_text_field($_POST['student_birthdate']);
+            $student_phone = sanitize_text_field($_POST['student_phone']);
+            $student_email = sanitize_text_field($_POST['student_email']);
             $student_blood_group = sanitize_text_field($_POST['student_blood_group']);
             $student_religion = sanitize_text_field($_POST['student_religion']);
             $student_nid = sanitize_text_field($_POST['student_nid']);
@@ -35,7 +37,7 @@ function dm_admission_page() {
 
             // Process and save data to the database
             if (!empty($institute_name) && !empty($class) && !empty($section) && !empty($admission_date) && !empty($category)
-                && !empty($student_first_name) && !empty($student_last_name) && !empty($student_gender) && !empty($student_birthdate)
+                && !empty($student_first_name) && !empty($student_last_name) && !empty($student_gender) && !empty($student_birthdate) && !empty($student_phone) && !empty($student_email)
                 && !empty($student_blood_group) && !empty($student_religion) && !empty($student_nid) && !empty($student_present_address)
                 && !empty($student_permanent_address) && !empty($student_city) && !empty($student_state)
                 && !empty($student_father_name) && !empty($student_mother_name) && !empty($student_parent_occupation)
@@ -62,6 +64,8 @@ function dm_admission_page() {
                     update_post_meta($post_id, 'student_first_name', $student_first_name);
                     update_post_meta($post_id, 'student_last_name', $student_last_name);
                     update_post_meta($post_id, 'student_gender', $student_gender);
+                    update_post_meta($post_id, 'student_phone', $student_phone);
+                    update_post_meta($post_id, 'student_email', $student_email);
                     update_post_meta($post_id, 'student_birthdate', $student_birthdate);
                     update_post_meta($post_id, 'student_blood_group', $student_blood_group);
                     update_post_meta($post_id, 'student_religion', $student_religion);
@@ -159,6 +163,7 @@ function dm_admission_page() {
                         <input readonly type="text" name="institute_name" value="<?php bloginfo( 'title' )  ?>" placeholder="Institute Name" required>
                         <input type="text" name="class" placeholder="Class" required>
                         <select name="section" id="" required placeholder="Select Section">
+                            <option>Select Section</option>
                             <option value="Group A">Group A</option>
                             <option value="Group B">Group B</option>
                             <option value="Group C">Group C</option>
@@ -166,6 +171,7 @@ function dm_admission_page() {
                         </select>
                         <input type="text" name="admission_date" placeholder="Admission Date" required value="<?php echo date('d-m-Y'); ?>">
                         <select name="category" id="" required placeholder="Select Category">
+                            <option>Select Category </option>
                             <option value="Science">Science</option>
                             <option value="Arts">Arts</option>
                             <option value="Commerce">Commerce</option>
@@ -178,16 +184,20 @@ function dm_admission_page() {
                         <input type="text" name="student_first_name" placeholder="First Name" required>
                         <input type="text" name="student_last_name" placeholder="Last Name" required>
                         <select name="student_gender" id="" required placeholder="Select Gender">
+                            <option>Select Gender</option>
                             <option value="Female">Female</option>
                             <option value="Male">Male</option>
                             <option value="Others">Others</option>
                         </select>
                         <input type="date" name="student_birthdate" placeholder="Birthday" required>
                         <select name="student_blood_group" id="" required placeholder="Select Blood Group">
+                            <option>Select Blood Group</option>
                             <option value="A+">A+</option>
                             <option value="B+">B+</option>
                             <option value="AB+">AB+</option>
                         </select>
+                        <input type="text" name="student_phone" placeholder="Student Phone Number" required>
+                        <input type="text" name="student_email" placeholder="Student Email" required>
                         <input type="text" name="student_religion" placeholder="Religion" required>
                         <input type="text" name="student_nid" placeholder="Birth Certificate or NID No" required>
                         <input type="text" name="student_present_address" placeholder="Present Address" required>

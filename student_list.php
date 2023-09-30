@@ -14,6 +14,8 @@ function dm_students_page() {
             $student_last_name = sanitize_text_field($_POST['student_last_name']);
             $student_gender = sanitize_text_field($_POST['student_gender']);
             $student_birthdate = sanitize_text_field($_POST['student_birthdate']);
+            $student_phone = sanitize_text_field($_POST['student_phone']);
+            $student_email = sanitize_text_field($_POST['student_email']);
             $student_blood_group = sanitize_text_field($_POST['student_blood_group']);
             $student_religion = sanitize_text_field($_POST['student_religion']);
             $student_nid = sanitize_text_field($_POST['student_nid']);
@@ -35,7 +37,7 @@ function dm_students_page() {
 
             // Process and save data to the database
             if (!empty($institute_name) && !empty($class) && !empty($section) && !empty($admission_date) && !empty($category)
-                && !empty($student_first_name) && !empty($student_last_name) && !empty($student_gender) && !empty($student_birthdate)
+                && !empty($student_first_name) && !empty($student_last_name) && !empty($student_gender) && !empty($student_birthdate) && !empty($student_phone) && !empty($student_email)
                 && !empty($student_blood_group) && !empty($student_religion) && !empty($student_nid) && !empty($student_present_address)
                 && !empty($student_permanent_address) && !empty($student_city) && !empty($student_state)
                 && !empty($student_father_name) && !empty($student_mother_name) && !empty($student_parent_occupation)
@@ -62,6 +64,8 @@ function dm_students_page() {
                     update_post_meta($post_id, 'student_first_name', $student_first_name);
                     update_post_meta($post_id, 'student_last_name', $student_last_name);
                     update_post_meta($post_id, 'student_gender', $student_gender);
+                    update_post_meta($post_id, 'student_phone', $student_phone);
+                    update_post_meta($post_id, 'student_email', $student_email);
                     update_post_meta($post_id, 'student_birthdate', $student_birthdate);
                     update_post_meta($post_id, 'student_blood_group', $student_blood_group);
                     update_post_meta($post_id, 'student_religion', $student_religion);
@@ -152,7 +156,8 @@ function dm_students_page() {
                             <th>Select</th>
                             <th>Serial Number</th>
                             <th>Student Name</th>
-                            <th>Admission Date</th>
+                            <th>Birthday</th>
+                            <th>Phone Number</th>
                             <th>Father's Name</th>
                             <th>Location</th>
                             <th>Image</th>
@@ -172,7 +177,8 @@ function dm_students_page() {
                             while ($student_query->have_posts()) : $student_query->the_post();
                                 $student_id = get_the_ID();
                                 $student_name = get_the_title();
-                                $admission_date = get_post_meta($student_id, 'admission_date', true);
+                                $student_birthdate = get_post_meta($student_id, 'student_birthdate', true);
+                                $student_phone = get_post_meta($student_id, 'student_phone', true);
                                 $father_name = get_post_meta($student_id, 'student_father_name', true);
                                 $location = get_post_meta($student_id, 'student_city', true);
                                 $student_image = get_the_post_thumbnail($student_id, 'thumbnail');
@@ -181,7 +187,8 @@ function dm_students_page() {
                                     <td><input type="checkbox" name="students_to_delete[]" value="<?php echo $student_id; ?>"></td>
                                     <td><?php echo $serial_number; ?></td>
                                     <td><?php echo $student_name; ?></td>
-                                    <td><?php echo $admission_date; ?></td>
+                                    <td><?php echo $student_birthdate; ?></td>
+                                    <td><?php echo $student_phone; ?></td>
                                     <td><?php echo $father_name; ?></td>
                                     <td><?php echo $location; ?></td>
                                     <td><?php echo $student_image; ?></td>

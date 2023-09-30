@@ -1,10 +1,6 @@
 <?php
 /*
-Plugin Name: Student Management Plugin
-Description: A WordPress plugin for managing students.
-Version: 1.0
-Author: Your Name
-*/
+
 
 // Register a custom post type for Students
 function create_dm_students_post_type() {
