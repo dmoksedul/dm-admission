@@ -241,42 +241,4 @@ add_shortcode('admission_form', 'render_admission_form_shortcode');
 
 ?>
 
-<style>
-    #dashboard_admission_form_box{
-        max-width:1200px;
-        margin:auto;
-    }
-form.upload_form_box {
-    background: transparent;
-}
-form.upload_form_box div div {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 25px;
-    margin-bottom: 25px;
-}
-div#dashboard_admission_form_box h3 {
-    font-size: 22px;
-    color: #08a88a;
-    font-weight: 600;
-}
-form.upload_form_box input {
-    font-size: 16px;
-    font-weight: 400;
-    border: 1px solid #0000002b;
-    border-radius: 2px;
-    padding: 5px 10px;
-    width:100%;
-}
-input#admission_submit_button {
-    width: auto;
-    margin: auto;
-}
-div#submit_btn_box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-top: 35px;
-}
-</style>
+
