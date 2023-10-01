@@ -74,6 +74,11 @@ function admission_form_shortcode() {
             $student_city = sanitize_text_field($_POST['student_city']);
             $student_state = sanitize_text_field($_POST['student_state']);
             $student_father_name = sanitize_text_field($_POST['student_father_name']);
+            $student_parent_relation = sanitize_text_field($_POST['student_parent_relation']);
+            $student_previous_institute_name = sanitize_text_field($_POST['student_previous_institute_name']);
+            $student_previous_institute_qualification = sanitize_text_field($_POST['student_previous_institute_qualification']);
+            $student_previous_institute_remarks = sanitize_text_field($_POST['student_previous_institute_remarks']);
+            $student_parent_name = sanitize_text_field($_POST['student_parent_name']);
             $student_mother_name = sanitize_text_field($_POST['student_mother_name']);
             $student_parent_occupation = sanitize_text_field($_POST['student_parent_occupation']);
             $student_parent_income = sanitize_text_field($_POST['student_parent_income']);
@@ -89,7 +94,7 @@ function admission_form_shortcode() {
                 && !empty($student_first_name) && !empty($student_last_name) && !empty($student_gender) && !empty($student_birthdate) && !empty($student_phone) && !empty($student_email)
                 && !empty($student_religion) && !empty($student_nid) && !empty($student_present_address)
                 && !empty($student_permanent_address) && !empty($student_city) && !empty($student_state)
-                && !empty($student_father_name) && !empty($student_mother_name) && !empty($student_parent_occupation)
+                && !empty($student_father_name) && !empty($student_previous_institute_name) && !empty($student_previous_institute_qualification) && !empty($student_previous_institute_remarks) && !empty($student_parent_name) && !empty($student_parent_relation) && !empty($student_mother_name) && !empty($student_parent_occupation)
                 && !empty($student_parent_income) && !empty($student_parent_education) && !empty($student_parent_email)
                 && !empty($student_parent_number) && !empty($student_parent_address) && !empty($student_parent_city)
                 && !empty($student_parent_state)) {
@@ -124,6 +129,11 @@ function admission_form_shortcode() {
                     update_post_meta($post_id, 'student_permanent_address', $student_permanent_address);
                     update_post_meta($post_id, 'student_city', $student_city);
                     update_post_meta($post_id, 'student_state', $student_state);
+                    update_post_meta($post_id, 'student_previous_institute_name', $student_previous_institute_name);
+                    update_post_meta($post_id, 'student_previous_institute_qualification', $student_previous_institute_qualification);
+                    update_post_meta($post_id, 'student_previous_institute_remarks', $student_previous_institute_remarks);
+                    update_post_meta($post_id, 'student_parent_name', $student_parent_name);
+                    update_post_meta($post_id, 'student_parent_relation', $student_parent_relation);
                     update_post_meta($post_id, 'student_father_name', $student_father_name);
                     update_post_meta($post_id, 'student_mother_name', $student_mother_name);
                     update_post_meta($post_id, 'student_parent_occupation', $student_parent_occupation);
@@ -184,7 +194,7 @@ function admission_form_shortcode() {
     ?>
     <div id="dashboard_admission_form_box">
         <div class="wrap">
-            <h2 style="text-align:center;margin:10px 0px;font-weight:bold; color: #08A88A">Student Admission</h2>
+            <h3 style="text-align:center;margin:10px 0px;font-weight:bold; color: #08A88A">New Admission</h3>
             <!-- List of Students for Admission -->
             <form class="admission_form_box" method="post" enctype="multipart/form-data">
                 <!-- Institute Details Section -->
@@ -239,8 +249,16 @@ function admission_form_shortcode() {
                     </div>
 
                     <!-- Student Parent Details Section -->
+                    <h3>Previous Institute Details</h3>
+                    <div class="student_previous_details_form">
+                        <input type="text" name="student_previous_institute_name" placeholder="Institute Name" required>
+                        <input type="text" name="student_previous_institute_qualification" placeholder="Qualification" required>
+                        <input type="text" name="student_previous_institute_remarks" placeholder="Remarks" required>
+                    </div>
                     <h3>Student Parent Details</h3>
                     <div class="student_parent_form">
+                        <input type="text" name="student_parent_name" placeholder="Guardian Name" required>
+                        <input type="text" name="student_parent_relation" placeholder="Relation" required>
                         <input type="text" name="student_father_name" placeholder="Father's Name" required>
                         <input type="text" name="student_mother_name" placeholder="Mother's Name" required>
                         <input type="text" name="student_parent_occupation" placeholder="Occupation" required>
