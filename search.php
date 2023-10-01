@@ -59,10 +59,10 @@ function student_search_shortcode() {
 
                     // Rest of the student information display code (e.g., name, class, etc.)
                     echo '<div class="student-photo">' . $student_photo . '</div>';
-                    echo '<h3 class="student_name">Name: ' . $student_name . '</h3>';
+                    echo '<h3 class="student_name">' . $student_name . '</h3>';
                     echo '<div class="student-info">';
                     echo '<p>Class: ' . $student_class . '</p>';
-                    echo '<p>Father\'s Name: ' . $father_name . '</p>';
+                    echo '<p>Father: ' . $father_name . '</p>';
                     echo '<p>Phone: ' . $student_phone . '</p>';
                     echo '<p>Date of Birth: ' . $student_birthdate . '</p>';
                     echo '</div>';
@@ -93,16 +93,93 @@ function student_search_shortcode() {
     if (!$matching_student_found || isset($_POST['show_search_form'])) {
         echo '<form id="search_form" method="post" action="">';
         echo '<div>';
-        echo '<label for="full_name">Full Name:</label>';
+        echo '<label for="full_name">Full Name: <span style="color:red">*</span></label>';
         echo '<input type="text" name="full_name" id="full_name" placeholder="Full Name" required />';
         echo '</div>';
         echo '<div>';
-        echo '<label for="birthdate">Birthdate:</label>';
+        echo '<label for="birthdate">Birthdate: <span style="color:red">*</span> </label>';
         echo '<input type="date" name="birthdate" id="birthdate" required />';
         echo '</div>';
-        echo '<input type="submit" value="Search" />';
+        echo '<input type="submit" value="Submit" />';
         echo '</form>';
     }
+    ?>
+    <style>
+        #id_card_box {
+            width: 300px;
+            margin: 20px auto;
+            border: 1px solid #0000000f;
+            box-shadow: 0 0 5px 0 #0000001f;
+            border-radius: 4px;
+            padding: 20px;
+            list-style: none;
+        }
+        .student-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        .student-info p {
+            line-height: 20px;
+        }
+        input[type="button"] {
+            margin: auto;
+            display: block;
+            background: #056839;
+            width: auto;
+            padding: 5px 30px;
+            padding-top: 7px;
+            color: #fff;
+            border: 1px solid #056839;
+            transition: all 0.5s;
+        }
+        input[type="button"]:hover{
+            color: #056839;
+            background: #fff;
+        }
+        #search_form {
+            border: 1px solid #0000001a;
+            padding: 25px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 4px;
+            box-shadow: 0 0 7px #00000017;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+        form#search_form div {
+            width: 100%;
+        }
+
+        form#search_form input {
+            width: 100%;
+            border: 1px solid #00000040;
+            padding: 5px 10px;
+            border-radius: 2px;
+        }
+        form#search_form input[type="submit"] {
+            background: #056839;
+            width: auto;
+            padding: 5px 30px;
+            padding-top: 7px;
+            color: #fff;
+            border: 1px solid #056839;
+            transition: all 0.5s;
+        }
+        form#search_form input[type="submit"]:hover{
+            background: #fff;
+            color: #056839;
+        }
+        form#search_form label{
+            000000d1
+        }
+    </style>
+    <?php
 
     return ob_get_clean();
 }

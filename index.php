@@ -194,98 +194,353 @@ function admission_form_shortcode() {
     ?>
     <div id="dashboard_admission_form_box">
         <div class="wrap">
-            <h3 style="text-align:center;margin:10px 0px;font-weight:bold; color: #08A88A">New Admission</h3>
+            <h3 style="text-align:left;margin:10px 0px;font-weight:600; border-bottom:2px solid #056839; display:inline-block; color: #056839">New Admission</h3>
             <!-- List of Students for Admission -->
             <form class="admission_form_box" method="post" enctype="multipart/form-data">
                 <!-- Institute Details Section -->
                 <div>
                     <h3>Institute Details</h3>
-                    <div class="institute_details_form">
-                        <input readonly type="text" name="institute_name" value="<?php bloginfo( 'title' )  ?>" placeholder="Institute Name" required>
-                        <input type="text" name="class" placeholder="Class" required>
-                        <select name="section" id="" required placeholder="Select Section">
-                            <option>Select Section</option>
-                            <option value="Group A">Group A</option>
-                            <option value="Group B">Group B</option>
-                            <option value="Group C">Group C</option>
-                            <option value="Group D">Group D</option>
-                        </select>
-                        <input type="text" name="admission_date" placeholder="Admission Date" required value="<?php echo date('d-m-Y'); ?>">
-                        <select name="category" id="" required placeholder="Select Category">
-                            <option>Select Category </option>
-                            <option value="Science">Science</option>
-                            <option value="Arts">Arts</option>
-                            <option value="Commerce">Commerce</option>
-                        </select>
+                    <div class="institute_details_form input_main_box">
+                        <div class="input_box">
+                            <label for="">Institute Name <span style="color:red">*</span> </label>
+                            <input readonly type="text" name="institute_name" value="<?php bloginfo( 'title' )  ?>"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Class <span style="color:red">*</span> </label>
+                            <input type="text" name="class"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Select Section <span style="color:red">*</span> </label>
+                            <select name="section" id="" required >
+                                <option>Select</option>
+                                <option value="Group A">Group A</option>
+                                <option value="Group B">Group B</option>
+                                <option value="Group C">Group C</option>
+                                <option value="Group D">Group D</option>
+                            </select>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Admission Date <span style="color:red">*</span> </label>
+                            <input type="text" name="admission_date"  required value="<?php echo date('d-m-Y'); ?>">
+                        </div>
+                        <div class="input_box">
+                            <label for="">Category <span style="color:red">*</span> </label>
+                            <select name="category" id="" required >
+                                <option>Select </option>
+                                <option value="Science">Science</option>
+                                <option value="Arts">Arts</option>
+                                <option value="Commerce">Commerce</option>
+                            </select>
+                        </div>
                     </div>
 
                     <!-- Student Details Section -->
                     <h3>Student Details</h3>
-                    <div class="student_details_form">
-                        <input type="text" name="student_first_name" placeholder="First Name" required>
-                        <input type="text" name="student_last_name" placeholder="Last Name" required>
-                        <select name="student_gender" id="" required placeholder="Select Gender">
-                            <option>Select Gender</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                            <option value="Others">Others</option>
-                        </select>
-                        <input type="date" name="student_birthdate" placeholder="Birthday" required>
-                        <select name="student_blood_group" id="" required placeholder="Select Blood Group">
-                            <option>Select Blood Group</option>
-                            <option value="A+">A+</option>
-                            <option value="B+">B+</option>
-                            <option value="AB+">AB+</option>
-                        </select>
-                        <input type="text" name="student_phone" placeholder="Student Phone Number" required>
-                        <input type="text" name="student_email" placeholder="Student Email" required>
-                        <input type="text" name="student_religion" placeholder="Religion" required>
-                        <input type="text" name="student_nid" placeholder="Birth Certificate or NID No" required>
-                        <input type="text" name="student_present_address" placeholder="Present Address" required>
-                        <input type="text" name="student_permanent_address" placeholder="Permanent Address" required>
-                        <input type="text" name="student_city" placeholder="City" required>
-                        <input type="text" name="student_state" placeholder="State" required>
-                        <input type="file" name="student_image" accept="image/*">
+                    <div class="student_details_form input_main_box">
+                        <div class="input_box">
+                            <label for="">First Name <span style="color:red">*</span> </label>
+                            <input type="text" name="student_first_name"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Last Name <span style="color:red">*</span> </label>
+                            <input type="text" name="student_last_name"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Gender <span style="color:red">*</span> </label>
+                            <select name="student_gender" id="" required >
+                                <option>Select </option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Birthday <span style="color:red">*</span> </label>
+                            <input type="date" name="student_birthdate"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Select Blood Group <span style="color:red">*</span> </label>
+                            <select name="student_blood_group" id="" required >
+                                <option>Select</option>
+                                <option value="A+">A+</option>
+                                <option value="B+">B+</option>
+                                <option value="AB+">AB+</option>
+                            </select>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Student Phone Number <span style="color:red">*</span> </label>
+                            <input type="text" name="student_phone"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Student Email <span style="color:red">*</span> </label>
+                            <input type="text" name="student_email"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Religion <span style="color:red">*</span> </label>
+                            <input type="text" name="student_religion"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Birth Certificate or NID No <span style="color:red">*</span> </label>
+                            <input type="text" name="student_nid"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Present Address <span style="color:red">*</span> </label>
+                            <input type="text" name="student_present_address"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Permanent Address <span style="color:red">*</span> </label>
+                            <input type="text" name="student_permanent_address"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">City <span style="color:red">*</span> </label>
+                            <input type="text" name="student_city"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">State <span style="color:red">*</span> </label>
+                            <input type="text" name="student_state"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Student Image <span style="color:red">*</span> </label>
+                            <div class="custom-file-input">
+                                <label for="browse-button" class="custom-file-label">Choose file...</label>
+                                <input style="width:100%;" type="file" name="student_image" id="file-input" class="hidden" required accept="image/*"/>
+                                <button type="button" id="browse-button" class="custom-browse-button">Browse</button>
+                            </div>
+                        </div>
+   
                     </div>
 
                     <!-- Student Parent Details Section -->
                     <h3>Previous Institute Details</h3>
-                    <div class="student_previous_details_form">
-                        <input type="text" name="student_previous_institute_name" placeholder="Institute Name" required>
-                        <input type="text" name="student_previous_institute_qualification" placeholder="Qualification" required>
-                        <input type="text" name="student_previous_institute_remarks" placeholder="Remarks" required>
+                    <div class="student_previous_details_form input_main_box">
+                        <div class="input_box">
+                            <label for="">Institute Name <span style="color:red">*</span> </label>
+                            <input type="text" name="student_previous_institute_name"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Qualification <span style="color:red">*</span> </label>
+                            <input type="text" name="student_previous_institute_qualification"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Remarks <span style="color:red">*</span> </label>
+                            <input type="text" name="student_previous_institute_remarks" required>
+                        </div>
                     </div>
                     <h3>Student Parent Details</h3>
-                    <div class="student_parent_form">
-                        <input type="text" name="student_parent_name" placeholder="Guardian Name" required>
-                        <input type="text" name="student_parent_relation" placeholder="Relation" required>
-                        <input type="text" name="student_father_name" placeholder="Father's Name" required>
-                        <input type="text" name="student_mother_name" placeholder="Mother's Name" required>
-                        <input type="text" name="student_parent_occupation" placeholder="Occupation" required>
-                        <input type="text" name="student_parent_income" placeholder="Income" required>
-                        <input type="text" name="student_parent_education" placeholder="Education" required>
-                        <input type="text" name="student_parent_email" placeholder="Guardian Email" required>
-                        <input type="text" name="student_parent_number" placeholder="Guardian Mobile No" required>
-                        <textarea type="text" name="student_parent_address" placeholder="Guardian Address" required></textarea>
-                        <input type="text" name="student_parent_city" placeholder="Guardian City" required>
-                        <input type="text" name="student_parent_state" placeholder="Guardian State" required>
-                        <input type="file" name="student_parent_image" accept="image/*">
+                    <div class="student_parent_form input_main_box">
+                        <div class="input_box">
+                            <label for="">Guardian Name <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_name" placeholder="Guardian Name" required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Relation <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_relation" placeholder="Relation" required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Father's Name <span style="color:red">*</span> </label>
+                            <input type="text" name="student_father_name" placeholder="Father's Name" required>
+                        </div>
+                        <div class="input_box">
+                        <label for="">Mother's Name <span style="color:red">*</span> </label>
+                            <input type="text" name="student_mother_name" placeholder="Mother's Name" required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Occupation <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_occupation" placeholder="Occupation" required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Income <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_income" placeholder="Income" required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Education <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_education" placeholder="Education" required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Guardian Email <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_email" placeholder="Guardian Email" required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Guardian Mobile No <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_number" placeholder="Guardian Mobile No" required>
+                        </div>
+                    </div>
+                    <div class="text_area_box">
+                        <label for="">Guardian Address <span style="color:red">*</span> </label>
+                        <textarea type="text" name="student_parent_address" required></textarea>
+                    </div>
+                    <div class="input_main_box">
+                        <div class="input_box">
+                            <label for="">Guardian City <span style="color:red">*</span> </label>
+                            <input type="text" name="student_parent_city"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Guardian State <span style="color:red">*</span> </label>
+                        <input type="text" name="student_parent_state"  required>
+                        </div>
+                        <div class="input_box">
+                            <label for="">Guardian Photo <span style="color:red">*</span> </label>
+                            
+                            <div class="custom-file-input">
+                                <label for="browse-button" class="custom-file-label">Choose file...</label>
+                                <input style="width:100%;" type="file" name="student_parent_image" id="file-input" class="hidden" required accept="image/*"/>
+                                <button type="button" id="browse-button" class="custom-browse-button">Browse</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div>
                     <!-- Upload Documents Section -->
-                <h3>Upload Documents</h3>
-                <input style="width:100%;" type="file" name="student_documents" placeholder="Add Documents" required>
+                   
+                <h3 style="margin-top:40px">Upload Documents</h3>
+                <label for="">Upload Documents <span style="color:red">*</span> </label>
+                <div class="custom-file-input">
+                    <label for="browse-button" class="custom-file-label">Choose file...</label>
+                    <input style="width:100%;" type="file" name="student_documents" id="file-input" class="hidden" required accept="image/*"/>
+                    <button type="button" id="browse-button" class="custom-browse-button">Browse</button>
+                </div>
                 </div>
                 
-
                 <div id="submit_btn_box">
                 <input id="admission_submit_button" type="submit" name="add_student" value="Add Student">
                 <?php wp_nonce_field('add_student', 'add_student_nonce'); ?>
                 </div>
+
             </form>
         </div>
     </div>
+    <style>
+        #dashboard_admission_form_box form{
+            padding:20px 20px;
+            border: 1px solid #0000001f;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        form.admission_form_box {
+            width: 100%;
+            padding: 5px;
+        }
+        form.admission_form_box label {
+            display: block;
+            font-size: 15px;
+            margin-bottom: 3px;
+            color: #080808d9;
+        }
+
+        #dashboard_admission_form_box form input, select, textarea {
+            width: 100%;
+            padding: 7px 12px;
+            border: 1px solid #0000002b;
+            border-radius: 2px;
+            font-size: 16px;
+            font-weight: 400;
+            outline: none !important;
+            color: #080808d9;
+        }
+        #dashboard_admission_form_box form select , input[type="file"]{
+            padding: 6px 12px;
+        }
+        .text_area_box{
+            margin:20px 0px;
+        }
+        form.admission_form_box .input_main_box {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+        }
+        @media screen and (max-width:992px){
+            form.admission_form_box .input_main_box {
+            grid-template-columns: 1fr 1fr;
+        }
+        }
+        @media screen and (max-width:768px){
+            form.admission_form_box .input_main_box {
+            grid-template-columns: 1fr;
+        }
+        }
+        form.admission_form_box h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #056839;
+            margin-top:40px;
+        }
+        form.admission_form_box h3:nth-child(1) {
+            margin-top: 0px;
+        }
+
+
+        /* Style the hidden file input */
+        .custom-file-input input.hidden {
+            display: none;
+        }
+        .custom-file-input {
+            width: 100%;
+            display: flex !important;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0px;
+            padding-left: 10px;
+        }
+        button#browse-button {
+            width: 100px;
+            display: inline;
+            padding: 8px;
+            font-size: 14px;
+            border: none;
+            outline: none !important;
+        }
+        .custom-file-input label {
+            background: transparent;
+            width: 100%;
+            cursor:pointer;
+            margin: 0px !important;
+        }
+        .custom-file-input {
+            border: 1px solid #0000002e;
+        }
+        button#browse-button {
+            width: 100px;
+            display: inline;
+            padding: 8px;
+            font-size: 14px;
+            border: none;
+            outline: none !important;
+            height: 100%;
+        }
+        .input_box {
+            display: block !important;
+        }
+        input#admission_submit_button {
+            display: block;
+            width: auto !important;
+            margin: auto;
+            margin-top: 25px;
+            background: #056839;
+            color: #fff !important;
+            padding: 7px 25px !important;
+            border: 2px solid #056839;
+            transition: all 0.5s;
+        }
+        input#admission_submit_button:hover{
+            background: #fff;
+            color: #056839 !important;
+        }
+    </style>
+    <script>
+        const fileInput = document.getElementById('file-input');
+const browseButton = document.getElementById('browse-button');
+
+browseButton.addEventListener('click', function () {
+    fileInput.click();
+});
+
+fileInput.addEventListener('change', function () {
+    const fileName = this.value.split('\\').pop(); // Get the selected file's name
+    document.querySelector('.custom-file-label').textContent = fileName;
+});
+
+    </script>
     <?php
     return ob_get_clean();
 }
