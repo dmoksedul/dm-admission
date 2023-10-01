@@ -231,14 +231,4 @@ function dm_admission_page() {
     </div>
     <?php
 }
-// Define the shortcode to render the admission form
-function render_admission_form_shortcode() {
-    ob_start();
-    dm_admission_page();
-    return ob_get_clean();
-}
-add_shortcode('admission_form', 'render_admission_form_shortcode');
-
-?>
-
 
