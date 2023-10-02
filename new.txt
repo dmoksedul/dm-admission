@@ -1,0 +1,553 @@
+<?php
+/*
+Plugin Name: Admission Form Plugin
+Description: A plugin to display an admission form and save data to the database.
+Version: 1.0
+Author: Your Name
+*/
+
+// Activation Hook
+function admission_form_plugin_activation() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'dm_students';
+
+    // SQL statement to create the table
+    $charset_collate = $wpdb->get_charset_collate();
+    $sql = "CREATE TABLE $table_name (
+        id INT NOT NULL AUTO_INCREMENT,
+        institute_name VARCHAR(255) NOT NULL,
+        class VARCHAR(255) NOT NULL,
+        section VARCHAR(255) NOT NULL,
+        admission_date DATE NOT NULL,
+        category VARCHAR(255) NOT NULL,
+        student_first_name VARCHAR(255) NOT NULL,
+        student_last_name VARCHAR(255) NOT NULL,
+        student_gender VARCHAR(20) NOT NULL,
+        student_birthdate DATE NOT NULL,
+        student_phone_number VARCHAR(20) NOT NULL,
+        student_email VARCHAR(255) NOT NULL,
+        student_religion VARCHAR(255) NOT NULL,
+        student_nid VARCHAR(255) NOT NULL,
+        student_present_address TEXT NOT NULL,
+        student_permanent_address TEXT NOT NULL,
+        student_city VARCHAR(255) NOT NULL,
+        student_state VARCHAR(255) NOT NULL,
+        student_previous_institute_name VARCHAR(255) NOT NULL,
+        student_previous_institute_qualification VARCHAR(255) NOT NULL,
+        student_previous_institute_remarks TEXT NOT NULL,
+        student_parent_name VARCHAR(255) NOT NULL,
+        student_parent_relation VARCHAR(255) NOT NULL,
+        student_father_name VARCHAR(255) NOT NULL,
+        student_mother_name VARCHAR(255) NOT NULL,
+        student_parent_occupation VARCHAR(255) NOT NULL,
+        student_parent_income VARCHAR(255) NOT NULL,
+        student_parent_education VARCHAR(255) NOT NULL,
+        student_parent_email VARCHAR(255) NOT NULL,
+        student_parent_number VARCHAR(20) NOT NULL,
+        student_parent_address TEXT NOT NULL,
+        student_parent_city VARCHAR(255) NOT NULL,
+        student_parent_state VARCHAR(255) NOT NULL,
+        student_image INT, /* Changed to INT to store attachment IDs */
+        student_documents INT, /* Changed to INT to store attachment IDs */
+        PRIMARY KEY (id)
+    ) $charset_collate;";
+
+    // Execute the SQL query to create the table
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+
+register_activation_hook(__FILE__, 'admission_form_plugin_activation');
+
+// Deactivation Hook
+function admission_form_plugin_deactivation() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'dm_students';
+
+    // SQL statement to delete the table
+    $sql = "DROP TABLE IF EXISTS $table_name;";
+    $wpdb->query($sql);
+}
+
+// Create the admission form
+function admission_form_page() {
+    if (isset($_POST['add_student'])) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'dm_students';
+
+        // Handle file uploads
+        $uploaded_image_id = 0;
+        $uploaded_document_id = 0;
+
+        if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
+            $uploaded_image_id = media_handle_upload('student_image', 0);
+        }
+
+        if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
+            $uploaded_document_id = media_handle_upload('student_documents', 0);
+        }
+
+        // Check for errors in file uploads
+        if (is_wp_error($uploaded_image_id)) {
+            // Handle the error, e.g., display an error message
+        }
+
+        if (is_wp_error($uploaded_document_id)) {
+            // Handle the error, e.g., display an error message
+        }
+
+        // Sanitize and validate form data here
+        $data = array(
+            'institute_name' => sanitize_text_field($_POST['institute_name']),
+            'class' => sanitize_text_field($_POST['class']),
+            'section' => sanitize_text_field($_POST['section']),
+            'admission_date' => sanitize_text_field($_POST['admission_date']),
+            'category' => sanitize_text_field($_POST['category']),
+            'student_first_name' => sanitize_text_field($_POST['student_first_name']),
+            'student_last_name' => sanitize_text_field($_POST['student_last_name']),
+            'student_gender' => sanitize_text_field($_POST['student_gender']),
+            'student_birthdate' => sanitize_text_field($_POST['student_birthdate']),
+            'student_phone_number' => sanitize_text_field($_POST['student_phone_number']),
+            'student_email' => sanitize_email($_POST['student_email']),
+            'student_religion' => sanitize_text_field($_POST['student_religion']),
+            'student_nid' => sanitize_text_field($_POST['student_nid']),
+            'student_present_address' => sanitize_textarea_field($_POST['student_present_address']),
+            'student_permanent_address' => sanitize_textarea_field($_POST['student_permanent_address']),
+            'student_city' => sanitize_text_field($_POST['student_city']),
+            'student_state' => sanitize_text_field($_POST['student_state']),
+            'student_previous_institute_name' => sanitize_text_field($_POST['student_previous_institute_name']),
+            'student_previous_institute_qualification' => sanitize_text_field($_POST['student_previous_institute_qualification']),
+            'student_previous_institute_remarks' => sanitize_textarea_field($_POST['student_previous_institute_remarks']),
+            'student_parent_name' => sanitize_text_field($_POST['student_parent_name']),
+            'student_parent_relation' => sanitize_text_field($_POST['student_parent_relation']),
+            'student_father_name' => sanitize_text_field($_POST['student_father_name']),
+            'student_mother_name' => sanitize_text_field($_POST['student_mother_name']),
+            'student_parent_occupation' => sanitize_text_field($_POST['student_parent_occupation']),
+            'student_parent_income' => sanitize_text_field($_POST['student_parent_income']),
+            'student_parent_education' => sanitize_text_field($_POST['student_parent_education']),
+            'student_parent_email' => sanitize_email($_POST['student_parent_email']),
+            'student_parent_number' => sanitize_text_field($_POST['student_parent_number']),
+            'student_parent_address' => sanitize_textarea_field($_POST['student_parent_address']),
+            'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
+            'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
+            'student_image' => $uploaded_image_id, /* Store attachment ID */
+            'student_documents' => $uploaded_document_id, /* Store attachment ID */
+        );
+
+        $wpdb->insert($table_name, $data);
+
+        // Add success message or redirection here if needed
+    }
+
+    // Display the content of your plugin's admin page here
+    echo '<div class="wrap">';
+    echo '<h2>Admission Form Plugin</h2>';
+    ?>
+    <form method="post" enctype="multipart/form-data">
+        <!-- Institute Name -->
+        <label for="institute_name">Institute Name:</label>
+        <input type="text" name="institute_name" id="institute_name" required>
+
+        <!-- Class -->
+        <label for="class">Class:</label>
+        <input type="text" name="class" id="class" required>
+
+        <!-- Section -->
+        <label for="section">Section:</label>
+        <input type="text" name="section" id="section" required>
+
+        <!-- Admission Date -->
+        <label for="admission_date">Admission Date:</label>
+        <input type="date" name="admission_date" id="admission_date" required>
+
+        <!-- Category -->
+        <label for="category">Category:</label>
+        <input type="text" name="category" id="category" required>
+
+        <!-- Student First Name -->
+        <label for="student_first_name">First Name:</label>
+        <input type="text" name="student_first_name" id="student_first_name" required>
+
+        <!-- Student Last Name -->
+        <label for="student_last_name">Last Name:</label>
+        <input type="text" name="student_last_name" id="student_last_name" required>
+
+        <!-- Student Gender -->
+        <label for="student_gender">Gender:</label>
+        <input type="radio" name="student_gender" id="male" value="Male" required> Male
+        <input type="radio" name="student_gender" id="female" value="Female" required> Female
+
+        <!-- Student Birthdate -->
+        <label for="student_birthdate">Birthdate:</label>
+        <input type="date" name="student_birthdate" id="student_birthdate" required>
+
+        <!-- Student Phone Number -->
+        <label for="student_phone_number">Phone Number:</label>
+        <input type="tel" name="student_phone_number" id="student_phone_number" required>
+
+        <!-- Student Email -->
+        <label for="student_email">Email:</label>
+        <input type="email" name="student_email" id="student_email" required>
+
+        <!-- Student Religion -->
+        <label for="student_religion">Religion:</label>
+        <input type="text" name="student_religion" id="student_religion" required>
+
+        <!-- Student National ID -->
+        <label for="student_nid">National ID:</label>
+        <input type="text" name="student_nid" id="student_nid" required>
+
+        <!-- Student Present Address -->
+        <label for="student_present_address">Present Address:</label>
+        <textarea name="student_present_address" id="student_present_address" rows="4" required></textarea>
+
+        <!-- Student Permanent Address -->
+        <label for="student_permanent_address">Permanent Address:</label>
+        <textarea name="student_permanent_address" id="student_permanent_address" rows="4" required></textarea>
+
+        <!-- Student City -->
+        <label for="student_city">City:</label>
+        <input type="text" name="student_city" id="student_city" required>
+
+        <!-- Student State -->
+        <label for="student_state">State:</label>
+        <input type="text" name="student_state" id="student_state" required>
+
+        <!-- Student Previous Institute Name -->
+        <label for="student_previous_institute_name">Previous Institute Name:</label>
+        <input type="text" name="student_previous_institute_name" id="student_previous_institute_name" required>
+
+        <!-- Student Previous Institute Qualification -->
+        <label for="student_previous_institute_qualification">Previous Institute Qualification:</label>
+        <input type="text" name="student_previous_institute_qualification" id="student_previous_institute_qualification" required>
+
+        <!-- Student Previous Institute Remarks -->
+        <label for="student_previous_institute_remarks">Previous Institute Remarks:</label>
+        <textarea name="student_previous_institute_remarks" id="student_previous_institute_remarks" rows="4" required></textarea>
+
+        <!-- Parent Name -->
+        <label for="student_parent_name">Parent Name:</label>
+        <input type="text" name="student_parent_name" id="student_parent_name" required>
+
+        <!-- Parent Relation -->
+        <label for="student_parent_relation">Parent Relation:</label>
+        <input type="text" name="student_parent_relation" id="student_parent_relation" required>
+
+        <!-- Father Name -->
+        <label for="student_father_name">Father Name:</label>
+        <input type="text" name="student_father_name" id="student_father_name" required>
+
+        <!-- Mother Name -->
+        <label for="student_mother_name">Mother Name:</label>
+        <input type="text" name="student_mother_name" id="student_mother_name" required>
+
+        <!-- Parent Occupation -->
+        <label for="student_parent_occupation">Parent Occupation:</label>
+        <input type="text" name="student_parent_occupation" id="student_parent_occupation" required>
+
+        <!-- Parent Income -->
+        <label for="student_parent_income">Parent Income:</label>
+        <input type="text" name="student_parent_income" id="student_parent_income" required>
+
+        <!-- Parent Education -->
+        <label for="student_parent_education">Parent Education:</label>
+        <input type="text" name="student_parent_education" id="student_parent_education" required>
+
+        <!-- Parent Email -->
+        <label for="student_parent_email">Parent Email:</label>
+        <input type="email" name="student_parent_email" id="student_parent_email" required>
+
+        <!-- Parent Phone Number -->
+        <label for="student_parent_number">Parent Phone Number:</label>
+        <input type="tel" name="student_parent_number" id="student_parent_number" required>
+
+        <!-- Parent Address -->
+        <label for="student_parent_address">Parent Address:</label>
+        <textarea name="student_parent_address" id="student_parent_address" rows="4" required></textarea>
+
+        <!-- Parent City -->
+        <label for="student_parent_city">Parent City:</label>
+        <input type="text" name="student_parent_city" id="student_parent_city" required>
+
+        <!-- Parent State -->
+        <label for="student_parent_state">Parent State:</label>
+        <input type="text" name="student_parent_state" id="student_parent_state" required>
+
+        <!-- Upload Student Image -->
+        <label for="student_image">Upload Student Image:</label>
+        <input type="file" name="student_image" id="student_image" accept="image/*">
+
+        <!-- Upload Student Documents -->
+        <label for="student_documents">Upload Student Documents:</label>
+        <input type="file" name="student_documents" id="student_documents" accept=".pdf,.doc,.docx">
+
+        <input type="submit" name="add_student" value="Add Student">
+    </form>
+    <?php
+    echo '</div>';
+}
+
+// Add a top-level menu page for your plugin
+function admission_form_plugin_menu() {
+    add_menu_page(
+        'Admission Form Plugin', // Page title
+        'Admission Form',        // Menu title
+        'manage_options',        // Capability required to access the menu
+        'admission-form',        // Menu slug (unique identifier)
+        'admission_form_page',   // Callback function to display the page content
+        'dashicons-id-alt'       // Icon for the menu (you can choose from dashicons)
+    );
+
+    // Add a submenu page for the student list
+    add_submenu_page(
+        'admission-form',       // Parent menu slug
+        'Student List',         // Page title
+        'Student List',         // Menu title
+        'manage_options',       // Capability required to access the menu
+        'student-list',         // Menu slug (unique identifier)
+        'display_student_list'  // Callback function to display the student list
+    );
+    // Add a submenu page for editing students
+    add_submenu_page(
+        'admission-form',
+        'Edit Student',
+        'Edit Student',
+        'manage_options',
+        'edit-student', // Sub-menu page slug
+        'edit_student_page' // Callback function for editing students
+    );
+
+}
+add_action('admin_menu', 'admission_form_plugin_menu');
+
+// Display the student list
+function display_student_list() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'dm_students';
+
+    // Retrieve student data from the database
+    $students = $wpdb->get_results("SELECT * FROM $table_name");
+
+    // Display the student list table
+    echo '<div class="wrap">';
+    echo '<h2>Student List</h2>';
+    echo '<table class="wp-list-table widefat fixed">';
+    echo '<thead><tr>';
+    echo '<th>List Number</th>';
+    echo '<th>Image</th>';
+    echo '<th>Name</th>';
+    echo '<th>Birthday</th>';
+    echo '<th>Phone Number</th>';
+    echo '<th>Parent Name</th>';
+    echo '<th>Location</th>';
+    echo '<th>Actions</th>'; // Add a new column for actions
+    echo '</tr></thead>';
+    echo '<tbody>';
+
+    $list_number = 1; // Initialize list number
+
+    foreach ($students as $student) {
+        // Get the student's first and last name
+        $student_name = $student->student_first_name . ' ' . $student->student_last_name;
+
+        // Get the student's location (city and state)
+        $location = $student->student_city . ', ' . $student->student_state;
+
+        echo '<tr>';
+        echo '<td>' . esc_html($list_number) . '</td>';
+        echo '<td><img src="' . esc_url(wp_get_attachment_image_url($student->student_image, 'thumbnail')) . '" alt="' . esc_attr($student_name) . '" width="50"></td>';
+        echo '<td>' . esc_html($student_name) . '</td>';
+        echo '<td>' . esc_html(date('F j, Y', strtotime($student->student_birthdate))) . '</td>';
+        echo '<td>' . esc_html($student->student_phone_number) . '</td>';
+        echo '<td>' . esc_html($student->student_parent_name) . '</td>';
+        echo '<td>' . esc_html($location) . '</td>';
+        echo '<td>';
+        echo '<a href="?page=edit-student&student_id=' . $student->id . '" class="button">Edit</a>'; // Edit link
+        echo '</td>';
+
+        echo '</tr>';
+
+        $list_number++; // Increment list number
+    }
+
+    echo '</tbody>';
+    echo '</table>';
+    echo '</div>';
+}
+
+function edit_student_page() {
+    if (isset($_GET['student_id'])) {
+        $student_id = intval($_GET['student_id']); // Get the student ID from the URL parameter
+
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'dm_students';
+
+        // Retrieve the specific student's data based on the student ID
+        $student = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $student_id));
+
+        if ($student) {
+            // Check if the form is submitted for updating student data
+            if (isset($_POST['update_student'])) {
+                // Sanitize and update student data in the database
+                $data = array(
+                    'institute_name' => sanitize_text_field($_POST['institute_name']),
+                    'class' => sanitize_text_field($_POST['class']),
+                    'section' => sanitize_text_field($_POST['section']),
+                    'admission_date' => sanitize_text_field($_POST['admission_date']),
+                    'category' => sanitize_text_field($_POST['category']),
+                    'student_first_name' => sanitize_text_field($_POST['student_first_name']),
+                    'student_last_name' => sanitize_text_field($_POST['student_last_name']),
+                    'student_gender' => sanitize_text_field($_POST['student_gender']),
+                    'student_birthdate' => sanitize_text_field($_POST['student_birthdate']),
+                    'student_phone_number' => sanitize_text_field($_POST['student_phone_number']),
+                    'student_email' => sanitize_email($_POST['student_email']),
+                    'student_religion' => sanitize_text_field($_POST['student_religion']),
+                    'student_nid' => sanitize_text_field($_POST['student_nid']),
+                    'student_present_address' => sanitize_textarea_field($_POST['student_present_address']),
+                    'student_permanent_address' => sanitize_textarea_field($_POST['student_permanent_address']),
+                    'student_city' => sanitize_text_field($_POST['student_city']),
+                    'student_state' => sanitize_text_field($_POST['student_state']),
+                    'student_previous_institute_name' => sanitize_text_field($_POST['student_previous_institute_name']),
+                    'student_previous_institute_qualification' => sanitize_text_field($_POST['student_previous_institute_qualification']),
+                    'student_previous_institute_remarks' => sanitize_textarea_field($_POST['student_previous_institute_remarks']),
+                    'student_parent_name' => sanitize_text_field($_POST['student_parent_name']),
+                    'student_parent_relation' => sanitize_text_field($_POST['student_parent_relation']),
+                    'student_father_name' => sanitize_text_field($_POST['student_father_name']),
+                    'student_mother_name' => sanitize_text_field($_POST['student_mother_name']),
+                    'student_parent_occupation' => sanitize_text_field($_POST['student_parent_occupation']),
+                    'student_parent_income' => sanitize_text_field($_POST['student_parent_income']),
+                    'student_parent_education' => sanitize_text_field($_POST['student_parent_education']),
+                    'student_parent_email' => sanitize_email($_POST['student_parent_email']),
+                    'student_parent_number' => sanitize_text_field($_POST['student_parent_number']),
+                    'student_parent_address' => sanitize_textarea_field($_POST['student_parent_address']),
+                    'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
+                    'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
+                );
+
+                // Update the student data in the database
+                $wpdb->update(
+                    $table_name,
+                    $data,
+                    array('id' => $student_id),
+                    $format = null,
+                    $where_format = null
+                );
+
+                echo '<div class="updated"><p>Student data updated successfully.</p></div>';
+            }
+
+            // Display the edit form with student data
+            echo '<div class="wrap">';
+            echo '<h2>Edit Student</h2>';
+            echo '<form method="post">';
+            
+            // Add form fields for all student data fields with current values
+            echo '<label for="institute_name">Institute Name:</label>';
+            echo '<input type="text" name="institute_name" id="institute_name" value="' . esc_attr($student->institute_name) . '" required>';
+            
+            echo '<label for="class">Class:</label>';
+            echo '<input type="text" name="class" id="class" value="' . esc_attr($student->class) . '" required>';
+
+            echo '<label for="section">Section:</label>';
+            echo '<input type="text" name="section" id="section" value="' . esc_attr($student->section) . '" required>';
+
+            echo '<label for="admission_date">Admission Date:</label>';
+            echo '<input type="date" name="admission_date" id="admission_date" value="' . esc_attr($student->admission_date) . '" required>';
+
+            echo '<label for="category">Category:</label>';
+            echo '<input type="text" name="category" id="category" value="' . esc_attr($student->category) . '" required>';
+
+            echo '<label for="student_first_name">First Name:</label>';
+            echo '<input type="text" name="student_first_name" id="student_first_name" value="' . esc_attr($student->student_first_name) . '" required>';
+
+            echo '<label for="student_last_name">Last Name:</label>';
+            echo '<input type="text" name="student_last_name" id="student_last_name" value="' . esc_attr($student->student_last_name) . '" required>';
+
+            echo '<label for="student_gender">Gender:</label>';
+            echo '<input type="radio" name="student_gender" id="male" value="Male" ' . ($student->student_gender === 'Male' ? 'checked' : '') . ' required> Male';
+            echo '<input type="radio" name="student_gender" id="female" value="Female" ' . ($student->student_gender === 'Female' ? 'checked' : '') . ' required>';
+
+            echo '<label for="student_birthdate">Birthdate:</label>';
+            echo '<input type="date" name="student_birthdate" id="student_birthdate" value="' . esc_attr($student->student_birthdate) . '" required>';
+
+            echo '<label for="student_phone_number">Phone Number:</label>';
+            echo '<input type="tel" name="student_phone_number" id="student_phone_number" value="' . esc_attr($student->student_phone_number) . '" required>';
+
+            echo '<label for="student_email">Email:</label>';
+            echo '<input type="email" name="student_email" id="student_email" value="' . esc_attr($student->student_email) . '" required>';
+
+            echo '<label for="student_religion">Religion:</label>';
+            echo '<input type="text" name="student_religion" id="student_religion" value="' . esc_attr($student->student_religion) . '" required>';
+
+            echo '<label for="student_nid">National ID:</label>';
+            echo '<input type="text" name="student_nid" id="student_nid" value="' . esc_attr($student->student_nid) . '" required>';
+
+            echo '<label for="student_present_address">Present Address:</label>';
+            echo '<textarea name="student_present_address" id="student_present_address" rows="4" required>' . esc_textarea($student->student_present_address) . '</textarea>';
+
+            echo '<label for="student_permanent_address">Permanent Address:</label>';
+            echo '<textarea name="student_permanent_address" id="student_permanent_address" rows="4" required>' . esc_textarea($student->student_permanent_address) . '</textarea>';
+
+            echo '<label for="student_city">City:</label>';
+            echo '<input type="text" name="student_city" id="student_city" value="' . esc_attr($student->student_city) . '" required>';
+
+            echo '<label for="student_state">State:</label>';
+            echo '<input type="text" name="student_state" id="student_state" value="' . esc_attr($student->student_state) . '" required>';
+
+            echo '<label for="student_previous_institute_name">Previous Institute Name:</label>';
+            echo '<input type="text" name="student_previous_institute_name" id="student_previous_institute_name" value="' . esc_attr($student->student_previous_institute_name) . '" required>';
+
+            echo '<label for="student_previous_institute_qualification">Previous Institute Qualification:</label>';
+            echo '<input type="text" name="student_previous_institute_qualification" id="student_previous_institute_qualification" value="' . esc_attr($student->student_previous_institute_qualification) . '" required>';
+
+            echo '<label for="student_previous_institute_remarks">Previous Institute Remarks:</label>';
+            echo '<textarea name="student_previous_institute_remarks" id="student_previous_institute_remarks" rows="4" required>' . esc_textarea($student->student_previous_institute_remarks) . '</textarea>';
+
+            echo '<label for="student_parent_name">Parent Name:</label>';
+            echo '<input type="text" name="student_parent_name" id="student_parent_name" value="' . esc_attr($student->student_parent_name) . '" required>';
+
+            echo '<label for="student_parent_relation">Parent Relation:</label>';
+            echo '<input type="text" name="student_parent_relation" id="student_parent_relation" value="' . esc_attr($student->student_parent_relation) . '" required>';
+
+            echo '<label for="student_father_name">Father Name:</label>';
+            echo '<input type="text" name="student_father_name" id="student_father_name" value="' . esc_attr($student->student_father_name) . '" required>';
+
+            echo '<label for="student_mother_name">Mother Name:</label>';
+            echo '<input type="text" name="student_mother_name" id="student_mother_name" value="' . esc_attr($student->student_mother_name) . '" required>';
+
+            echo '<label for="student_parent_occupation">Parent Occupation:</label>';
+            echo '<input type="text" name="student_parent_occupation" id="student_parent_occupation" value="' . esc_attr($student->student_parent_occupation) . '" required>';
+
+            echo '<label for="student_parent_income">Parent Income:</label>';
+            echo '<input type="text" name="student_parent_income" id="student_parent_income" value="' . esc_attr($student->student_parent_income) . '" required>';
+
+            echo '<label for="student_parent_education">Parent Education:</label>';
+            echo '<input type="text" name="student_parent_education" id="student_parent_education" value="' . esc_attr($student->student_parent_education) . '" required>';
+
+            echo '<label for="student_parent_email">Parent Email:</label>';
+            echo '<input type="email" name="student_parent_email" id="student_parent_email" value="' . esc_attr($student->student_parent_email) . '" required>';
+
+            echo '<label for="student_parent_number">Parent Phone Number:</label>';
+            echo '<input type="tel" name="student_parent_number" id="student_parent_number" value="' . esc_attr($student->student_parent_number) . '" required>';
+
+            echo '<label for="student_parent_address">Parent Address:</label>';
+            echo '<textarea name="student_parent_address" id="student_parent_address" rows="4" required>' . esc_textarea($student->student_parent_address) . '</textarea>';
+
+            echo '<label for="student_parent_city">Parent City:</label>';
+            echo '<input type="text" name="student_parent_city" id="student_parent_city" value="' . esc_attr($student->student_parent_city) . '" required>';
+
+            echo '<label for="student_parent_state">Parent State:</label>';
+            echo '<input type="text" name="student_parent_state" id="student_parent_state" value="' . esc_attr($student->student_parent_state) . '" required>';
+
+            // Add a submit button for updating the student data
+            echo '<input type="submit" name="update_student" value="Update Student">';
+            echo '</form>';
+            echo '</div>';
+        } else {
+            echo '<div class="error"><p>Student not found.</p></div>';
+        }
+    } else {
+        echo '<div class="error"><p>Invalid request. Student ID not provided.</p></div>';
+    }
+}
+
