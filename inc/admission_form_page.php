@@ -341,13 +341,15 @@ function admission_form_page() {
                         <label for="student_parent_state">Parent State:</label>
                         <input type="text" name="student_parent_state" id="student_parent_state" required>
                     </div>
+                    
+                </div>
+                <div class="parent_img_sub_box">
                     <!-- Upload Student Image -->
                     <div class="input_box">
-                        <label for="student_parent_image">Upload Student Image:</label>
-                        <input type="file" name="studstudent_parent_imageent_image" id="student_parent_image" accept="image/*">
+                        <label for="student_parent_image">Upload Parent Image:</label>
+                        <input type="file" name="student_parent_image" id="student_parent_image" accept="image/*">
                     </div>
                 </div>
-
                 <!-- Upload Document -->
                 <h3>Upload Document:</h3>
                 <div class="document_box">
