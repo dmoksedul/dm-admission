@@ -15,8 +15,8 @@ function display_student_list() {
     echo '<h2>Student List</h2>';
     echo '<table class="wp-list-table widefat fixed">';
     echo '<thead><tr>';
-    echo '<th>List Number</th>';
-    echo '<th>Image</th>';
+    echo '<th style="width:50px">No</th>';
+    echo '<th style="width:90px">Image</th>';
     echo '<th>Name</th>';
     echo '<th>Birthday</th>';
     echo '<th>Phone Number</th>';

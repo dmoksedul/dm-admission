@@ -16,7 +16,6 @@ function export_student_list_csv() {
     foreach ($students as $student) {
         // Prepare student data for CSV
         $student_data = array(
-            $student->id,
             $student->institute_name,
             $student->class,
             $student->section,
