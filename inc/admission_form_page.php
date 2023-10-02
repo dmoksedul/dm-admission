@@ -74,146 +74,372 @@ function admission_form_page() {
     echo '<div class="wrap">';
     echo '<h2>Admission Form </h2>';
     ?>
-    <form method="post" enctype="multipart/form-data">
-        <!-- Institute Name -->
-        <label for="institute_name">Institute Name:</label>
-        <input type="text" name="institute_name" id="institute_name" required>
+        <form id="student_admission_form" method="post" enctype="multipart/form-data">
+            
+            <div class="admission_form_box">
+                <h3><i class="fas fa-school"></i> Institute Details:</h3>
+                <div class="form_details_box insitute_box">
+                    <div class="input_box">
+                        <!-- Institute Name -->
+                        <label for="institute_name">Institute Name:</label>
+                        <input value="<?php print bloginfo( 'title' ) ?>" readonly type="text" name="institute_name" id="institute_name" required>
+                    </div>
 
-        <!-- Class -->
-        <label for="class">Class:</label>
-        <input type="text" name="class" id="class" required>
+                    <div class="input_box">
+                        <!-- Class -->
+                        <label for="class">Class:</label>
+                        <select name="class" id="class" required>
+                            <option disabled value="" selected>Select</option>
+                            <option value="One">One</option>
+                            <option value="Two">Two</option>
+                            <option value="Three">Three</option>
+                            <option value="Four">Four</option>
+                            <option value="Five">Five</option>
+                            <option value="Six">Six</option>
+                            <option value="Seven">Seven</option>
+                            <option value="Eight">Eight</option>
+                            <option value="Nine">Nine</option>
+                            <option value="SSC">SSC</option>
+                            <option value="HSC 1st Year">HSC 1st Year</option>
+                            <option value="HSC 2nd Year">HSC 2nd Year</option>
+                            <option value="Degree">Degree</option>
+                            <option value="Honours">Honours</option>
+                            <option value="Masters">Masters</option>
+                        </select>
+                    </div>
 
-        <!-- Section -->
-        <label for="section">Section:</label>
-        <input type="text" name="section" id="section" required>
+                    <div class="input_box">
+                        <!-- Section -->
+                        <label for="section">Section:</label>
+                        <select name="section" id="section" required>
+                            <option value="" disabled value="" selected>Select</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                        </select>
+                    </div>
 
-        <!-- Admission Date -->
-        <label for="admission_date">Admission Date:</label>
-        <input type="date" name="admission_date" id="admission_date" required>
+                    <div class="input_box">
+                        <!-- Admission Date -->
+                        <label for="admission_date">Admission Date:</label>
+                        <input value="<?php echo date('Y-m-d'); ?>" type="date" name="admission_date" id="admission_date" required>
+                    </div>
 
-        <!-- Category -->
-        <label for="category">Category:</label>
-        <input type="text" name="category" id="category" required>
+                    <div class="input_box">
+                        <!-- Category -->
+                        <label for="category">Category:</label>
+                        <select name="category" id="category" required>
+                            <option value="" disabled value="" selected>Select</option>
+                            <option value="General">General</option>
+                            <option value="Science">Science</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Commerce">Commerce</option>
+                        </select>
+                    </div>
+                </div>
 
-        <!-- Student First Name -->
-        <label for="student_first_name">First Name:</label>
-        <input type="text" name="student_first_name" id="student_first_name" required>
+                <!-- student details area -->
+                <h3>Student Details:</h3>
+                <div class="form_details_box student_details_box">
+                    <div class="input_box">
+                        <!-- Student First Name -->
+                        <label for="student_first_name">First Name:</label>
+                        <input type="text" name="student_first_name" id="student_first_name" required>
+                    </div>
 
-        <!-- Student Last Name -->
-        <label for="student_last_name">Last Name:</label>
-        <input type="text" name="student_last_name" id="student_last_name" required>
+                    <div class="input_box">
+                        <!-- Student Last Name -->
+                        <label for="student_last_name">Last Name:</label>
+                        <input type="text" name="student_last_name" id="student_last_name" required>
+                    </div>
 
-        <!-- Student Gender -->
-        <label for="student_gender">Gender:</label>
-        <input type="radio" name="student_gender" id="male" value="Male" required> Male
-        <input type="radio" name="student_gender" id="female" value="Female" required> Female
+                    <div class="input_box">
+                        <!-- Student Gender -->
+                        <label for="student_gender">Gender:</label>
+                        <select name="student_gender" id="">
+                            <option value="" disabled value="" selected>Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Female">Others</option>
+                        </select>
+                    </div>
 
-        <!-- Student Birthdate -->
-        <label for="student_birthdate">Birthdate:</label>
-        <input type="date" name="student_birthdate" id="student_birthdate" required>
+                    <!-- Student Birthdate -->
+                    <div class="input_box">
+                        <label for="student_birthdate">Birthdate:</label>
+                        <input type="date" name="student_birthdate" id="student_birthdate" required>
+                    </div>
 
-        <!-- Student Phone Number -->
-        <label for="student_phone_number">Phone Number:</label>
-        <input type="tel" name="student_phone_number" id="student_phone_number" required>
+                    <!-- Student Phone Number -->
+                    <div class="input_box">
+                        <label for="student_phone_number">Phone Number:</label>
+                        <input type="tel" name="student_phone_number" id="student_phone_number" required>
+                    </div>
 
-        <!-- Student Email -->
-        <label for="student_email">Email:</label>
-        <input type="email" name="student_email" id="student_email" required>
+                    <!-- Student Email -->
+                    <div class="input_box">
+                        <label for="student_email">Email:</label>
+                        <input type="email" name="student_email" id="student_email" required>
+                    </div>
 
-        <!-- Student Religion -->
-        <label for="student_religion">Religion:</label>
-        <input type="text" name="student_religion" id="student_religion" required>
+                    <!-- Student Religion -->
+                    <div class="input_box">
+                        <label for="student_religion">Religion:</label>
+                        <input type="text" name="student_religion" id="student_religion" required>
+                    </div>
 
-        <!-- Student National ID -->
-        <label for="student_nid">National ID:</label>
-        <input type="text" name="student_nid" id="student_nid" required>
+                    <!-- Student National ID -->
+                    <div class="input_box">
+                        <label for="student_nid">National ID:</label>
+                        <input type="text" name="student_nid" id="student_nid" required>
+                    </div>
+                </div>
+                <div class="address_box">
+                        <!-- Student Present Address -->
+                        <div class="input_box">
+                            <label for="student_present_address">Present Address:</label>
+                            <textarea name="student_present_address" id="student_present_address" rows="4" required></textarea>
+                        </div>
 
-        <!-- Student Present Address -->
-        <label for="student_present_address">Present Address:</label>
-        <textarea name="student_present_address" id="student_present_address" rows="4" required></textarea>
+                        <!-- Student Permanent Address -->
+                        <div class="input_box">
+                            <label for="student_permanent_address">Permanent Address:</label>
+                            <textarea name="student_permanent_address" id="student_permanent_address" rows="4" required></textarea>
+                        </div>
+                    </div>
+                <div class="form_details_box student_details_box">
+                    <!-- Student City -->
+                    <div class="input_box">
+                        <label for="student_city">City:</label>
+                        <input type="text" name="student_city" id="student_city" required>
+                    </div>
 
-        <!-- Student Permanent Address -->
-        <label for="student_permanent_address">Permanent Address:</label>
-        <textarea name="student_permanent_address" id="student_permanent_address" rows="4" required></textarea>
+                    <!-- Student State -->
+                    <div class="input_box">
+                        <label for="student_state">State:</label>
+                        <input type="text" name="student_state" id="student_state" required>
+                    </div>
+                    <!-- Upload Student Image -->
+                    <div class="input_box">
+                        <label for="student_image">Upload Student Image:</label>
+                        <input type="file" name="student_image" id="student_image" accept="image/*">
+                    </div>
+                </div>
+                    
+                
+                <h3>Previous Institute Details:</h3>
+                <div class="form_details_box previous_institute_box">
+                    <!-- Student Previous Institute Name -->
+                    <div class="input_box">
+                        <label for="student_previous_institute_name">Previous Institute Name:</label>
+                        <input type="text" name="student_previous_institute_name" id="student_previous_institute_name" required>
+                    </div>
 
-        <!-- Student City -->
-        <label for="student_city">City:</label>
-        <input type="text" name="student_city" id="student_city" required>
+                    <!-- Student Previous Institute Qualification -->
+                    <div class="input_box">
+                        <label for="student_previous_institute_qualification">Previous Institute Qualification:</label>
+                        <input type="text" name="student_previous_institute_qualification" id="student_previous_institute_qualification" required>
+                    </div>
+                </div>
+                <div class="previous_box_sub">
+                    <!-- Student Previous Institute Remarks -->
+                    <div class="input_box">
+                        <label for="student_previous_institute_remarks">Previous Institute Remarks:</label>
+                        <textarea name="student_previous_institute_remarks" id="student_previous_institute_remarks" rows="4" required></textarea>
+                    </div>
+                </div>
+                
+                <h3>Parent Details:</h3>
+                <div class="form_details_box parent_details_box">
+                    <!-- Parent Name -->
+                    <div class="input_box">
+                        <label for="student_parent_name">Parent Name:</label>
+                        <input type="text" name="student_parent_name" id="student_parent_name" required>
+                    </div>
 
-        <!-- Student State -->
-        <label for="student_state">State:</label>
-        <input type="text" name="student_state" id="student_state" required>
+                    <!-- Parent Relation -->
+                    <div class="input_box">
+                        <label for="student_parent_relation">Parent Relation:</label>
+                        <input type="text" name="student_parent_relation" id="student_parent_relation" required>
+                    </div>
 
-        <!-- Student Previous Institute Name -->
-        <label for="student_previous_institute_name">Previous Institute Name:</label>
-        <input type="text" name="student_previous_institute_name" id="student_previous_institute_name" required>
+                    <!-- Father Name -->
+                    <div class="input_box">
+                        <label for="student_father_name">Father Name:</label>
+                        <input type="text" name="student_father_name" id="student_father_name" required>
+                    </div>
 
-        <!-- Student Previous Institute Qualification -->
-        <label for="student_previous_institute_qualification">Previous Institute Qualification:</label>
-        <input type="text" name="student_previous_institute_qualification" id="student_previous_institute_qualification" required>
+                    <!-- Mother Name -->
+                    <div class="input_box">
+                        <label for="student_mother_name">Mother Name:</label>
+                        <input type="text" name="student_mother_name" id="student_mother_name" required>
+                    </div>
 
-        <!-- Student Previous Institute Remarks -->
-        <label for="student_previous_institute_remarks">Previous Institute Remarks:</label>
-        <textarea name="student_previous_institute_remarks" id="student_previous_institute_remarks" rows="4" required></textarea>
+                    <!-- Parent Occupation -->
+                    <div class="input_box">
+                        <label for="student_parent_occupation">Parent Occupation:</label>
+                        <input type="text" name="student_parent_occupation" id="student_parent_occupation" required>
+                    </div>
 
-        <!-- Parent Name -->
-        <label for="student_parent_name">Parent Name:</label>
-        <input type="text" name="student_parent_name" id="student_parent_name" required>
+                    <!-- Parent Income -->
+                    <div class="input_box">
+                        <label for="student_parent_income">Parent Income:</label>
+                        <input type="text" name="student_parent_income" id="student_parent_income" required>
+                    </div>
 
-        <!-- Parent Relation -->
-        <label for="student_parent_relation">Parent Relation:</label>
-        <input type="text" name="student_parent_relation" id="student_parent_relation" required>
+                    <!-- Parent Education -->
+                    <div class="input_box">
+                        <label for="student_parent_education">Parent Education:</label>
+                        <input type="text" name="student_parent_education" id="student_parent_education" required>
+                    </div>
 
-        <!-- Father Name -->
-        <label for="student_father_name">Father Name:</label>
-        <input type="text" name="student_father_name" id="student_father_name" required>
+                    <!-- Parent Email -->
+                    <div class="input_box">
+                        <label for="student_parent_email">Parent Email:</label>
+                        <input type="email" name="student_parent_email" id="student_parent_email" required>
+                    </div>
 
-        <!-- Mother Name -->
-        <label for="student_mother_name">Mother Name:</label>
-        <input type="text" name="student_mother_name" id="student_mother_name" required>
+                    <!-- Parent Phone Number -->
+                    <div class="input_box">
+                        <label for="student_parent_number">Parent Phone Number:</label>
+                        <input type="tel" name="student_parent_number" id="student_parent_number" required>
+                    </div>
+                </div>
+                <div class="sub_parent_box">
+                    <!-- Parent Address -->
+                    <div class="input_box">
+                        <label for="student_parent_address">Parent Address:</label>
+                        <textarea name="student_parent_address" id="student_parent_address" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="form_details_box parent_details_box_sub">
+                    <!-- Parent City -->
+                    <div class="input_box">
+                        <label for="student_parent_city">Parent City:</label>
+                        <input type="text" name="student_parent_city" id="student_parent_city" required>
+                    </div>
 
-        <!-- Parent Occupation -->
-        <label for="student_parent_occupation">Parent Occupation:</label>
-        <input type="text" name="student_parent_occupation" id="student_parent_occupation" required>
+                    <!-- Parent State -->
+                    <div class="input_box">
+                        <label for="student_parent_state">Parent State:</label>
+                        <input type="text" name="student_parent_state" id="student_parent_state" required>
+                    </div>
+                </div>
+                
+                <h3>Upload Document:</h3>
+                <div class="document_box">
+                    <!-- Upload Student Documents -->
+                    <div class="input_box">
+                        <label for="student_documents">Upload Student Documents:</label>
+                        <input type="file" name="student_documents" id="student_documents" accept=".pdf,.doc,.docx">
+                    </div>
+                </div>
+                
+                <div class="submit_button_box">
+                    <input type="submit" name="add_student" value="Add Student">
+                </div>
+            </div>
+        </form>
+        <style>
+        input[type="file"] {
+        position: relative;
+        padding: 9px 12px !important;
+        }
 
-        <!-- Parent Income -->
-        <label for="student_parent_income">Parent Income:</label>
-        <input type="text" name="student_parent_income" id="student_parent_income" required>
+        input::file-selector-button {
+        font-weight: bold;
+        color: #000000cf;
+        background: #10101012;
+        border: none;
+        border-radius: 0px;
+        position: absolute;
+        right:-5px;
+        font-size:14px;
+        font-weight:300;
+        height:100%;
+        top:0px;
+        padding:0px 15px;
+        cursor:pointer;
+        }
 
-        <!-- Parent Education -->
-        <label for="student_parent_education">Parent Education:</label>
-        <input type="text" name="student_parent_education" id="student_parent_education" required>
-
-        <!-- Parent Email -->
-        <label for="student_parent_email">Parent Email:</label>
-        <input type="email" name="student_parent_email" id="student_parent_email" required>
-
-        <!-- Parent Phone Number -->
-        <label for="student_parent_number">Parent Phone Number:</label>
-        <input type="tel" name="student_parent_number" id="student_parent_number" required>
-
-        <!-- Parent Address -->
-        <label for="student_parent_address">Parent Address:</label>
-        <textarea name="student_parent_address" id="student_parent_address" rows="4" required></textarea>
-
-        <!-- Parent City -->
-        <label for="student_parent_city">Parent City:</label>
-        <input type="text" name="student_parent_city" id="student_parent_city" required>
-
-        <!-- Parent State -->
-        <label for="student_parent_state">Parent State:</label>
-        <input type="text" name="student_parent_state" id="student_parent_state" required>
-
-        <!-- Upload Student Image -->
-        <label for="student_image">Upload Student Image:</label>
-        <input type="file" name="student_image" id="student_image" accept="image/*">
-
-        <!-- Upload Student Documents -->
-        <label for="student_documents">Upload Student Documents:</label>
-        <input type="file" name="student_documents" id="student_documents" accept=".pdf,.doc,.docx">
-
-        <input type="submit" name="add_student" value="Add Student">
-    </form>
+        #student_admission_form{
+            max-width:1200px;
+            margin:auto;
+            box-shadow: 0 0 3px #00000026;
+            border-radius: 12px;
+            border: 1px solid #0000001c;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .form_details_box {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 25px;
+        }
+        .address_box, .previous_institute_box, .parent_details_box_sub{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin:20px 0px
+        }
+        @media screen and (max-width: 1024px) {
+            .form_details_box {
+            grid-template-columns: 1fr 1fr;
+        }
+        }
+        @media screen and (max-width: 678px) {
+            .form_details_box {
+            grid-template-columns: 1fr;
+        }
+        }
+        .previous_box_sub, .sub_parent_box, .parent_img_sub_box {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin:20px 0px;
+        }
+        .admission_form_box input, select, textarea {
+            display: block;
+            width: 100%;
+            border: 1px solid #0000001f;
+            border-radius: 1px;
+            font-size: 16px;
+            padding: 3px 12px;
+            outline:none !important;
+        }
+        .admission_form_box select {
+            padding: 2.5px 10px;
+            display: block;
+            width: 100%;
+            border: 1px solid #0000001f;
+            border-radius: 1px;
+            font-size: 16px;
+        }
+        .admission_form_box label {
+            font-size: 16px;
+            margin: 5px 5px;
+            display: block;
+            margin-top:0px;
+        }
+        .admission_form_box h3 {
+            font-size: 20px;
+            color: #056839;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-left:5px;
+            line-height:22px;
+        }
+        .submit_button_box {
+            margin-top: 25px;
+        }
+        .submit_button_box input[type="submit"] {
+            display: block;
+            width: auto;
+            margin: auto;
+            cursor: pointer;
+        }
+        
+    </style>
     <?php
     echo '</div>';
 }
