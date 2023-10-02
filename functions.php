@@ -130,15 +130,3 @@ include_once('inc/import_student_csv.php');
 // student edit page linking
 include_once('inc/edit_student.php');
 
-// Shortcode for displaying the admission form
-function admission_form_shortcode() {
-    ob_start();
-    admission_form_page(); // Reuse the admission_form_page function to generate the form HTML
-    return ob_get_clean();
-}
-
-add_shortcode('admission_form', 'admission_form_shortcode');
-
-
-
-
