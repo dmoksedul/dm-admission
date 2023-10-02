@@ -72,7 +72,7 @@ function admission_form_page() {
 
     // Display the content of your plugin's admin page here
     echo '<div class="wrap">';
-    echo '<h2>Admission Form Plugin</h2>';
+    echo '<h2>Admission Form </h2>';
     ?>
     <form method="post" enctype="multipart/form-data">
         <!-- Institute Name -->

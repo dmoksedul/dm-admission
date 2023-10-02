@@ -1,15 +1,30 @@
 <?php
 // student list 
-
-
-// Display the student list
 function display_student_list() {
     global $wpdb;
     $table_name = $wpdb->prefix . 'dm_students';
 
-    // Retrieve student data from the database
-    $students = $wpdb->get_results("SELECT * FROM $table_name");
-    
+    // Get the current page number from URL
+    $current_page = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
+    $per_page = 10; // Default number of items per page
+
+    // Calculate the offset for the SQL query
+    $offset = ($current_page - 1) * $per_page;
+
+    // Retrieve all student data
+    $all_students = $wpdb->get_results("SELECT * FROM $table_name");
+
+    // Calculate the total number of students
+    $total_students = count($all_students);
+
+    // Calculate the total number of pages based on the total students and items per page
+    $total_pages = ceil($total_students / $per_page);
+
+    // Retrieve student data with pagination
+    $students = $wpdb->get_results(
+        $wpdb->prepare("SELECT * FROM $table_name LIMIT %d, %d", $offset, $per_page)
+    );
+
     // Display the student list table
     echo '<div class="wrap">';
     echo '<h2>Student List</h2>';
@@ -25,10 +40,6 @@ function display_student_list() {
     echo '<th>Actions</th>'; // Add a new column for actions
     echo '</tr></thead>';
     echo '<tbody>'; 
-    // Add a button for exporting CSV
-    echo '<div>';
-    echo '<a href="?page=student-list&action=export-csv" class="button">Export CSV</a>';
-    echo '</div>';
 
     $list_number = 1; // Initialize list number
 
@@ -58,6 +69,21 @@ function display_student_list() {
 
     echo '</tbody>';
     echo '</table>';
+
+    // Pagination
+    echo '<div class="tablenav">';
+    echo '<div class="tablenav-pages">';
+    echo paginate_links(array(
+        'base' => add_query_arg('paged', '%#%'),
+        'format' => '',
+        'prev_text' => '&laquo;',
+        'next_text' => '&raquo;',
+        'total' => $total_pages,
+        'current' => $current_page,
+    ));
+    echo '</div>';
+    echo '</div>';
+
     echo '</div>';
 }
 
