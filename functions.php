@@ -130,3 +130,6 @@ include_once('inc/import_student_csv.php');
 // student edit page linking
 include_once('inc/edit_student.php');
 
+// student edit page linking
+include_once('inc/search.php');
+
