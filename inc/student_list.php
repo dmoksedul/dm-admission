@@ -46,6 +46,8 @@ function display_student_list() {
     // Display the student list table
     echo '<div class="wrap">';
     echo '<h2>Student List</h2>';
+    // Add the export CSV button
+    echo '<a href="?page=student-list&action=export-csv" class="button">Export CSV</a>';
     // Search form
     echo '<form method="post">';
     echo '<input type="text" name="student_search" placeholder="Search by student name">';

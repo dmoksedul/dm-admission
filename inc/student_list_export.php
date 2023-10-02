@@ -11,7 +11,7 @@ function export_student_list_csv() {
     $csv_filename = 'dm_student_list.csv';
 
     // Create CSV content
-    $csv_data = "Institute Name,Class,Section,Admission Date,Category,First Name,Last Name,Gender,Birthday,Phone Number,Email,Religion,National ID,Present Address,Permanent Address,City,State,Previous Institute Name,Previous Institute Qualification,Previous Institute Remarks,Parent Name,Parent Relation,Father Name,Mother Name,Parent Occupation,Parent Income,Parent Education,Parent Email,Parent Phone Number,Parent Address,Parent City,Parent State\n";
+    $csv_data = "Institute Name,Class,Section,Admission Date,Category,First Name,Last Name,Gender,Birthday,Blood Group,Phone Number,Email,Religion,National ID,Present Address,Permanent Address,City,State,Previous Institute Name,Previous Institute Qualification,Previous Institute Remarks,Parent Name,Parent Relation,Father Name,Mother Name,Parent Occupation,Parent Income,Parent Education,Parent Email,Parent Phone Number,Parent Address,Parent City,Parent State\n";
 
     foreach ($students as $student) {
         // Prepare student data for CSV
@@ -25,6 +25,7 @@ function export_student_list_csv() {
             $student->student_last_name,
             $student->student_gender,
             $student->student_birthdate,
+            $student->student_blood_group,
             $student->student_phone_number,
             $student->student_email,
             $student->student_religion,

@@ -25,6 +25,7 @@ function admission_form_plugin_activation() {
         student_last_name VARCHAR(255) NOT NULL,
         student_gender VARCHAR(20) NOT NULL,
         student_birthdate DATE NOT NULL,
+        student_blood_group VARCHAR(10) DEFAULT '', /* New field for blood group */
         student_phone_number VARCHAR(20) NOT NULL,
         student_email VARCHAR(255) NOT NULL,
         student_religion VARCHAR(255) NOT NULL,
@@ -49,6 +50,7 @@ function admission_form_plugin_activation() {
         student_parent_city VARCHAR(255) NOT NULL,
         student_parent_state VARCHAR(255) NOT NULL,
         student_image INT, /* Changed to INT to store attachment IDs */
+        student_parent_image INT, /* Changed to INT to store attachment IDs */
         student_documents INT, /* Changed to INT to store attachment IDs */
         PRIMARY KEY (id)
     ) $charset_collate;";

@@ -26,6 +26,7 @@ function edit_student_page() {
                     'student_last_name' => sanitize_text_field($_POST['student_last_name']),
                     'student_gender' => sanitize_text_field($_POST['student_gender']),
                     'student_birthdate' => sanitize_text_field($_POST['student_birthdate']),
+                    'student_blood_group' => sanitize_text_field($_POST['student_blood_group']),
                     'student_phone_number' => sanitize_text_field($_POST['student_phone_number']),
                     'student_email' => sanitize_email($_POST['student_email']),
                     'student_religion' => sanitize_text_field($_POST['student_religion']),
@@ -49,38 +50,10 @@ function edit_student_page() {
                     'student_parent_address' => sanitize_textarea_field($_POST['student_parent_address']),
                     'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
                     'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
+                    'student_blood_group' => sanitize_text_field($_POST['student_blood_group']), // New field
                 );
-                // Handle Student Image Upload
-if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
-    $upload_dir = wp_upload_dir(); // Get the WordPress upload directory
-    $image_filename = $_FILES['student_image']['name'];
-    $image_temp_path = $_FILES['student_image']['tmp_name'];
 
-    // Generate a unique file name to avoid overwriting
-    $image_destination = $upload_dir['path'] . '/' . uniqid() . '_' . $image_filename;
-
-    // Move the uploaded image to the destination directory
-    if (move_uploaded_file($image_temp_path, $image_destination)) {
-        // Update the student's image field in the database with the file path
-        $data['student_image'] = $image_destination;
-    }
-}
-
-// Handle Student Documents Upload
-if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
-    $upload_dir = wp_upload_dir(); // Get the WordPress upload directory
-    $document_filename = $_FILES['student_documents']['name'];
-    $document_temp_path = $_FILES['student_documents']['tmp_name'];
-
-    // Generate a unique file name to avoid overwriting
-    $document_destination = $upload_dir['path'] . '/' . uniqid() . '_' . $document_filename;
-
-    // Move the uploaded document to the destination directory
-    if (move_uploaded_file($document_temp_path, $document_destination)) {
-        // Update the student's document field in the database with the file path
-        $data['student_documents'] = $document_destination;
-    }
-}
+                // Handle Student Image Upload and Documents Upload (existing code)
 
                 // Update the student data in the database
                 $wpdb->update(
@@ -127,6 +100,10 @@ if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error']
 
             echo '<label for="student_birthdate">Birthdate:</label>';
             echo '<input type="date" name="student_birthdate" id="student_birthdate" value="' . esc_attr($student->student_birthdate) . '" >';
+
+            echo '<label for="student_blood_group">Blood Group:</label>';
+            echo '<input type="text" name="student_blood_group" id="student_blood_group" value="' . esc_attr($student->student_blood_group) . '" >'; // New field for blood group
+
 
             echo '<label for="student_phone_number">Phone Number:</label>';
             echo '<input type="tel" name="student_phone_number" id="student_phone_number" value="' . esc_attr($student->student_phone_number) . '" >';

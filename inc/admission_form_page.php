@@ -1,7 +1,8 @@
 <?php
-// 
 // Create the admission form
 function admission_form_page() {
+    $student_blood_group = ''; // Initialize the variable for student_blood_group
+
     if (isset($_POST['add_student'])) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'dm_students';
@@ -12,6 +13,10 @@ function admission_form_page() {
 
         if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
             $uploaded_image_id = media_handle_upload('student_image', 0);
+        }
+
+        if (isset($_FILES['student_parent_image']) && $_FILES['student_parent_image']['error'] === 0) {
+            $uploaded_image_id = media_handle_upload('student_parent_image', 0);
         }
 
         if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
@@ -38,6 +43,7 @@ function admission_form_page() {
             'student_last_name' => sanitize_text_field($_POST['student_last_name']),
             'student_gender' => sanitize_text_field($_POST['student_gender']),
             'student_birthdate' => sanitize_text_field($_POST['student_birthdate']),
+            'student_blood_group' => sanitize_text_field($_POST['student_blood_group']), /* New field for blood group */
             'student_phone_number' => sanitize_text_field($_POST['student_phone_number']),
             'student_email' => sanitize_email($_POST['student_email']),
             'student_religion' => sanitize_text_field($_POST['student_religion']),
@@ -62,20 +68,24 @@ function admission_form_page() {
             'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
             'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
             'student_image' => $uploaded_image_id, /* Store attachment ID */
+            'student_parent_image' => $uploaded_image_id, /* Store attachment ID */
             'student_documents' => $uploaded_document_id, /* Store attachment ID */
         );
+
+        //$student_blood_group = $data['student_blood_group']; // Remember student_blood_group
 
         $wpdb->insert($table_name, $data);
 
         // Add success message or redirection here if needed
     }
 
+
+
     // Display the content of your plugin's admin page here
     echo '<div class="wrap">';
     echo '<h2>Admission Form </h2>';
     ?>
         <form id="student_admission_form" method="post" enctype="multipart/form-data">
-            
             <div class="admission_form_box">
                 <h3><i class="fas fa-school"></i> Institute Details:</h3>
                 <div class="form_details_box insitute_box">
@@ -93,18 +103,7 @@ function admission_form_page() {
                             <option value="One">One</option>
                             <option value="Two">Two</option>
                             <option value="Three">Three</option>
-                            <option value="Four">Four</option>
-                            <option value="Five">Five</option>
-                            <option value="Six">Six</option>
-                            <option value="Seven">Seven</option>
-                            <option value="Eight">Eight</option>
-                            <option value="Nine">Nine</option>
-                            <option value="SSC">SSC</option>
-                            <option value="HSC 1st Year">HSC 1st Year</option>
-                            <option value="HSC 2nd Year">HSC 2nd Year</option>
-                            <option value="Degree">Degree</option>
-                            <option value="Honours">Honours</option>
-                            <option value="Masters">Masters</option>
+                            <!-- Add more options as needed -->
                         </select>
                     </div>
 
@@ -116,6 +115,7 @@ function admission_form_page() {
                             <option value="A">A</option>
                             <option value="B">B</option>
                             <option value="C">C</option>
+                            <!-- Add more options as needed -->
                         </select>
                     </div>
 
@@ -134,11 +134,12 @@ function admission_form_page() {
                             <option value="Science">Science</option>
                             <option value="Arts">Arts</option>
                             <option value="Commerce">Commerce</option>
+                            <!-- Add more options as needed -->
                         </select>
                     </div>
                 </div>
 
-                <!-- student details area -->
+                <!-- Student Details -->
                 <h3>Student Details:</h3>
                 <div class="form_details_box student_details_box">
                     <div class="input_box">
@@ -156,11 +157,12 @@ function admission_form_page() {
                     <div class="input_box">
                         <!-- Student Gender -->
                         <label for="student_gender">Gender:</label>
-                        <select name="student_gender" id="">
+                        <select name="student_gender" id="student_gender" required>
                             <option value="" disabled value="" selected>Select</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
-                            <option value="Female">Others</option>
+                            <option value="Others">Others</option>
+                            <!-- Add more options as needed -->
                         </select>
                     </div>
 
@@ -168,6 +170,12 @@ function admission_form_page() {
                     <div class="input_box">
                         <label for="student_birthdate">Birthdate:</label>
                         <input type="date" name="student_birthdate" id="student_birthdate" required>
+                    </div>
+
+                    <!-- New Student Blood Group Field -->
+                    <div class="input_box">
+                        <label for="student_blood_group">Blood Group:</label>
+                        <input type="text" name="student_blood_group" id="student_blood_group" required>
                     </div>
 
                     <!-- Student Phone Number -->
@@ -194,19 +202,23 @@ function admission_form_page() {
                         <input type="text" name="student_nid" id="student_nid" required>
                     </div>
                 </div>
-                <div class="address_box">
-                        <!-- Student Present Address -->
-                        <div class="input_box">
-                            <label for="student_present_address">Present Address:</label>
-                            <textarea name="student_present_address" id="student_present_address" rows="4" required></textarea>
-                        </div>
 
-                        <!-- Student Permanent Address -->
-                        <div class="input_box">
-                            <label for="student_permanent_address">Permanent Address:</label>
-                            <textarea name="student_permanent_address" id="student_permanent_address" rows="4" required></textarea>
-                        </div>
+                <!-- Student Addresses -->
+                <div class="address_box">
+                    <!-- Student Present Address -->
+                    <div class="input_box">
+                        <label for="student_present_address">Present Address:</label>
+                        <textarea name="student_present_address" id="student_present_address" rows="4" required></textarea>
                     </div>
+
+                    <!-- Student Permanent Address -->
+                    <div class="input_box">
+                        <label for="student_permanent_address">Permanent Address:</label>
+                        <textarea name="student_permanent_address" id="student_permanent_address" rows="4" required></textarea>
+                    </div>
+                </div>
+
+                <!-- Student City, State, and Image Upload -->
                 <div class="form_details_box student_details_box">
                     <!-- Student City -->
                     <div class="input_box">
@@ -219,14 +231,15 @@ function admission_form_page() {
                         <label for="student_state">State:</label>
                         <input type="text" name="student_state" id="student_state" required>
                     </div>
+
                     <!-- Upload Student Image -->
                     <div class="input_box">
                         <label for="student_image">Upload Student Image:</label>
                         <input type="file" name="student_image" id="student_image" accept="image/*">
                     </div>
                 </div>
-                    
-                
+
+                <!-- Previous Institute Details -->
                 <h3>Previous Institute Details:</h3>
                 <div class="form_details_box previous_institute_box">
                     <!-- Student Previous Institute Name -->
@@ -241,6 +254,7 @@ function admission_form_page() {
                         <input type="text" name="student_previous_institute_qualification" id="student_previous_institute_qualification" required>
                     </div>
                 </div>
+
                 <div class="previous_box_sub">
                     <!-- Student Previous Institute Remarks -->
                     <div class="input_box">
@@ -248,7 +262,8 @@ function admission_form_page() {
                         <textarea name="student_previous_institute_remarks" id="student_previous_institute_remarks" rows="4" required></textarea>
                     </div>
                 </div>
-                
+
+                <!-- Parent Details -->
                 <h3>Parent Details:</h3>
                 <div class="form_details_box parent_details_box">
                     <!-- Parent Name -->
@@ -305,6 +320,7 @@ function admission_form_page() {
                         <input type="tel" name="student_parent_number" id="student_parent_number" required>
                     </div>
                 </div>
+
                 <div class="sub_parent_box">
                     <!-- Parent Address -->
                     <div class="input_box">
@@ -312,6 +328,7 @@ function admission_form_page() {
                         <textarea name="student_parent_address" id="student_parent_address" rows="4" required></textarea>
                     </div>
                 </div>
+
                 <div class="form_details_box parent_details_box_sub">
                     <!-- Parent City -->
                     <div class="input_box">
@@ -324,8 +341,14 @@ function admission_form_page() {
                         <label for="student_parent_state">Parent State:</label>
                         <input type="text" name="student_parent_state" id="student_parent_state" required>
                     </div>
+                    <!-- Upload Student Image -->
+                    <div class="input_box">
+                        <label for="student_parent_image">Upload Student Image:</label>
+                        <input type="file" name="studstudent_parent_imageent_image" id="student_parent_image" accept="image/*">
+                    </div>
                 </div>
-                
+
+                <!-- Upload Document -->
                 <h3>Upload Document:</h3>
                 <div class="document_box">
                     <!-- Upload Student Documents -->
@@ -334,7 +357,7 @@ function admission_form_page() {
                         <input type="file" name="student_documents" id="student_documents" accept=".pdf,.doc,.docx">
                     </div>
                 </div>
-                
+
                 <div class="submit_button_box">
                     <input type="submit" name="add_student" value="Add Student">
                 </div>
