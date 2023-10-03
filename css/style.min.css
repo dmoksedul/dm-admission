@@ -6,6 +6,15 @@ body {
   position: relative;
   padding: 9px 12px !important;
 }
+#dm_student_admission_form .dm_admission_title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #056839;
+  margin-bottom: -10px;
+  margin-top: 10px;
+  display: inline-block;
+  border-bottom: 2px solid #056839;
+}
 #dm_student_admission_form input::file-selector-button {
   font-weight: bold;
   color: rgba(0, 0, 0, 0.8117647059);
@@ -243,6 +252,40 @@ button:hover {
 #dm_student_id_card_box .information_box p {
   line-height: 18px !important;
   color: rgba(0, 0, 0, 0.8078431373) !important;
+}
+
+.dm_id_card_back_page {
+  padding: 0px 25px !important;
+}
+.dm_id_card_back_page h3 {
+  text-align: center !important;
+  margin-top: 100px !important;
+  color: #000 !important;
+  margin-bottom: 10px !important;
+}
+.dm_id_card_back_page p {
+  text-align: center;
+}
+.dm_id_card_back_page img {
+  width: 90px !important;
+  height: 90px !important;
+  margin: 20px auto !important;
+  display: block !important;
+}
+.dm_id_card_back_page #institute_id_card_title {
+  margin: 0px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #056839;
+}
+.dm_id_card_back_page ul li {
+  list-style: none;
+  margin-top: 10px;
+}
+
+#dm_error_message {
+  text-align: center;
+  color: red;
 }
 
 /* print-styles.css */

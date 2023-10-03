@@ -9,7 +9,15 @@ body {
     position: relative;
     padding: 9px 12px !important;
   }
-
+  .dm_admission_title {
+    font-size: 22px;
+    font-weight: 700;
+    color: $pColor;
+    margin-bottom: -10px;
+    margin-top: 10px;
+    display: inline-block;
+    border-bottom: 2px solid $pColor;
+  }
   input::file-selector-button {
     font-weight: bold;
     color: #000000cf;
@@ -243,7 +251,40 @@ button {
     }
   }
 }
-
+.dm_id_card_back_page {
+  padding: 0px 25px !important;
+  h3 {
+    text-align: center !important;
+    margin-top: 100px !important;
+    color: #000 !important;
+    margin-bottom: 10px !important;
+  }
+  p {
+    text-align: center;
+  }
+  img {
+    width: 90px !important;
+    height: 90px !important;
+    margin: 20px auto !important;
+    display: block !important;
+  }
+  #institute_id_card_title {
+    margin: 0px;
+    text-align: center;
+    margin-bottom: 30px;
+    color: $pColor;
+  }
+  ul {
+    li {
+      list-style: none;
+      margin-top: 10px;
+    }
+  }
+}
+#dm_error_message {
+  text-align: center;
+  color: red;
+}
 /* print-styles.css */
 @media print {
   /* Define your styles for printing here */

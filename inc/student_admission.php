@@ -15,8 +15,9 @@ function admission_form_shortcode() {
     // Display the admission form here
     ?>
     <div class="wrap" id="dm_student_admission_form">
-        <h2>Admission Form</h2>
+        
         <form id="student_admission_form" method="post" enctype="multipart/form-data">
+        <h2 class="dm_admission_title">New Admission</h2>
         <div class="admission_form_box">
                 <h3><i class="fas fa-school"></i> Institute Details:</h3>
                 <div class="form_details_box insitute_box">

@@ -10,7 +10,7 @@ function student_search_shortcode() {
             </div>
             <div>
                 <label for="student_birthdate">Birthday:</label>
-                <input type="date" name="student_birthdate" id="student_birthdate">
+                <input type="date" name="student_birthdate" id="student_birthdate" required>
             </div>
             <div>
                 <input type="submit" name="search_students" value="Search">
@@ -68,7 +68,7 @@ function student_search_shortcode() {
                         echo '<button id="print_id_card" onclick="print_id_card()">Download Id Card</button>';
                     }
                 } else {
-                    echo '<p>No matching students found.</p>';
+                    echo '<div id="dm_error_message" >No matching students found.</div>';
                 }
             }
             ?>
