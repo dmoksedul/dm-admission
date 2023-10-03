@@ -8,15 +8,16 @@ function admission_form_page() {
         $table_name = $wpdb->prefix . 'dm_students';
 
         // Handle file uploads
-        $uploaded_image_id = 0;
+        $uploaded_student_image_id = 0;
+        $uploaded_parent_image_id = 0;
         $uploaded_document_id = 0;
 
         if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
-            $uploaded_image_id = media_handle_upload('student_image', 0);
+            $uploaded_student_image_id = media_handle_upload('student_image', 0);
         }
 
         if (isset($_FILES['student_parent_image']) && $_FILES['student_parent_image']['error'] === 0) {
-            $uploaded_image_id = media_handle_upload('student_parent_image', 0);
+            $uploaded_parent_image_id = media_handle_upload('student_parent_image', 0);
         }
 
         if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
@@ -24,12 +25,16 @@ function admission_form_page() {
         }
 
         // Check for errors in file uploads
-        if (is_wp_error($uploaded_image_id)) {
-            // Handle the error, e.g., display an error message
+        if (is_wp_error($uploaded_student_image_id)) {
+            // Handle the error for student image upload, e.g., display an error message
+        }
+
+        if (is_wp_error($uploaded_parent_image_id)) {
+            // Handle the error for parent image upload, e.g., display an error message
         }
 
         if (is_wp_error($uploaded_document_id)) {
-            // Handle the error, e.g., display an error message
+            // Handle the error for document upload, e.g., display an error message
         }
 
         // Sanitize and validate form data here
@@ -67,12 +72,10 @@ function admission_form_page() {
             'student_parent_address' => sanitize_textarea_field($_POST['student_parent_address']),
             'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
             'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
-            'student_image' => $uploaded_image_id, /* Store attachment ID */
-            'student_parent_image' => $uploaded_image_id, /* Store attachment ID */
-            'student_documents' => $uploaded_document_id, /* Store attachment ID */
+            'student_image' => $uploaded_student_image_id, /* Store student image attachment ID */
+            'student_parent_image' => $uploaded_parent_image_id, /* Store parent image attachment ID */
+            'student_documents' => $uploaded_document_id, /* Store document attachment ID */
         );
-
-        //$student_blood_group = $data['student_blood_group']; // Remember student_blood_group
 
         $wpdb->insert($table_name, $data);
 
@@ -103,6 +106,18 @@ function admission_form_page() {
                             <option value="One">One</option>
                             <option value="Two">Two</option>
                             <option value="Three">Three</option>
+                            <option value="Four">Four</option>
+                            <option value="Five">Five</option>
+                            <option value="Six">Six</option>
+                            <option value="Seven">Seven</option>
+                            <option value="Eight">Eight</option>
+                            <option value="Nine">Nine</option>
+                            <option value="SSC">SSC</option>
+                            <option value="HSC 1st Year">HSC 1st Year</option>
+                            <option value="HSC 2nd Year">HSC 2nd Year</option>
+                            <option value="Degree">Degree</option>
+                            <option value="Honours">Honours</option>
+                            <option value="Masters">Masters</option>
                             <!-- Add more options as needed -->
                         </select>
                     </div>
@@ -175,7 +190,17 @@ function admission_form_page() {
                     <!-- New Student Blood Group Field -->
                     <div class="input_box">
                         <label for="student_blood_group">Blood Group:</label>
-                        <input type="text" name="student_blood_group" id="student_blood_group" required>
+                        <select id="student_blood_group" name="student_blood_group" required>
+                            <option value="" disabled selected>Select</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
                     </div>
 
                     <!-- Student Phone Number -->
@@ -344,7 +369,7 @@ function admission_form_page() {
                     
                 </div>
                 <div class="parent_img_sub_box">
-                    <!-- Upload Student Image -->
+                    <!-- Upload Parent Image -->
                     <div class="input_box">
                         <label for="student_parent_image">Upload Parent Image:</label>
                         <input type="file" name="student_parent_image" id="student_parent_image" accept="image/*">
