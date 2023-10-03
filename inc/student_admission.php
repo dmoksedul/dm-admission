@@ -1,5 +1,7 @@
 <?php
 
+// At the beginning of your PHP code
+session_start();
 
 // Function to handle admission form shortcode
 function admission_form_shortcode() {
@@ -7,7 +9,7 @@ function admission_form_shortcode() {
 
     // Check if the form is submitted and handle the submission
     if (isset($_POST['add_student'])) {
-        handle_admission_form_submission();
+        handle_admission_form_submission(); // Call the function to save data temporarily
     }
 
     // Display the admission form here
@@ -303,107 +305,178 @@ function admission_form_shortcode() {
 }
 add_shortcode('admission_form', 'admission_form_shortcode');
 
-
 function handle_admission_form_submission() {
-    global $wpdb;
-    $table_name = $wpdb->prefix . 'dm_students';
+    // Sanitize and validate form data here
+    $data = array(
+        'institute_name' => sanitize_text_field($_POST['institute_name']),
+        'class' => sanitize_text_field($_POST['class']),
+        'section' => sanitize_text_field($_POST['section']),
+        'admission_date' => sanitize_text_field($_POST['admission_date']),
+        'category' => sanitize_text_field($_POST['category']),
+        'student_first_name' => sanitize_text_field($_POST['student_first_name']),
+        'student_last_name' => sanitize_text_field($_POST['student_last_name']),
+        'student_gender' => sanitize_text_field($_POST['student_gender']),
+        'student_birthdate' => sanitize_text_field($_POST['student_birthdate']),
+        'student_blood_group' => sanitize_text_field($_POST['student_blood_group']),
+        'student_phone_number' => sanitize_text_field($_POST['student_phone_number']),
+        'student_email' => sanitize_email($_POST['student_email']),
+        'student_religion' => sanitize_text_field($_POST['student_religion']),
+        'student_nid' => sanitize_text_field($_POST['student_nid']),
+        'student_present_address' => sanitize_textarea_field($_POST['student_present_address']),
+        'student_permanent_address' => sanitize_textarea_field($_POST['student_permanent_address']),
+        'student_city' => sanitize_text_field($_POST['student_city']),
+        'student_state' => sanitize_text_field($_POST['student_state']),
+        'student_previous_institute_name' => sanitize_text_field($_POST['student_previous_institute_name']),
+        'student_previous_institute_qualification' => sanitize_text_field($_POST['student_previous_institute_qualification']),
+        'student_previous_institute_remarks' => sanitize_textarea_field($_POST['student_previous_institute_remarks']),
+        'student_parent_name' => sanitize_text_field($_POST['student_parent_name']),
+        'student_parent_relation' => sanitize_text_field($_POST['student_parent_relation']),
+        'student_father_name' => sanitize_text_field($_POST['student_father_name']),
+        'student_mother_name' => sanitize_text_field($_POST['student_mother_name']),
+        'student_parent_occupation' => sanitize_text_field($_POST['student_parent_occupation']),
+        'student_parent_income' => sanitize_text_field($_POST['student_parent_income']),
+        'student_parent_education' => sanitize_text_field($_POST['student_parent_education']),
+        'student_parent_email' => sanitize_email($_POST['student_parent_email']),
+        'student_parent_number' => sanitize_text_field($_POST['student_parent_number']),
+        'student_parent_address' => sanitize_textarea_field($_POST['student_parent_address']),
+        'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
+        'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
+        // You can add more fields as needed
+    );
 
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_student'])) {
-        // Initialize WordPress media library
-        require_once(ABSPATH . 'wp-admin/includes/image.php');
-        require_once(ABSPATH . 'wp-admin/includes/file.php');
-        require_once(ABSPATH . 'wp-admin/includes/media.php');
-        // Handle file uploads
-        $uploaded_student_image_id = 0;
-        $uploaded_parent_image_id = 0;
-        $uploaded_student_documents_id = 0;
+    
+    // Initialize WordPress media library
+    require_once(ABSPATH . 'wp-admin/includes/image.php');
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+    require_once(ABSPATH . 'wp-admin/includes/media.php');
 
-        // Handle Student Image Upload
-        if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
-            $uploaded_student_image_id = media_handle_upload('student_image', 0);
+    // Handle file uploads
+    $uploaded_student_image_id = 0;
+    $uploaded_parent_image_id = 0;
+    $uploaded_student_documents_id = 0;
 
-            if (is_wp_error($uploaded_student_image_id)) {
-                // Handle the error here
-                echo 'Error uploading student_image: ' . $uploaded_student_image_id->get_error_message();
-                return; // Stop processing if there's an error
-            }
-        }
+    // Handle Student Image Upload
+    if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
+        $uploaded_student_image_id = media_handle_upload('student_image', 0);
 
-        // Handle Parent Image Upload
-        if (isset($_FILES['student_parent_image']) && $_FILES['student_parent_image']['error'] === 0) {
-            $uploaded_parent_image_id = media_handle_upload('student_parent_image', 0);
-
-            if (is_wp_error($uploaded_parent_image_id)) {
-                // Handle the error here
-                echo 'Error uploading student_parent_image: ' . $uploaded_parent_image_id->get_error_message();
-                return; // Stop processing if there's an error
-            }
-        }
-
-        // Handle Student Documents Upload
-        if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
-            $uploaded_student_documents_id = media_handle_upload('student_documents', 0);
-
-            if (is_wp_error($uploaded_student_documents_id)) {
-                // Handle the error here
-                echo 'Error uploading student_documents: ' . $uploaded_student_documents_id->get_error_message();
-                return; // Stop processing if there's an error
-            }
-        }
-
-        // Sanitize and validate form data here
-        $data = array(
-            'institute_name' => sanitize_text_field($_POST['institute_name']),
-            'class' => sanitize_text_field($_POST['class']),
-            'section' => sanitize_text_field($_POST['section']),
-            'admission_date' => sanitize_text_field($_POST['admission_date']),
-            'category' => sanitize_text_field($_POST['category']),
-            'student_first_name' => sanitize_text_field($_POST['student_first_name']),
-            'student_last_name' => sanitize_text_field($_POST['student_last_name']),
-            'student_gender' => sanitize_text_field($_POST['student_gender']),
-            'student_birthdate' => sanitize_text_field($_POST['student_birthdate']),
-            'student_blood_group' => sanitize_text_field($_POST['student_blood_group']),
-            'student_phone_number' => sanitize_text_field($_POST['student_phone_number']),
-            'student_email' => sanitize_email($_POST['student_email']),
-            'student_religion' => sanitize_text_field($_POST['student_religion']),
-            'student_nid' => sanitize_text_field($_POST['student_nid']),
-            'student_present_address' => sanitize_textarea_field($_POST['student_present_address']),
-            'student_permanent_address' => sanitize_textarea_field($_POST['student_permanent_address']),
-            'student_city' => sanitize_text_field($_POST['student_city']),
-            'student_state' => sanitize_text_field($_POST['student_state']),
-            'student_previous_institute_name' => sanitize_text_field($_POST['student_previous_institute_name']),
-            'student_previous_institute_qualification' => sanitize_text_field($_POST['student_previous_institute_qualification']),
-            'student_previous_institute_remarks' => sanitize_textarea_field($_POST['student_previous_institute_remarks']),
-            'student_parent_name' => sanitize_text_field($_POST['student_parent_name']),
-            'student_parent_relation' => sanitize_text_field($_POST['student_parent_relation']),
-            'student_father_name' => sanitize_text_field($_POST['student_father_name']),
-            'student_mother_name' => sanitize_text_field($_POST['student_mother_name']),
-            'student_parent_occupation' => sanitize_text_field($_POST['student_parent_occupation']),
-            'student_parent_income' => sanitize_text_field($_POST['student_parent_income']),
-            'student_parent_education' => sanitize_text_field($_POST['student_parent_education']),
-            'student_parent_email' => sanitize_email($_POST['student_parent_email']),
-            'student_parent_number' => sanitize_text_field($_POST['student_parent_number']),
-            'student_parent_address' => sanitize_textarea_field($_POST['student_parent_address']),
-            'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
-            'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
-            'student_image' => $uploaded_student_image_id,
-            'student_parent_image' => $uploaded_parent_image_id,
-            'student_documents' => $uploaded_student_documents_id,
-        );
-
-        // Insert data into the database
-        $wpdb->insert($table_name, $data);
-
-        // Check for database errors
-        if ($wpdb->last_error) {
-            // Handle the database error here
-            echo '<div class="error-message">Error inserting data into the database: ' . $wpdb->last_error . '</div>';
-        } else {
-            // Add success message or redirection here if needed
-            echo '<div class="success-message">Student data has been submitted successfully.</div>';
+        if (is_wp_error($uploaded_student_image_id)) {
+            // Handle the error here
+            echo 'Error uploading student_image: ' . $uploaded_student_image_id->get_error_message();
+            return; // Stop processing if there's an error
         }
     }
+
+    // Handle Parent Image Upload
+    if (isset($_FILES['student_parent_image']) && $_FILES['student_parent_image']['error'] === 0) {
+        $uploaded_parent_image_id = media_handle_upload('student_parent_image', 0);
+
+        if (is_wp_error($uploaded_parent_image_id)) {
+            // Handle the error here
+            echo 'Error uploading student_parent_image: ' . $uploaded_parent_image_id->get_error_message();
+            return; // Stop processing if there's an error
+        }
+    }
+
+    // Handle Student Documents Upload
+    if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
+        $uploaded_student_documents_id = media_handle_upload('student_documents', 0);
+
+        if (is_wp_error($uploaded_student_documents_id)) {
+            // Handle the error here
+            echo 'Error uploading student_documents: ' . $uploaded_student_documents_id->get_error_message();
+            return; // Stop processing if there's an error
+        }
+    }
+
+    // Add uploaded media IDs to the data array
+    $data['student_image'] = $uploaded_student_image_id;
+    $data['student_parent_image'] = $uploaded_parent_image_id;
+    $data['student_documents'] = $uploaded_student_documents_id;
+
+    // Create or retrieve a session variable to store pending admission data
+    if (!isset($_SESSION['pending_admissions'])) {
+        $_SESSION['pending_admissions'] = array();
+    }
+
+    // Add the submitted data to the session variable
+    $_SESSION['pending_admissions'][] = $data;
+
+    // Display a success message to inform the user that their submission is pending approval.
+    echo '<div class="success-message">Your admission submission was successful. It is pending approval.</div>';
 }
 
+// pending admission list
 
-?>
+
+function display_pending_admission() {
+    // Retrieve pending admission data from the session variable
+    session_start();
+    $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
+
+    echo '<div class="wrap">';
+    echo '<h2>Pending Admission</h2>';
+
+    if (!empty($pending_admissions)) {
+        echo '<table class="wp-list-table widefat fixed striped">';
+        echo '<thead><tr>';
+        echo '<th>#</th>';
+        echo '<th>Student Image</th>';
+        echo '<th>Student Name</th>';
+        echo '<th>Class</th>';
+        echo '<th>Section</th>';
+        echo '<th>Category</th>';
+        echo '<th>Father Name</th>';
+        echo '<th>Location</th>';
+        echo '<th>Admission Date</th>';
+        echo '<th>Actions</th>';
+        echo '</tr></thead>';
+        echo '<tbody>';
+
+        foreach ($pending_admissions as $index => $pending_admission) {
+            $student_name = $pending_admission['student_first_name'] . ' ' . $pending_admission['student_last_name'];
+            $father_name = $pending_admission['student_father_name'];
+            $class = $pending_admission['class'];
+            $section = $pending_admission['section'];
+            $category = $pending_admission['category'];
+            $admission_date = $pending_admission['admission_date'];
+            $location = $pending_admission['student_city'] . ', ' . $pending_admission['student_state'];
+
+            // Check if the 'student_image' key exists in the array
+            $student_image_id = isset($pending_admission['student_image']) ? $pending_admission['student_image'] : null;
+
+            echo '<tr>';
+            echo '<td>' . ($index + 1) . '</td>';
+            echo '<td>';
+
+            if ($student_image_id) {
+                $student_image_url = wp_get_attachment_image_src($student_image_id, 'thumbnail');
+                if ($student_image_url) {
+                    echo '<img src="' . esc_url($student_image_url[0]) . '" alt="' . esc_attr($student_name) . '">';
+                }
+            }
+
+            echo '</td>';
+            echo '<td>' . esc_html($student_name) . '</td>';
+            echo '<td>' . esc_html($class) . '</td>';
+            echo '<td>' . esc_html($section) . '</td>';
+            echo '<td>' . esc_html($category) . '</td>';
+            echo '<td>' . esc_html($father_name) . '</td>';
+            echo '<td>' . esc_html($location) . '</td>';
+            echo '<td>' . esc_html($admission_date) . '</td>';
+            echo '<td>';
+            // Add a "Approve" button for each item
+            echo '<button type="submit" name="approve_admission" value="' . $index . '" class="button button-primary">Approve</button>';
+            echo ' ';
+            // Add a "Delete" button for each item
+            echo '<button type="button" class="delete-admission-button" data-index="' . $index . '">Delete</button>';
+            echo '</td>';
+            echo '</tr>';
+        }
+
+        echo '</tbody></table>';
+    } else {
+        echo '<p>No pending admissions.</p>';
+    }
+
+    echo '</div>';
+}

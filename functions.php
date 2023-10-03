@@ -111,6 +111,15 @@ function admission_form_plugin_menu() {
         'import-students',                       // Menu slug (unique identifier)
         'import_students_form'                  // Callback function to display the import form
     );
+     // Add a submenu page for pending admissions
+     add_submenu_page(
+        'admission-form',             // Parent menu slug (should match the top-level menu slug)
+        'Pending Admission',          // Page title
+        'Pending Admission',          // Menu title
+        'manage_options',             // Capability required to access the menu
+        'pending-admission',          // Menu slug (unique identifier)
+        'display_pending_admission'   // Callback function to display the pending admission content
+    );
 }
 add_action('admin_menu', 'admission_form_plugin_menu');
 
@@ -134,7 +143,3 @@ include_once('inc/search.php');
 
 // student edit page linking
 include_once('inc/student_admission.php');
-
-
-
-
