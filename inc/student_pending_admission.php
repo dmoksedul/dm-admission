@@ -1,13 +1,17 @@
 <?php
-
 function display_pending_admission() {
     // Retrieve pending admission data from the session variable
     $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
 
     echo '<div class="wrap">';
     echo '<h2>Pending Admission</h2>';
+    
+    $counter = 1; // Initialize the counter to 1
 
     if (!empty($pending_admissions)) {
+        // Reverse the order of pending admissions
+        $pending_admissions = array_reverse($pending_admissions);
+
         echo '<table class="wp-list-table widefat fixed striped">';
         echo '<thead><tr>';
         echo '<th>#</th>';
@@ -36,13 +40,13 @@ function display_pending_admission() {
             $student_image_id = isset($pending_admission['student_image']) ? $pending_admission['student_image'] : null;
 
             echo '<tr>';
-            echo '<td>' . ($index + 1) . '</td>';
+            echo '<td>' . $counter . '</td>'; // Display the counter
             echo '<td>';
 
             if ($student_image_id) {
                 $student_image_url = wp_get_attachment_image_src($student_image_id, 'thumbnail');
                 if ($student_image_url) {
-                    echo '<img src="' . esc_url($student_image_url[0]) . '" alt="' . esc_attr($student_name) . '">';
+                    echo '<img width="50" height="50" src="' . esc_url($student_image_url[0]) . '" alt="' . esc_attr($student_name) . '">';
                 }
             }
 
@@ -56,26 +60,27 @@ function display_pending_admission() {
             echo '<td>' . esc_html($admission_date) . '</td>';
             echo '<td>';
             
-           // Inside the foreach loop for pending admissions
+            // Inside the foreach loop for pending admissions
             echo '<form method="post">';
             echo '<input type="hidden" name="approve_admission_index" value="' . $index . '">';
-
             // Serialize and encode the pending admission data as a hidden field
             echo '<input type="hidden" name="pending_admission_data" value="' . esc_attr(base64_encode(serialize($pending_admission))) . '">';
-
             echo '<button type="submit" name="approve_admission" class="button button-primary">Approve</button>';
             echo '</form>';
             echo '</tr>';
+            
+            $counter++; // Increment the counter for the next item
         }
 
         echo '</tbody></table>';
     } else {
         echo '<p>No pending admissions.</p>';
     }
-
     echo '</div>';
 }
 
+
+// admssion approve submission fucnctions
 function approve_admission_submission() {
     if (isset($_POST['approve_admission'])) {
         $index = intval($_POST['approve_admission_index']);
@@ -100,8 +105,5 @@ function approve_admission_submission() {
     }
 }
 add_action('init', 'approve_admission_submission');
-
-
-
 
 ?>
