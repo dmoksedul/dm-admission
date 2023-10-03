@@ -23,7 +23,7 @@ function display_student_list() {
     // Modify your SQL query to search for students by name and limit the results per page
     $students = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT * FROM $table_name WHERE student_first_name LIKE '%%%s%%' OR student_last_name LIKE '%%%s%%' LIMIT %d, %d",
+            "SELECT * FROM $table_name WHERE student_first_name LIKE '%%%s%%' OR student_last_name LIKE '%%%s%%' ORDER BY id DESC LIMIT %d, %d",
             $search_query,
             $search_query,
             $offset,

@@ -14,7 +14,7 @@ function display_pending_admission() {
 
         echo '<table class="wp-list-table widefat fixed striped">';
         echo '<thead><tr>';
-        echo '<th>#</th>';
+        echo '<th>No</th>';
         echo '<th>Student Image</th>';
         echo '<th>Student Name</th>';
         echo '<th>Class</th>';

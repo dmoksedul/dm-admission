@@ -111,7 +111,7 @@ function handle_csv_import() {
         if (isset($_FILES['csv_file']) && $_FILES['csv_file']['error'] === 0) {
             $csv_file = $_FILES['csv_file']['tmp_name'];
             parse_csv_and_insert_data($csv_file);
-            wp_redirect(admin_url('admin.php?page=student-list'));
+            wp_redirect(admin_url('admin.php?page=dm_admission'));
             exit();
         }
     }
