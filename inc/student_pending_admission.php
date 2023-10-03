@@ -66,6 +66,7 @@ function display_pending_admission() {
             // Serialize and encode the pending admission data as a hidden field
             echo '<input type="hidden" name="pending_admission_data" value="' . esc_attr(base64_encode(serialize($pending_admission))) . '">';
             echo '<button type="submit" name="approve_admission" class="button button-primary">Approve</button>';
+            echo '<button type="submit" name="delete_admission" class="button button-secondary">Delete</button>';
             echo '</form>';
             echo '</tr>';
             
@@ -110,5 +111,18 @@ function approve_admission_submission() {
 }
 add_action('init', 'approve_admission_submission');
 
+function delete_admission_submission() {
+    if (isset($_POST['delete_admission'])) {
+        $index = intval($_POST['delete_admission_index']);
 
+        // Remove the item from the session variable
+        if (isset($_SESSION['pending_admissions'][$index])) {
+            unset($_SESSION['pending_admissions'][$index]);
+
+            // Reindex the session array to remove gaps in the index
+            $_SESSION['pending_admissions'] = array_values($_SESSION['pending_admissions']);
+        }
+    }
+}
+add_action('init', 'delete_admission_submission');
 ?>
