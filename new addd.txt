@@ -132,9 +132,113 @@ include_once('inc/edit_student.php');
 // student edit page linking
 include_once('inc/search.php');
 
-// student edit page linking
-include_once('inc/student_admission.php');
 
 
 
+// Function to handle admission form shortcode
+function admission_form_shortcode() {
+    ob_start();
+    
+    if (isset($_POST['add_student'])) {
+        handle_admission_form_submission();
+    }
+    
+    // Display the admission form here
+    ?>
+    <div class="wrap">
+        <h2>Admission Form</h2>
+        <form id="student_admission_form" method="post" enctype="multipart/form-data">
+            <!-- Institute Details -->
+            <!-- Add your form fields here -->
+            
+            <!-- Student Image Upload -->
+            <div class="input_box">
+                <label for="student_image">Upload Student Image:</label>
+                <input type="file" name="student_image" id="student_image" accept="image/*">
+            </div>
+            
+            <!-- Continue with the rest of your form fields -->
 
+            <div class="submit_button_box">
+                <input type="submit" name="add_student" value="Add Student">
+            </div>
+        </form>
+    </div>
+    <?php
+
+    return ob_get_clean();
+}
+add_shortcode('admission_form', 'admission_form_shortcode');
+
+// Define a function to handle admission form submissions
+function handle_admission_form_submission() {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_student'])) {
+        // Initialize WordPress media library
+        require_once(ABSPATH . 'wp-admin/includes/image.php');
+        require_once(ABSPATH . 'wp-admin/includes/file.php');
+        require_once(ABSPATH . 'wp-admin/includes/media.php');
+
+        // Handle file uploads
+        $uploaded_student_image_id = 0;
+
+        if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
+            $uploaded_student_image_id = media_handle_upload('student_image', 0);
+
+            if (is_wp_error($uploaded_student_image_id)) {
+                // Handle the error here
+                echo 'Error uploading student_image: ' . $uploaded_student_image_id->get_error_message();
+                return; // Stop processing if there's an error
+            }
+        }
+
+        // Sanitize and validate form data here
+        // Sanitize and validate form data here
+$data = array();
+
+// Example: Sanitize and validate a text field
+if (isset($_POST['student_name'])) {
+    $student_name = sanitize_text_field($_POST['student_name']);
+    // You can add further validation here, e.g., check if it's not empty or meets specific criteria
+    if (!empty($student_name)) {
+        $data['student_name'] = $student_name;
+    } else {
+        // Handle validation error for student name
+        echo '<div class="error-message">Please provide a valid student name.</div>';
+    }
+}
+
+// Example: Sanitize and validate an email field
+if (isset($_POST['student_email'])) {
+    $student_email = sanitize_email($_POST['student_email']);
+    // You can add further validation here, e.g., check if it's a valid email format
+    if (is_email($student_email)) {
+        $data['student_email'] = $student_email;
+    } else {
+        // Handle validation error for student email
+        echo '<div class="error-message">Please provide a valid email address.</div>';
+    }
+}
+
+// Continue adding similar code for other form fields
+
+// Example: Sanitize and validate a select field
+if (isset($_POST['student_gender'])) {
+    $student_gender = sanitize_text_field($_POST['student_gender']);
+    // You can add further validation here, e.g., check if it's a valid option
+    if (in_array($student_gender, array('Male', 'Female', 'Other'))) {
+        $data['student_gender'] = $student_gender;
+    } else {
+        // Handle validation error for student gender
+        echo '<div class="error-message">Please select a valid gender option.</div>';
+    }
+}
+
+        // Insert data into the database
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'dm_students';
+        $wpdb->insert($table_name, $data);
+
+        // Add success message or redirection here if needed
+        echo '<div class="success-message">Student data has been submitted successfully.</div>';
+    }
+}

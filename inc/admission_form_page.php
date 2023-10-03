@@ -390,7 +390,7 @@ function admission_form_page() {
                 </div>
             </div>
         </form>
-        <style>
+    <style>
         input[type="file"] {
         position: relative;
         padding: 9px 12px !important;
