@@ -14,7 +14,7 @@ function admission_form_shortcode() {
 
     // Display the admission form here
     ?>
-    <div class="wrap">
+    <div class="wrap" id="dm_student_admission_form">
         <h2>Admission Form</h2>
         <form id="student_admission_form" method="post" enctype="multipart/form-data">
         <div class="admission_form_box">
@@ -314,7 +314,7 @@ function admission_form_shortcode() {
                 </div>
 
                 <div class="submit_button_box">
-                    <input type="submit" name="add_student" value="Add Student">
+                    <input type="submit" name="add_student" value="Submit">
                 </div>
             </div>
         </form>
@@ -323,7 +323,7 @@ function admission_form_shortcode() {
 
     return ob_get_clean();
 }
-add_shortcode('admission_form', 'admission_form_shortcode');
+add_shortcode('dm_admission_form', 'admission_form_shortcode');
 
 function handle_admission_form_submission() {
     // Sanitize and validate form data here
