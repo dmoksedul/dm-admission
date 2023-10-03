@@ -80,7 +80,6 @@ function display_pending_admission() {
 }
 
 
-// admssion approve submission fucnctions
 function approve_admission_submission() {
     if (isset($_POST['approve_admission'])) {
         $index = intval($_POST['approve_admission_index']);
@@ -101,9 +100,15 @@ function approve_admission_submission() {
         );
 
         // Remove the approved data from the session variable
-        unset($_SESSION['pending_admissions'][$index]);
+        if (isset($_SESSION['pending_admissions'][$index])) {
+            unset($_SESSION['pending_admissions'][$index]);
+        }
+
+        // Reindex the session array to remove gaps in the index
+        $_SESSION['pending_admissions'] = array_values($_SESSION['pending_admissions']);
     }
 }
 add_action('init', 'approve_admission_submission');
+
 
 ?>
