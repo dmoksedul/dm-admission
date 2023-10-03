@@ -410,7 +410,6 @@ function handle_admission_form_submission() {
 
 function display_pending_admission() {
     // Retrieve pending admission data from the session variable
-    session_start();
     $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
 
     echo '<div class="wrap">';
@@ -480,3 +479,6 @@ function display_pending_admission() {
 
     echo '</div>';
 }
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
