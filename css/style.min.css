@@ -320,4 +320,17 @@ button:hover {
     left: 20px;
   }
   /* Add any other styles you need for printing */
+}
+.student_top_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0px;
+}
+.student_top_box form {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  gap: 15px;
 }/*# sourceMappingURL=style.min.css.map */

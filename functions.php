@@ -110,7 +110,15 @@ function admission_form_plugin_menu() {
         'edit-student', // Sub-menu page slug
         'edit_student_page' // Callback function for editing students
     );
-
+    // Add a submenu page for admission_form_page
+    add_submenu_page(
+        'dm_admission',
+        'Admission Form',
+        'Admission Form',
+        'manage_options',
+        'admission-form', // Sub-menu page slug
+        'admission_form_page' // Callback function for admission_form_page
+    );
     // Add a submenu page for importing students from CSV
     add_submenu_page(
         'dm_admission',                        // Parent menu slug

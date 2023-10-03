@@ -46,13 +46,15 @@ function display_student_list() {
     // Display the student list table
     echo '<div class="wrap">';
     echo '<h2>Student List</h2>';
-    // Add the export CSV button
-    echo '<a href="?page=student-list&action=export-csv" class="button">Export CSV</a>';
+    echo '<div class="student_top_box">';
     // Search form
     echo '<form method="post">';
-    echo '<input type="text" name="student_search" placeholder="Search by student name">';
+    echo '<input type="text" name="student_search" placeholder="First Name">';
     echo '<input type="submit" name="search_students" value="Search">';
     echo '</form>';
+    // Add the export CSV button
+    echo '<a href="?page=student-list&action=export-csv" class="button">Export CSV Formate</a>';
+    echo '</div>';
     echo '<table class="wp-list-table widefat fixed">';
     echo '<thead><tr>';
     echo '<th style="width:50px">No</th>';

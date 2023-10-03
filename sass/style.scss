@@ -320,3 +320,18 @@ button {
   }
   /* Add any other styles you need for printing */
 }
+
+// admin page
+.student_top_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0px;
+  form {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    gap: 15px;
+  }
+}
