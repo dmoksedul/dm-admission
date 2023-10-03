@@ -86,6 +86,9 @@ function dm_student_search_form() {
         </div>
     </div>
     <script>
+        document.getElementById("print_id_card").addEventListener("click", function(){
+            windows.print();
+        })
         function print_id_card(){
             window.print();
         }
