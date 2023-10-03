@@ -395,6 +395,7 @@ function admission_form_page() {
             border: 1px solid #0000001c;
             padding: 20px;
             box-sizing: border-box;
+            background: #ffffff;
         }
         .form_details_box {
             display: grid;
