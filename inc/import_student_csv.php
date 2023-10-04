@@ -1,15 +1,16 @@
 <?php
 // Function to display the import form
 function import_students_form() {
-    echo '<div class="wrap">';
-    echo '<h2>Import Students from CSV</h2>';
+    echo '<div class="wrap" id="import_student_page">';
+    echo '<div class="student_upload_box">';
+    echo '<h2 style="font-size:25px">Import Students from CSV</h2>';
     ?>
     <form method="post" enctype="multipart/form-data">
-        <label for="csv_file">Select CSV File:</label>
         <input type="file" name="csv_file" id="csv_file" accept=".csv">
         <input type="submit" name="import_students" value="Import Students">
     </form>
     <?php
+    echo '</div>';
     echo '</div>';
 }
 
@@ -59,6 +60,13 @@ function parse_csv_and_insert_data($csv_file) {
             $student_parent_address = sanitize_textarea_field($data[30]);
             $student_parent_city = sanitize_text_field($data[31]);
             $student_parent_state = sanitize_text_field($data[32]);
+            $student_session = sanitize_text_field($data[33]);
+            $student_id_number = sanitize_text_field($data[34]);
+            $student_registration_number = sanitize_text_field($data[35]);
+            $student_roll_number = sanitize_text_field($data[36]);
+            $student_exam = sanitize_text_field($data[37]);
+            $student_subject = sanitize_text_field($data[38]);
+            $student_result = sanitize_text_field($data[38]);
 
             // Insert data into the database
             $wpdb->insert(

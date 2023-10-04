@@ -5,7 +5,7 @@ function display_pending_admission() {
 
     echo '<div class="wrap">';
     echo '<h2>Pending Admission</h2>';
-    
+
     $counter = 1; // Initialize the counter to 1
 
     if (!empty($pending_admissions)) {
@@ -28,13 +28,13 @@ function display_pending_admission() {
         echo '<tbody>';
 
         foreach ($pending_admissions as $index => $pending_admission) {
-            $student_name = $pending_admission['student_first_name'] . ' ' . $pending_admission['student_last_name'];
-            $father_name = $pending_admission['student_father_name'];
-            $class = $pending_admission['class'];
-            $section = $pending_admission['section'];
-            $category = $pending_admission['category'];
-            $admission_date = $pending_admission['admission_date'];
-            $location = $pending_admission['student_city'] . ', ' . $pending_admission['student_state'];
+            $student_name = isset($pending_admission['student_first_name']) && isset($pending_admission['student_last_name']) ? $pending_admission['student_first_name'] . ' ' . $pending_admission['student_last_name'] : 'N/A';
+            $father_name = isset($pending_admission['student_father_name']) ? $pending_admission['student_father_name'] : 'N/A';
+            $class = isset($pending_admission['class']) ? $pending_admission['class'] : 'N/A';
+            $section = isset($pending_admission['section']) ? $pending_admission['section'] : 'N/A';
+            $category = isset($pending_admission['category']) ? $pending_admission['category'] : 'N/A';
+            $admission_date = isset($pending_admission['admission_date']) ? $pending_admission['admission_date'] : 'N/A';
+            $location = isset($pending_admission['student_city']) && isset($pending_admission['student_state']) ? $pending_admission['student_city'] . ', ' . $pending_admission['student_state'] : 'N/A';
 
             // Check if the 'student_image' key exists in the array
             $student_image_id = isset($pending_admission['student_image']) ? $pending_admission['student_image'] : null;
@@ -59,7 +59,7 @@ function display_pending_admission() {
             echo '<td>' . esc_html($location) . '</td>';
             echo '<td>' . esc_html($admission_date) . '</td>';
             echo '<td>';
-            
+
             // Inside the foreach loop for pending admissions
             echo '<form method="post">';
             echo '<input type="hidden" name="approve_admission_index" value="' . $index . '">';
@@ -69,7 +69,7 @@ function display_pending_admission() {
             echo '<button type="submit" name="delete_admission" class="button button-secondary">Delete</button>';
             echo '</form>';
             echo '</tr>';
-            
+
             $counter++; // Increment the counter for the next item
         }
 
@@ -79,7 +79,6 @@ function display_pending_admission() {
     }
     echo '</div>';
 }
-
 
 function approve_admission_submission() {
     if (isset($_POST['approve_admission'])) {
@@ -113,7 +112,7 @@ add_action('init', 'approve_admission_submission');
 
 function delete_admission_submission() {
     if (isset($_POST['delete_admission'])) {
-        $index = intval($_POST['delete_admission_index']);
+        $index = intval($_POST['approve_admission_index']); // Change this line to use the correct index name 'delete_admission_index'
 
         // Remove the item from the session variable
         if (isset($_SESSION['pending_admissions'][$index])) {

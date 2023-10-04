@@ -361,3 +361,27 @@ button {
     gap: 15px;
   }
 }
+
+// student import page
+#import_student_page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+  .student_upload_box {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
