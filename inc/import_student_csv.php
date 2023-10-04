@@ -81,6 +81,7 @@ function parse_csv_and_insert_data($csv_file) {
                     'student_last_name' => $student_last_name,
                     'student_gender' => $student_gender,
                     'student_birthdate' => $student_birthdate,
+                    'student_blood_group' => $student_blood_group,
                     'student_phone_number' => $student_phone_number,
                     'student_email' => $student_email,
                     'student_religion' => $student_religion,
@@ -104,6 +105,13 @@ function parse_csv_and_insert_data($csv_file) {
                     'student_parent_address' => $student_parent_address,
                     'student_parent_city' => $student_parent_city,
                     'student_parent_state' => $student_parent_state,
+                    'student_session' => $student_session,
+                    'student_id_number' => $student_id_number,
+                    'student_registration_number' => $student_registration_number,
+                    'student_roll_number' => $student_roll_number,
+                    'student_exam' => $student_exam,
+                    'student_subject' => $student_subject,
+                    'student_result' => $student_result,
                 )
             );
         }
