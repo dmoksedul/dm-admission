@@ -110,14 +110,13 @@ function admission_form_plugin_menu() {
         'pending-admission',          // Menu slug (unique identifier)
         'display_pending_admission'   // Callback function to display the pending admission content
     );
-    // Add a submenu page for editing students
     add_submenu_page(
-        'dm_admission',
-        'Edit Student',
-        'Edit Student',
-        'manage_options',
-        'edit-student', // Sub-menu page slug
-        'edit_student_page' // Callback function for editing students
+        'your-main-menu-slug', // Parent menu slug
+        'Edit Student',         // Page title
+        'Edit Student',         // Menu title
+        'manage_options',       // Capability required to access the page
+        'edit-student',         // Page slug
+        'display_edit_student_form' // Callback function to display the page
     );
     // Add a submenu page for admission_form_page
     add_submenu_page(
