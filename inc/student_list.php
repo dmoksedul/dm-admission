@@ -60,13 +60,14 @@ function display_student_list() {
     echo '<th style="width:50px">No</th>';
     echo '<th style="width:90px">Image</th>';
     echo '<th>Name</th>';
+    echo '<th>Student ID</th>'; // Add the column for Student ID Number
     echo '<th>Birthday</th>';
     echo '<th>Phone Number</th>';
     echo '<th>Parent Name</th>';
     echo '<th>Location</th>';
-    echo '<th>Actions</th>'; // Add a new column for actions
+    echo '<th>Actions</th>';
     echo '</tr></thead>';
-    echo '<tbody>'; 
+    echo '<tbody>';
 
     $list_number = ($current_page - 1) * $per_page + 1; // Initialize list number
 
@@ -81,12 +82,13 @@ function display_student_list() {
         echo '<td>' . esc_html($list_number) . '</td>';
         echo '<td><img src="' . esc_url(wp_get_attachment_image_url($student->student_image, 'thumbnail')) . '" alt="' . esc_attr($student_name) . '" width="50"></td>';
         echo '<td>' . esc_html($student_name) . '</td>';
+        echo '<td>' . esc_html($student->student_id_number) . '</td>'; // Display the Student ID Number
         echo '<td>' . esc_html(date('F j, Y', strtotime($student->student_birthdate))) . '</td>';
         echo '<td>' . esc_html($student->student_phone_number) . '</td>';
         echo '<td>' . esc_html($student->student_parent_name) . '</td>';
         echo '<td>' . esc_html($location) . '</td>';
         echo '<td>';
-        echo '<a href="?page=edit-student&student_id=' . $student->id . '" class="button">Edit</a>'; // Edit link
+        echo '<a href="?page=edit-student&student_id=' . $student->id . '" class="button">Edit</a>';
         echo '</td>';
 
         echo '</tr>';

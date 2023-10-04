@@ -26,6 +26,36 @@ function admission_form_shortcode() {
                         <label for="institute_name">Institute Name:</label>
                         <input value="<?php print bloginfo( 'title' ) ?>" readonly type="text" name="institute_name" id="institute_name" required>
                     </div>
+                    <div class="input_box">
+                        <!-- Student ID No Name -->
+                        <label for="institute_name">Student ID No:</label>
+                        <input value="" readonly type="text" name="student_id_number" id="student_id_number" required>
+                    </div>
+
+                    <script>
+                        // Initialize an array to store generated IDs
+                        var generatedIDs = [];
+
+                        function generateRandomID() {
+                            if (generatedIDs.length === 1000000) {
+                                alert("All possible 6-digit IDs have been generated.");
+                                return;
+                            }
+
+                            var uniqueDigits;
+                            do {
+                                uniqueDigits = String(Math.floor(100000 + Math.random() * 900000)); // Generate a random 6-digit number
+                            } while (generatedIDs.includes(uniqueDigits));
+
+                            generatedIDs.push(uniqueDigits); // Store the generated ID
+                            document.getElementById('student_id_number').value = uniqueDigits;
+                        }
+
+                        // Generate an ID when the page loads
+                        window.addEventListener('load', generateRandomID);
+                    </script>
+
+
 
                     <div class="input_box">
                         <!-- Class -->
@@ -78,6 +108,19 @@ function admission_form_shortcode() {
                             <option value="Science">Science</option>
                             <option value="Arts">Arts</option>
                             <option value="Commerce">Commerce</option>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+                    <div class="input_box">
+                        <!-- Category -->
+                        <label for="student_session">Session:</label>
+                        <select name="student_session" id="student_session" required>
+                            <option value="" disabled value="" selected>Select</option>
+                            <option value="2020-2021">2020-2021</option>
+                            <option value="2021-2022">2021-2022</option>
+                            <option value="2022-2023">2022-2023</option>
+                            <option value="2023-2024">2023-2024</option>
+                            <option value="2024-2025">2024-2025</option>
                             <!-- Add more options as needed -->
                         </select>
                     </div>
@@ -232,6 +275,12 @@ function admission_form_shortcode() {
                         <input type="text" name="student_parent_relation" id="student_parent_relation" required>
                     </div>
 
+                    <!-- Parent Occupation -->
+                    <div class="input_box">
+                        <label for="student_parent_occupation">Occupation:</label>
+                        <input type="text" name="student_parent_occupation" id="student_parent_occupation" required>
+                    </div>
+
                     <!-- Father Name -->
                     <div class="input_box">
                         <label for="student_father_name">Father Name:</label>
@@ -244,21 +293,15 @@ function admission_form_shortcode() {
                         <input type="text" name="student_mother_name" id="student_mother_name" required>
                     </div>
 
-                    <!-- Parent Occupation -->
-                    <div class="input_box">
-                        <label for="student_parent_occupation">Parent Occupation:</label>
-                        <input type="text" name="student_parent_occupation" id="student_parent_occupation" required>
-                    </div>
-
                     <!-- Parent Income -->
                     <div class="input_box">
-                        <label for="student_parent_income">Parent Income:</label>
+                        <label for="student_parent_income">Income:</label>
                         <input type="text" name="student_parent_income" id="student_parent_income" required>
                     </div>
 
                     <!-- Parent Education -->
                     <div class="input_box">
-                        <label for="student_parent_education">Parent Education:</label>
+                        <label for="student_parent_education">Education:</label>
                         <input type="text" name="student_parent_education" id="student_parent_education" required>
                     </div>
 
@@ -315,10 +358,9 @@ function admission_form_shortcode() {
                 </div>
 
                 <div class="submit_button_box">
-                    <input type="submit" name="add_student" value="Submit">
+                    <input type="submit" name="add_student" value="Add Student">
                 </div>
             </div>
-        </form>
     </div>
     <?php
 
@@ -362,6 +404,8 @@ function handle_admission_form_submission() {
         'student_parent_address' => sanitize_textarea_field($_POST['student_parent_address']),
         'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
         'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
+        'student_session' => sanitize_text_field($_POST['student_session']), // Add student_session field
+        'student_id_number' => sanitize_text_field($_POST['student_id_number']), // Add student_id_number field
         // You can add more fields as needed
     );
 

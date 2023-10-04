@@ -45,6 +45,7 @@ function dm_student_search_form() {
                     echo '<img src="' . esc_url(wp_get_attachment_image_url($student->student_image, 'student_id_card_logo_size')) . '" alt="' . esc_attr($student->student_first_name . ' ' . $student->student_last_name) . '">';
                     echo '<h3 class="dm_student_name">' . esc_html($student->student_first_name . ' ' . $student->student_last_name) . '</h3>';
                     echo '<div class="information_box"';
+                    echo '<p>Student ID: ' . esc_html($student->student_id_number) . '</p>';
                     echo '<p>Class: ' . esc_html($student->class) . '</p>';
                     echo '<p>Blood: ' . esc_html($student->student_blood_group) . '</p>';
                     echo '<p>Phone: ' . esc_html($student->student_phone_number) . '</p>';
@@ -74,8 +75,15 @@ function dm_student_search_form() {
                     
                     echo '</div>';
 
-                    echo '<button id="print_id_card" onclick="print_id_card()">Download Id Card</button>';
-
+                    echo '<button id="print_id_card" class="button" onclick="print_id_card()">Download Id Card</button>';
+                    ?>
+                        
+                    <script>
+                        document.getElementById("print_id_card").addEventListener("click", function(){
+                            window.print();
+                        })
+                    </script>
+                    <?php
                     // Stop processing after displaying the first result
                     return;
                 } else {
@@ -85,14 +93,7 @@ function dm_student_search_form() {
             ?>
         </div>
     </div>
-    <script>
-        document.getElementById("print_id_card").addEventListener("click", function(){
-            windows.print();
-        })
-        function print_id_card(){
-            window.print();
-        }
-    </script>
+
     <?php
     return ob_get_clean();
 }

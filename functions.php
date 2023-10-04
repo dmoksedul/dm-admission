@@ -7,6 +7,7 @@ Author: Moksedul Islam
 Author URI: https://moksedul.dev/
 Text Domain: dmoksedul
 */
+
 // Activation Hook
 function admission_form_plugin_activation() {
     global $wpdb;
@@ -52,6 +53,13 @@ function admission_form_plugin_activation() {
         student_image INT, /* Changed to INT to store attachment IDs */
         student_parent_image INT, /* Changed to INT to store attachment IDs */
         student_documents INT, /* Changed to INT to store attachment IDs */
+        student_session VARCHAR(255) NOT NULL, /* New field for student session */
+        student_id_number VARCHAR(255) NOT NULL, /* New field for student ID number */
+        student_registration_number VARCHAR(255) NOT NULL, /* New field for student registration number */
+        student_roll_number VARCHAR(255) NOT NULL, /* New field for student roll number */
+        student_exam VARCHAR(255) NOT NULL, /* New field for student exam */
+        student_subject VARCHAR(255) NOT NULL, /* New field for student subject */
+        student_result VARCHAR(255) NOT NULL, /* New field for student result */
         PRIMARY KEY (id)
     ) $charset_collate;";
 
@@ -60,6 +68,7 @@ function admission_form_plugin_activation() {
     dbDelta($sql);
 }
 register_activation_hook(__FILE__, 'admission_form_plugin_activation');
+
 
 // Deactivation Hook
 function admission_form_plugin_deactivation() {

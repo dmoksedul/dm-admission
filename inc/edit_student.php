@@ -49,6 +49,11 @@ function edit_student_page() {
                     'student_parent_city' => sanitize_text_field($_POST['student_parent_city']),
                     'student_parent_state' => sanitize_text_field($_POST['student_parent_state']),
                     'student_blood_group' => sanitize_text_field($_POST['student_blood_group']), // New field
+                    'student_id_number' => sanitize_text_field($_POST['student_id_number']), // Corrected placement
+                    'student_session' => sanitize_text_field($_POST['student_session']), // Corrected placement
+                    'student_registration_number' => sanitize_text_field($_POST['student_registration_number']), // Corrected placement
+                    'student_roll_number' => intval($_POST['student_roll_number']),
+                    'student_exam' => sanitize_text_field($_POST['student_exam']), // Corrected placement
                 );
 
                 // Handle Student Image Upload
@@ -86,8 +91,8 @@ function edit_student_page() {
                     $table_name,
                     $data,
                     array('id' => $student_id),
-                    $format = null,
-                    $where_format = null
+                    '%s', // Adjust the format here based on the data types in your table columns
+                    array('%d') // Adjust the format here based on the data type of the 'id' column
                 );
 
                 echo '<div class="updated"><p>Student data updated successfully.</p></div>';
@@ -104,6 +109,24 @@ echo '<form method="post" enctype="multipart/form-data">'; // Added enctype for 
 // Institute Name
 echo '<label for="institute_name">Institute Name:</label>';
 echo '<input type="text" name="institute_name" id="institute_name" value="' . esc_attr($student->institute_name) . '" >';
+
+
+echo '<label for="student_id_number">Student ID Number:</label>';
+echo '<input type="text" name="student_id_number" id="student_id_number" value="' . esc_attr($student->student_id_number) . '" >';
+
+echo '<label for="student_session">Student Session:</label>';
+echo '<input type="text" name="student_session" id="student_session" value="' . esc_attr($student->student_session) . '" >';
+
+echo '<label for="student_registration_number">Registration Number:</label>';
+echo '<input type="text" name="student_registration_number" id="student_registration_number" value="' . esc_attr($student->student_registration_number) . '" >';
+
+echo '<label for="student_roll_number">Roll Number:</label>';
+echo '<input type="number" name="student_roll_number" id="student_roll_number" value="' . esc_attr($student->student_roll_number) . '" >';
+
+echo '<label for="student_exam">Exam:</label>';
+echo '<input type="text" name="student_exam" id="student_exam" value="' . esc_attr($student->student_exam) . '" >';
+
+
 
 // Class
 echo '<label for="class">Class:</label>';
