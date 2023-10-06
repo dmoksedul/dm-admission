@@ -57,9 +57,6 @@ function admission_form_plugin_activation() {
         student_id_number VARCHAR(255) NOT NULL, /* New field for student ID number */
         student_registration_number VARCHAR(255) NOT NULL, /* New field for student registration number */
         student_roll_number VARCHAR(255) NOT NULL, /* New field for student roll number */
-        student_exam VARCHAR(255) NOT NULL, /* New field for student exam */
-        student_subject VARCHAR(255) NOT NULL, /* New field for student subject */
-        student_result VARCHAR(255) NOT NULL, /* New field for student result */
         PRIMARY KEY (id)
     ) $charset_collate;";
 
