@@ -1,67 +1,77 @@
 <?php
-// Function to display the search form and insert data
-function display_search_results() {
-    ?>
-    <div class="wrap">
-        <h1>Search Students by ID Number</h1>
-        <form method="post" action="">
-            <input type="text" name="student_id_number" placeholder="Student ID Number">
-            <input type="submit" name="search_students" value="Search">
-        </form>
+// Create the submenu page
+function dm_students_submenu_page() {
+    echo '<div class="wrap">';
+    echo '<h2>Search Students by ID</h2>';
 
-        <?php
-        if (isset($_POST['search_students'])) {
-            // Handle the search query and insert data
-            search_students_and_insert_data();
-        }
-        ?>
-    </div>
-    <?php
-}
+    // Display the search form
+    echo '<form method="post" action="">';
+    echo '<label for="search_student_id">Search Student ID:</label>';
+    echo '<input type="text" name="search_student_id" id="search_student_id">';
+    echo '<input type="submit" name="submit_search" value="Search">';
+    echo '</form>';
 
-// Function to search students and insert data into the new database
-function search_students_and_insert_data() {
-    if (isset($_POST['student_id_number'])) {
-        $student_id_number = sanitize_text_field($_POST['student_id_number']);
+    // Handle form submission and display search results
+    if (isset($_POST['submit_search'])) {
+        // Get the entered student ID
+        $search_student_id = sanitize_text_field($_POST['search_student_id']);
 
+        // Perform a database query to search for the student
         global $wpdb;
-        $source_table_name = $wpdb->prefix . 'dm_students'; // Your source table name
-        $target_table_name = $wpdb->prefix . 'dm_students_esar'; // New database table
-
-        $student = $wpdb->get_row(
+        $table_name = $wpdb->prefix . 'dm_students';
+        $result = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT student_id, CONCAT(student_first_name, ' ', student_last_name) AS student_name, student_registration_number, student_phone_number FROM $source_table_name WHERE student_id_number = %s",
-                $student_id_number
+                "SELECT student_id_number, student_first_name, student_last_name, student_phone_number
+                FROM $table_name
+                WHERE student_id_number = %s",
+                $search_student_id
             )
         );
 
-        if ($student) {
-            // Insert data into the new database table
-            $data = array(
-                'student_id' => $student->student_id,
-                'student_name' => $student->student_name,
-                'student_registration_number' => $student->student_registration_number,
-                'student_phone_number' => $student->student_phone_number,
-            );
-
-            $wpdb->insert($target_table_name, $data);
-
-            echo '<p>Data inserted into the new database.</p>';
+        // Display search results in form input fields
+        if ($result) {
+            echo '<h2>Search Result:</h2>';
+            foreach ($result as $student) {
+                echo '<form method="post" action="">';
+                echo '<input type="hidden" name="student_id_number" value="' . esc_attr($student->student_id_number) . '">';
+                echo '<input type="text" name="student_first_name" placeholder="First Name" value="' . esc_attr($student->student_first_name) . '" required>';
+                echo '<input type="text" name="student_last_name" placeholder="Last Name" value="' . esc_attr($student->student_last_name) . '" required>';
+                echo '<input type="tel" name="student_phone_number" placeholder="Phone Number" value="' . esc_attr($student->student_phone_number) . '" required>';
+                echo '<input type="submit" name="insert_to_esar" value="Insert to dm_students_esar">';
+                echo '</form>';
+            }
         } else {
-            echo '<p>No students found with the provided ID number.</p>';
+            // No results found
+            echo '<p>No student found with the entered ID number.</p>';
         }
     }
+
+    echo '</div>';
 }
 
-// Add a menu item for your plugin
-function add_menu_item() {
-    add_menu_page(
-        'Student Search Plugin',
-        'Student Search Plugin',
-        'manage_options',
-        'student-search-plugin',
-        'display_search_form_and_insert_data'
+// Handle inserting data into dm_students_esar when the "Insert to dm_students_esar" button is clicked
+if (isset($_POST['insert_to_esar'])) {
+    // Get the data from the form submission
+    $student_id_number = sanitize_text_field($_POST['student_id_number']);
+    $student_first_name = sanitize_text_field($_POST['student_first_name']);
+    $student_last_name = sanitize_text_field($_POST['student_last_name']);
+    $student_phone_number = sanitize_text_field($_POST['student_phone_number']);
+
+    // Perform the database insert into dm_students_esar
+    global $wpdb;
+    $esar_table_name = $wpdb->prefix . 'dm_students_esar';
+
+    $data = array(
+        'student_id_number' => $student_id_number,
+        'student_first_name' => $student_first_name,
+        'student_last_name' => $student_last_name,
+        'student_phone_number' => $student_phone_number,
     );
-}
 
-add_action('admin_menu', 'add_menu_item');
+    $wpdb->insert($esar_table_name, $data);
+
+    echo '<div class="wrap">';
+    echo '<p>Data inserted into dm_students_esar successfully.</p>';
+    echo '</div>';
+}
+?>

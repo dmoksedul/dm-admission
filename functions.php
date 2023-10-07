@@ -173,7 +173,7 @@ function admission_form_plugin_menu() {
         'Search Results',           // Menu title
         'manage_options',           // Capability required to access the menu
         'search-results',           // Menu slug (unique identifier)
-        'display_search_results'    // Callback function to display the search results page
+        'dm_students_submenu_page'    // Callback function to display the search results page
     );
 }
 add_action('admin_menu', 'admission_form_plugin_menu');
