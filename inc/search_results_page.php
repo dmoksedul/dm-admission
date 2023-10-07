@@ -170,7 +170,14 @@ function dm_student_admit_card_shortcode() {
     echo '<label for="registration_number">Registration Number:</label>';
     echo '<input type="text" name="registration_number" id="registration_number" required><br>';
     echo '<label for="exam_name">Exam Name:</label>';
-    echo '<input type="text" name="exam_name" id="exam_name" required><br>';
+    echo '<br>';
+    echo '
+        <select name="exam_name" id="exam_name" required>
+            <option value="" selected disabled>Select </option>
+            <option value="Half Year">Half Year </option>
+            <option value="Anual">Anual </option>
+        </select>
+    ';
     echo '<input type="submit" name="search_student" value="Search">';
     echo '</form>';
 
