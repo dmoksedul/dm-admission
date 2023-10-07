@@ -22,6 +22,7 @@ function admission_form_plugin_activation() {
         section VARCHAR(255) NOT NULL,
         admission_date DATE NOT NULL,
         category VARCHAR(255) NOT NULL,
+        subject_list VARCHAR(255) NOT NULL,
         student_first_name VARCHAR(255) NOT NULL,
         student_last_name VARCHAR(255) NOT NULL,
         student_gender VARCHAR(20) NOT NULL,
@@ -67,7 +68,6 @@ function admission_form_plugin_activation() {
 register_activation_hook(__FILE__, 'admission_form_plugin_activation');
 
 
-
 function create_custom_table() {
     global $wpdb;
 
@@ -77,10 +77,14 @@ function create_custom_table() {
 
     $sql = "CREATE TABLE $table_name (
         id INT NOT NULL AUTO_INCREMENT,
-        student_id INT NOT NULL,
         student_name VARCHAR(255) NOT NULL,
+        student_id_number INT NOT NULL,
         student_registration_number VARCHAR(255) NOT NULL,
+        student_roll_number INT NOT NULL,
         student_phone_number VARCHAR(20) NOT NULL,
+        subject_list TEXT NOT NULL,
+        class VARCHAR(255) NOT NULL,
+        exam VARCHAR(255) NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 
@@ -89,6 +93,7 @@ function create_custom_table() {
 }
 
 register_activation_hook(__FILE__, 'create_custom_table');
+
 
 
 // Deactivation Hook
