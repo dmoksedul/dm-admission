@@ -92,7 +92,7 @@ function exam_submenu_page_content() {
         <form method="post" action="">
             <label for="student_id">Search Student by ID:</label>
             <input type="text" name="student_id" id="student_id" required>
-            <input type="submit" name="search_student" value="Search">
+            <input type="submit" name="search_student" value="Apply">
         </form>
         <?php if ($message) : ?>
             <p><?php echo esc_html($message); ?></p>
@@ -112,10 +112,14 @@ function exam_submenu_page_content() {
             <label for="student_class">Class:</label>
             <input type="text" name="student_class" id="student_class" value="<?php echo esc_attr($student_class); ?>" readonly>
             <label for="exam_name">Exam Name:</label>
-            <input type="text" name="exam_name" id="exam_name" required>
+            <select name="exam_name" id="exam_name" required>
+            <option value="" selected disabled>Select </option>
+            <option value="Half Year">Half Year </option>
+            <option value="Anual">Anual </option>
+        </select>
             <label for="student_roll_number">Student Roll Number:</label>
             <input type="text" name="student_roll_number" id="student_roll_number" value="<?php echo esc_attr($student_roll_number); ?>" readonly>
-            <input type="submit" name="insert_student_data" value="Insert Data" <?php if ($disableSubmit) echo 'disabled'; ?>>
+            <input type="submit" name="insert_student_data" value="Add Student" <?php if ($disableSubmit) echo 'disabled'; ?>>
         </form>
     </div>
     <?php
