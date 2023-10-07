@@ -9,11 +9,11 @@ if (isset($_POST['update_student'])) {
     // Assuming you have already defined the 'sanitize_text_field' and 'sanitize_textarea_field' functions
 
 // Sanitize and format various input fields
-$institute_name = sanitize_text_field($_POST['institute_name']);
-$class = sanitize_text_field($_POST['class']);
-$section = sanitize_text_field($_POST['section']);
-$admission_date = sanitize_text_field($_POST['admission_date']);
-$category = sanitize_text_field($_POST['category']);
+// $institute_name = sanitize_text_field($_POST['institute_name']);
+// $class = sanitize_text_field($_POST['class']);
+// $section = sanitize_text_field($_POST['section']);
+// $admission_date = sanitize_text_field($_POST['admission_date']);
+// $category = sanitize_text_field($_POST['category']);
 $student_first_name = sanitize_text_field($_POST['student_first_name']);
 $student_last_name = sanitize_text_field($_POST['student_last_name']);
 $student_gender = sanitize_text_field($_POST['student_gender']);
@@ -27,21 +27,22 @@ $student_present_address = sanitize_textarea_field($_POST['student_present_addre
 $student_permanent_address = sanitize_textarea_field($_POST['student_permanent_address']);
 $student_city = sanitize_text_field($_POST['student_city']);
 $student_state = sanitize_text_field($_POST['student_state']);
-$student_previous_institute_name = sanitize_text_field($_POST['student_previous_institute_name']);
-$student_previous_institute_qualification = sanitize_text_field($_POST['student_previous_institute_qualification']);
-$student_previous_institute_remarks = sanitize_textarea_field($_POST['student_previous_institute_remarks']);
+// $student_previous_institute_name = sanitize_text_field($_POST['student_previous_institute_name']);
+// $student_previous_institute_qualification = sanitize_text_field($_POST['student_previous_institute_qualification']);
+// $student_previous_institute_remarks = sanitize_textarea_field($_POST['student_previous_institute_remarks']);
 $student_parent_name = sanitize_text_field($_POST['student_parent_name']);
-$student_parent_relation = sanitize_text_field($_POST['student_parent_relation']);
-$student_father_name = sanitize_text_field($_POST['student_father_name']);
-$student_mother_name = sanitize_text_field($_POST['student_mother_name']);
-$student_parent_occupation = sanitize_text_field($_POST['student_parent_occupation']);
-$student_parent_income = sanitize_text_field($_POST['student_parent_income']);
-$student_parent_education = sanitize_text_field($_POST['student_parent_education']);
-$student_parent_email = sanitize_email($_POST['student_parent_email']);
-$student_parent_number = sanitize_text_field($_POST['student_parent_number']);
-$student_parent_address = sanitize_textarea_field($_POST['student_parent_address']);
-$student_parent_city = sanitize_text_field($_POST['student_parent_city']);
-$student_parent_state = sanitize_text_field($_POST['student_parent_state']);
+// $student_parent_relation = sanitize_text_field($_POST['student_parent_relation']);
+// $student_father_name = sanitize_text_field($_POST['student_father_name']);
+// $student_mother_name = sanitize_text_field($_POST['student_mother_name']);
+// $student_parent_occupation = sanitize_text_field($_POST['student_parent_occupation']);
+// $student_parent_income = sanitize_text_field($_POST['student_parent_income']);
+// $student_parent_education = sanitize_text_field($_POST['student_parent_education']);
+// $student_parent_email = sanitize_email($_POST['student_parent_email']);
+// $student_parent_number = sanitize_text_field($_POST['student_parent_number']);
+// $student_parent_address = sanitize_textarea_field($_POST['student_parent_address']);
+// $student_parent_city = sanitize_text_field($_POST['student_parent_city']);
+// $student_parent_state = sanitize_text_field($_POST['student_parent_state']);
+$student_registration_number = sanitize_text_field($_POST['student_registration_number']);
 
 // Now, you have sanitized and formatted values for each of these variables, and you can use them in your application as needed.
 
@@ -49,11 +50,11 @@ $student_parent_state = sanitize_text_field($_POST['student_parent_state']);
 
     // Prepare data for updating student information
     $data = array(
-        'institute_name' => $institute_name,
-    'class' => $class,
-    'section' => $section,
-    'admission_date' => $admission_date,
-    'category' => $category,
+        // 'institute_name' => $institute_name,
+    // 'class' => $class,
+    // 'section' => $section,
+    // 'admission_date' => $admission_date,
+    // 'category' => $category,
     'student_first_name' => $student_first_name,
     'student_last_name' => $student_last_name,
     'student_gender' => $student_gender,
@@ -67,21 +68,22 @@ $student_parent_state = sanitize_text_field($_POST['student_parent_state']);
     'student_permanent_address' => $student_permanent_address,
     'student_city' => $student_city,
     'student_state' => $student_state,
-    'student_previous_institute_name' => $student_previous_institute_name,
-    'student_previous_institute_qualification' => $student_previous_institute_qualification,
-    'student_previous_institute_remarks' => $student_previous_institute_remarks,
-    'student_parent_name' => $student_parent_name,
-    'student_parent_relation' => $student_parent_relation,
-    'student_father_name' => $student_father_name,
-    'student_mother_name' => $student_mother_name,
-    'student_parent_occupation' => $student_parent_occupation,
-    'student_parent_income' => $student_parent_income,
-    'student_parent_education' => $student_parent_education,
-    'student_parent_email' => $student_parent_email,
-    'student_parent_number' => $student_parent_number,
-    'student_parent_address' => $student_parent_address,
-    'student_parent_city' => $student_parent_city,
-    'student_parent_state' => $student_parent_state,
+    // 'student_previous_institute_name' => $student_previous_institute_name,
+    // 'student_previous_institute_qualification' => $student_previous_institute_qualification,
+    // 'student_previous_institute_remarks' => $student_previous_institute_remarks,
+    // 'student_parent_name' => $student_parent_name,
+    // 'student_parent_relation' => $student_parent_relation,
+    // 'student_father_name' => $student_father_name,
+    // 'student_mother_name' => $student_mother_name,
+    // 'student_parent_occupation' => $student_parent_occupation,
+    // 'student_parent_income' => $student_parent_income,
+    // 'student_parent_education' => $student_parent_education,
+    // 'student_parent_email' => $student_parent_email,
+    // 'student_parent_number' => $student_parent_number,
+    // 'student_parent_address' => $student_parent_address,
+    // 'student_parent_city' => $student_parent_city,
+    // 'student_parent_state' => $student_parent_state,
+    'student_registration_number' => $student_registration_number,
 );
 
 
@@ -124,6 +126,11 @@ $student = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %
     <form method="post" action="" enctype="multipart/form-data">
         <input type="hidden" name="student_id" value="<?php echo esc_attr($student->id); ?>">
         
+        <!-- Student Registration Number -->
+        <div class="input_box">
+            <label for="student_registration_number">Student Registration Number:</label>
+            <input type="text" name="student_registration_number" id="student_registration_number" value="<?php echo esc_attr($student->student_registration_number); ?>" required>
+        </div>
         <!-- Student ID Number -->
         <div class="input_box">
             <label for="student_id_number">Student ID Number:</label>

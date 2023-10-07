@@ -67,6 +67,30 @@ function admission_form_plugin_activation() {
 register_activation_hook(__FILE__, 'admission_form_plugin_activation');
 
 
+
+function create_custom_table() {
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'dm_students_esar';
+
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+        id INT NOT NULL AUTO_INCREMENT,
+        student_id INT NOT NULL,
+        student_name VARCHAR(255) NOT NULL,
+        student_registration_number VARCHAR(255) NOT NULL,
+        student_phone_number VARCHAR(20) NOT NULL,
+        PRIMARY KEY (id)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+
+register_activation_hook(__FILE__, 'create_custom_table');
+
+
 // Deactivation Hook
 function admission_form_plugin_deactivation() {
     global $wpdb;
@@ -142,6 +166,15 @@ function admission_form_plugin_menu() {
         'shortcodes',                       // Menu slug (unique identifier)
         'shortcodes_page'                  // Callback function to display the import form
     );
+    // Add a submenu for "Results"
+    add_submenu_page(
+        'dm_admission',             // Parent menu slug
+        'Search Results',           // Page title
+        'Search Results',           // Menu title
+        'manage_options',           // Capability required to access the menu
+        'search-results',           // Menu slug (unique identifier)
+        'display_search_results'    // Callback function to display the search results page
+    );
 }
 add_action('admin_menu', 'admission_form_plugin_menu');
 // default settings linking
@@ -173,6 +206,12 @@ include_once('inc/student_admission.php');
 
 // pending student  page linking
 include_once('inc/student_pending_admission.php');
+
+// Include the search_results_page.php file
+include_once('inc/search_results_page.php');
+
+// ... other includes and functions ...
+
 
 
 
