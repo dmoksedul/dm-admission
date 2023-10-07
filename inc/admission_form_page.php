@@ -44,6 +44,7 @@ function admission_form_page() {
             'section' => sanitize_text_field($_POST['section']),
             'admission_date' => sanitize_text_field($_POST['admission_date']),
             'category' => sanitize_text_field($_POST['category']),
+            'subject_list' => sanitize_text_field($_POST['subject_list']),
             'student_first_name' => sanitize_text_field($_POST['student_first_name']),
             'student_last_name' => sanitize_text_field($_POST['student_last_name']),
             'student_gender' => sanitize_text_field($_POST['student_gender']),
@@ -183,6 +184,11 @@ function admission_form_page() {
                             <option value="Commerce">Commerce</option>
                             <!-- Add more options as needed -->
                         </select>
+                    </div>
+                    <div class="input_box">
+                        <!-- Subject List -->
+                        <label for="subject_list">Subject:</label>
+                        <input value="Bangla, Englissh, ICT" type="text" name="subject_list" id="subject_list" required>
                     </div>
                     <div class="input_box">
                         <!-- Category -->

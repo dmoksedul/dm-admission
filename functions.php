@@ -22,6 +22,7 @@ function admission_form_plugin_activation() {
         section VARCHAR(255) NOT NULL,
         admission_date DATE NOT NULL,
         category VARCHAR(255) NOT NULL,
+        subject_list VARCHAR(255) NOT NULL,
         student_first_name VARCHAR(255) NOT NULL,
         student_last_name VARCHAR(255) NOT NULL,
         student_gender VARCHAR(20) NOT NULL,
@@ -77,10 +78,14 @@ function create_custom_table() {
 
     $sql = "CREATE TABLE $table_name (
         id INT NOT NULL AUTO_INCREMENT,
-        student_id INT NOT NULL,
         student_name VARCHAR(255) NOT NULL,
+        student_id_number INT NOT NULL,
         student_registration_number VARCHAR(255) NOT NULL,
+        student_roll_number INT NOT NULL,
         student_phone_number VARCHAR(20) NOT NULL,
+        subject_list TEXT NOT NULL,
+        class VARCHAR(255) NOT NULL,
+        exam VARCHAR(255) NOT NULL,
         PRIMARY KEY (id)
     ) $charset_collate;";
 
@@ -89,6 +94,7 @@ function create_custom_table() {
 }
 
 register_activation_hook(__FILE__, 'create_custom_table');
+
 
 
 // Deactivation Hook
@@ -166,14 +172,13 @@ function admission_form_plugin_menu() {
         'shortcodes',                       // Menu slug (unique identifier)
         'shortcodes_page'                  // Callback function to display the import form
     );
-    // Add a submenu page for search students
     add_submenu_page(
-        'dm_admission', // Parent menu slug
-        'Search Student', // Page title
-        'Search Student', // Menu title
-        'manage_options', // Capability required to access the menu
-        'search-student', // Menu slug (unique identifier)
-        'display_search_student_page' // Callback function to display the search student form
+        'dm_admission', // Parent menu slug (Students)
+        'Exam', // Page title
+        'Exam', // Menu title
+        'manage_options', // Capability required to access
+        'exam-submenu-page', // Menu slug
+        'exam_submenu_page_content' // Callback function to display content
     );
 
 }
@@ -212,6 +217,7 @@ include_once('inc/student_pending_admission.php');
 include_once('inc/search_results_page.php');
 
 // ... other includes and functions ...
+
 
 
 
