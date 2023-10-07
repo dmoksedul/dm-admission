@@ -166,15 +166,16 @@ function admission_form_plugin_menu() {
         'shortcodes',                       // Menu slug (unique identifier)
         'shortcodes_page'                  // Callback function to display the import form
     );
-    // Add a submenu for "Results"
+    // Add a submenu page for search students
     add_submenu_page(
-        'dm_admission',             // Parent menu slug
-        'Search Results',           // Page title
-        'Search Results',           // Menu title
-        'manage_options',           // Capability required to access the menu
-        'search-results',           // Menu slug (unique identifier)
-        'dm_students_submenu_page'    // Callback function to display the search results page
+        'dm_admission', // Parent menu slug
+        'Search Student', // Page title
+        'Search Student', // Menu title
+        'manage_options', // Capability required to access the menu
+        'search-student', // Menu slug (unique identifier)
+        'display_search_student_page' // Callback function to display the search student form
     );
+
 }
 add_action('admin_menu', 'admission_form_plugin_menu');
 // default settings linking
@@ -211,6 +212,8 @@ include_once('inc/student_pending_admission.php');
 include_once('inc/search_results_page.php');
 
 // ... other includes and functions ...
+
+
 
 
 
