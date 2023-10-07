@@ -120,3 +120,61 @@ function exam_submenu_page_content() {
     </div>
     <?php
 }
+
+
+
+
+
+
+// Register the shortcode [dm_student_admit_card]
+function dm_student_admit_card_shortcode() {
+    ob_start(); // Start output buffering
+
+    if (isset($_POST['search_student'])) {
+        // Handle form submission
+        global $wpdb;
+
+        // Get search parameters from the form
+        $student_name = sanitize_text_field($_POST['student_name']);
+        $registration_number = sanitize_text_field($_POST['registration_number']);
+        $exam_name = sanitize_text_field($_POST['exam_name']);
+
+        // Query the dm_students_esar table to retrieve student information
+        $table_name = $wpdb->prefix . 'dm_students_esar';
+        $query = $wpdb->prepare(
+            "SELECT student_name, student_registration_number, exam, subject_list FROM $table_name WHERE student_name = %s AND student_registration_number = %s AND exam = %s",
+            $student_name,
+            $registration_number,
+            $exam_name
+        );
+
+        $student_data = $wpdb->get_row($query);
+
+        if ($student_data) {
+            // Display student information
+            echo '<h2>Student Admit Card</h2>';
+            echo '<p><strong>Student Name:</strong> ' . esc_html($student_data->student_name) . '</p>';
+            echo '<p><strong>Registration Number:</strong> ' . esc_html($student_data->student_registration_number) . '</p>';
+            echo '<p><strong>Exam:</strong> ' . esc_html($student_data->exam) . '</p>';
+            echo '<p><strong>Subject List:</strong> ' . esc_html($student_data->subject_list) . '</p>';
+        } else {
+            // Display an error message if no matching student data is found
+            echo '<p>No student found with the provided information.</p>';
+        }
+    }
+
+    // Display the search form
+    echo '<form method="post" action="">';
+    echo '<label for="student_name">Student Name:</label>';
+    echo '<input type="text" name="student_name" id="student_name" required><br>';
+    echo '<label for="registration_number">Registration Number:</label>';
+    echo '<input type="text" name="registration_number" id="registration_number" required><br>';
+    echo '<label for="exam_name">Exam Name:</label>';
+    echo '<input type="text" name="exam_name" id="exam_name" required><br>';
+    echo '<input type="submit" name="search_student" value="Search">';
+    echo '</form>';
+
+    return ob_get_clean(); // Return the buffered output
+}
+add_shortcode('dm_student_admit_card', 'dm_student_admit_card_shortcode');
+
