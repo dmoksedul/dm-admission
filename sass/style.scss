@@ -385,3 +385,42 @@ button {
     }
   }
 }
+
+.admit_card_search {
+  max-width: 800px;
+  padding: 50px;
+  margin: auto;
+  box-shadow: 0 0 10px #00000029;
+  border-radius: 12px;
+  div {
+    width: 100%;
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    label {
+      display: block;
+      text-align: left;
+      width: 100%;
+      margin-left: 5px;
+      margin-bottom: 3px;
+    }
+    input,
+    select {
+      width: 100%;
+      border: 1px solid #00000030;
+      border-radius: 2px;
+      padding: 8px 20px;
+      outline: none !important;
+    }
+    input[type="submit"] {
+      border: 2px solid $pColor;
+      display: block;
+      width: auto;
+      margin: auto;
+    }
+  }
+}
