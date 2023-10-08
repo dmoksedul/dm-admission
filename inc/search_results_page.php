@@ -146,7 +146,7 @@ function dm_student_admit_card_shortcode() {
         // Query the dm_students_esar table to retrieve student information
         $table_name = $wpdb->prefix . 'dm_students_esar';
         $query = $wpdb->prepare(
-            "SELECT student_name, student_registration_number, exam, subject_list FROM $table_name WHERE student_name = %s AND student_registration_number = %s AND exam = %s",
+            "SELECT student_name, student_registration_number, exam, subject_list, student_image_id FROM $table_name WHERE student_name = %s AND student_registration_number = %s AND exam = %s",
             $student_name,
             $registration_number,
             $exam_name
@@ -155,12 +155,18 @@ function dm_student_admit_card_shortcode() {
         $student_data = $wpdb->get_row($query);
 
         if ($student_data) {
-            // Display student information
+            // Display student information including the image
             echo '<h2>Student Admit Card</h2>';
             echo '<p><strong>Student Name:</strong> ' . esc_html($student_data->student_name) . '</p>';
             echo '<p><strong>Registration Number:</strong> ' . esc_html($student_data->student_registration_number) . '</p>';
             echo '<p><strong>Exam:</strong> ' . esc_html($student_data->exam) . '</p>';
             echo '<p><strong>Subject List:</strong> ' . esc_html($student_data->subject_list) . '</p>';
+
+            // Display the student image if available
+            if ($student_data->student_image_id) {
+                $image_url = wp_get_attachment_url($student_data->student_image_id);
+                echo '<img src="' . esc_url($image_url) . '" alt="Student Image">';
+            }
         } else {
             // Display an error message if no matching student data is found
             echo '<p>No student found with the provided information.</p>';
@@ -179,7 +185,7 @@ function dm_student_admit_card_shortcode() {
         <select name="exam_name" id="exam_name" required>
             <option value="" selected disabled>Select </option>
             <option value="Half Year">Half Year </option>
-            <option value="Anual">Anual </option>
+            <option value="Annual">Annual </option>
         </select>
     ';
     echo '<input type="submit" name="search_student" value="Search">';
@@ -188,4 +194,3 @@ function dm_student_admit_card_shortcode() {
     return ob_get_clean(); // Return the buffered output
 }
 add_shortcode('dm_student_admit_card', 'dm_student_admit_card_shortcode');
-
