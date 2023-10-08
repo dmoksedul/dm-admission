@@ -130,67 +130,74 @@ function exam_submenu_page_content() {
 
 
 
-// Register the shortcode [dm_student_admit_card]
-function dm_student_admit_card_shortcode() {
+// Add a shortcode for generating admit cards
+function admit_card_shortcode() {
     ob_start(); // Start output buffering
 
-    if (isset($_POST['search_student'])) {
-        // Handle form submission
+    // Initialize variables for search results
+    $student_name_query = '';
+    $exam_query = '';
+    $registration_number_query = '';
+    $search_results = array();
+
+    // Check if the search form has been submitted
+    if (isset($_POST['search_students'])) {
+        // Check if the keys exist in the $_POST array before accessing their values
+        if (isset($_POST['student_name_query'])) {
+            $student_name_query = sanitize_text_field($_POST['student_name_query']);
+        }
+        if (isset($_POST['exam_query'])) {
+            $exam_query = sanitize_text_field($_POST['exam_query']);
+        }
+        if (isset($_POST['registration_number_query'])) {
+            $registration_number_query = sanitize_text_field($_POST['registration_number_query']);
+        }
+
+        // Query the dm_students_esar table to search for matching students
         global $wpdb;
+        $esar_table_name = $wpdb->prefix . 'dm_students_esar';
 
-        // Get search parameters from the form
-        $student_name = sanitize_text_field($_POST['student_name']);
-        $registration_number = sanitize_text_field($_POST['registration_number']);
-        $exam_name = sanitize_text_field($_POST['exam_name']);
-
-        // Query the dm_students_esar table to retrieve student information
-        $table_name = $wpdb->prefix . 'dm_students_esar';
-        $query = $wpdb->prepare(
-            "SELECT student_name, student_registration_number, exam, subject_list, student_image_id FROM $table_name WHERE student_name = %s AND student_registration_number = %s AND exam = %s",
-            $student_name,
-            $registration_number,
-            $exam_name
+        $sql = $wpdb->prepare(
+            "SELECT * FROM $esar_table_name WHERE student_name LIKE %s AND exam LIKE %s AND student_registration_number LIKE %s",
+            '%' . $wpdb->esc_like($student_name_query) . '%',
+            '%' . $wpdb->esc_like($exam_query) . '%',
+            '%' . $wpdb->esc_like($registration_number_query) . '%'
         );
 
-        $student_data = $wpdb->get_row($query);
-
-        if ($student_data) {
-            // Display student information including the image
-            echo '<h2>Student Admit Card</h2>';
-            echo '<p><strong>Student Name:</strong> ' . esc_html($student_data->student_name) . '</p>';
-            echo '<p><strong>Registration Number:</strong> ' . esc_html($student_data->student_registration_number) . '</p>';
-            echo '<p><strong>Exam:</strong> ' . esc_html($student_data->exam) . '</p>';
-            echo '<p><strong>Subject List:</strong> ' . esc_html($student_data->subject_list) . '</p>';
-
-            // Display the student image if available
-            if ($student_data->student_image_id) {
-                $image_url = wp_get_attachment_url($student_data->student_image_id);
-                echo '<img src="' . esc_url($image_url) . '" alt="Student Image">';
-            }
-        } else {
-            // Display an error message if no matching student data is found
-            echo '<p>No student found with the provided information.</p>';
-        }
+        $search_results = $wpdb->get_results($sql);
     }
+    ?>
+    <div class="admit-card-search">
+        <form method="post" action="">
+            <label for="student_name_query">Search by Student Name:</label>
+            <input type="text" name="student_name_query" id="student_name_query" value="<?php echo esc_attr($student_name_query); ?>">
+            <label for="exam_query">Search by Exam:</label>
+            <input type="text" name="exam_query" id="exam_query" value="<?php echo esc_attr($exam_query); ?>">
+            <label for="registration_number_query">Search by Registration Number:</label>
+            <input type="text" name="registration_number_query" id="registration_number_query" value="<?php echo esc_attr($registration_number_query); ?>">
+            <input type="submit" name="search_students" value="Search">
+        </form>
+    </div>
 
-    // Display the search form
-    echo '<form method="post" action="">';
-    echo '<label for="student_name">Student Name:</label>';
-    echo '<input type="text" name="student_name" id="student_name" required><br>';
-    echo '<label for="registration_number">Registration Number:</label>';
-    echo '<input type="text" name="registration_number" id="registration_number" required><br>';
-    echo '<label for="exam_name">Exam Name:</label>';
-    echo '<br>';
-    echo '
-        <select name="exam_name" id="exam_name" required>
-            <option value="" selected disabled>Select </option>
-            <option value="Half Year">Half Year </option>
-            <option value="Annual">Annual </option>
-        </select>
-    ';
-    echo '<input type="submit" name="search_student" value="Search">';
-    echo '</form>';
-
+    <?php
+    // Display search results
+    if (!empty($search_results)) {
+        echo '<h2>Search Results:</h2>';
+        echo '<ul>';
+        foreach ($search_results as $result) {
+            echo '<li>';
+            echo 'Student Name: ' . esc_html($result->student_name) . '<br>';
+            echo 'Exam: ' . esc_html($result->exam) . '<br>';
+            echo 'Registration Number: ' . esc_html($result->student_registration_number);
+            echo '</li>';
+        }
+        echo '</ul>';
+    } elseif ($student_name_query !== '' || $exam_query !== '' || $registration_number_query !== '') {
+        echo '<p>No matching students found.</p>';
+    }
+    ?>
+    <?php
     return ob_get_clean(); // Return the buffered output
 }
-add_shortcode('dm_student_admit_card', 'dm_student_admit_card_shortcode');
+add_shortcode('admit_card', 'admit_card_shortcode');
+

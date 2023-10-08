@@ -121,8 +121,8 @@ function admission_form_plugin_menu() {
     // Add a submenu page for the student list
     add_submenu_page(
         'dm_admission',       // Parent menu slug
-        'Student List',         // Page title
-        'Student List',         // Menu title
+        'All Students',         // Page title
+        'All Students',         // Menu title
         'manage_options',       // Capability required to access the menu
         'dm_admission',         // Menu slug (unique identifier)
         'display_student_list'  // Callback function to display the student
@@ -163,6 +163,14 @@ function admission_form_plugin_menu() {
         'import-students',                       // Menu slug (unique identifier)
         'import_students_form'                  // Callback function to display the import form
     );
+    add_submenu_page(
+        'dm_admission', // Parent menu slug (Students)
+        'Exam', // Page title
+        'Exam', // Menu title
+        'manage_options', // Capability required to access
+        'exam-submenu-page', // Menu slug
+        'exam_submenu_page_content' // Callback function to display content
+    );
     // Add a submenu page for importing students from CSV
     add_submenu_page(
         'dm_admission',                        // Parent menu slug
@@ -171,14 +179,6 @@ function admission_form_plugin_menu() {
         'manage_options',                        // Capability required to access the menu
         'shortcodes',                       // Menu slug (unique identifier)
         'shortcodes_page'                  // Callback function to display the import form
-    );
-    add_submenu_page(
-        'dm_admission', // Parent menu slug (Students)
-        'Exam', // Page title
-        'Exam', // Menu title
-        'manage_options', // Capability required to access
-        'exam-submenu-page', // Menu slug
-        'exam_submenu_page_content' // Callback function to display content
     );
 
 }
