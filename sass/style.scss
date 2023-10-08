@@ -388,7 +388,7 @@ button {
 
 .admit_card_search {
   max-width: 800px;
-  padding: 50px;
+  padding: 30px;
   margin: auto;
   box-shadow: 0 0 10px #00000029;
   border-radius: 12px;
@@ -423,4 +423,35 @@ button {
       margin: auto;
     }
   }
+}
+// admit card box
+div#dm_admit_card_box {
+  border-radius: 4px;
+  border: 1px solid #00000021;
+  padding: 40px;
+  background: url(../assets/img/admit-card-bg.webp);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  .institute_logo {
+    max-width: 800px;
+    margin-bottom: 80px !important;
+    display: block;
+    margin: auto;
+  }
+}
+
+@media print {
+  #dm_admit_card_box {
+    visibility: visible;
+    width: 1080px;
+    height: 1528px;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+}
+
+.institute_details {
+  text-align: center;
 }

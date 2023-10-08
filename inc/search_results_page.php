@@ -135,7 +135,10 @@ function exam_submenu_page_content() {
 
 
 // Add a shortcode for generating admit cards
-function admit_card_shortcode() {
+function student_admit_card_search() {
+    
+    $plugin_dir_path = plugin_dir_path(__FILE__);
+    $institute_banner = plugin_dir_url($plugin_dir_path) . 'assets/img/banner.png';
     ob_start(); // Start output buffering
 
     // Initialize variables for search results
@@ -205,44 +208,56 @@ function admit_card_shortcode() {
         echo '<h2>Search Results:</h2>';
         echo '<ul>';
         foreach ($search_results as $result) {
-            echo '<li>';
-            echo 'Student Name: ' . esc_html($result->student_name) . '<br>';
-            echo 'Exam: ' . esc_html($result->exam) . '<br>';
-            echo 'Registration Number: ' . esc_html($result->student_registration_number);
             
-            // Retrieve additional information from dm_students table
-            $dm_students_table = $wpdb->prefix . 'dm_students';
-            $student_data = $wpdb->get_row($wpdb->prepare(
-                "SELECT student_father_name, student_mother_name, student_city, student_state, student_birthdate, student_image FROM $dm_students_table WHERE student_registration_number = %s",
-                $result->student_registration_number
-            ));
-
-            if ($student_data) {
-                echo '<br>';
-                echo 'Father Name: ' . esc_html($student_data->student_father_name) . '<br>';
-                echo 'Mother Name: ' . esc_html($student_data->student_mother_name) . '<br>';
-                echo 'Location: ' . esc_html($student_data->student_city) . ', ' . esc_html($student_data->student_state) . '<br>';
-                echo 'Birthdate: ' . esc_html($student_data->student_birthdate) . '<br>';
+            echo '<div id="dm_admit_card_box">';
+            echo '<div class="institute_details">
+                <img class="institute_logo" src="' . esc_url($institute_banner) . '" alt="College Name"/>
+            </div>';
+                echo '<div>';
+                echo 'Student Name: ' . esc_html($result->student_name) . '<br>';
+                echo 'Exam: ' . esc_html($result->exam) . '<br>';
+                echo 'Registration Number: ' . esc_html($result->student_registration_number);
                 
-                // Display student image if available
-                if (!empty($student_data->student_image)) {
-                    $image_url = wp_get_attachment_url($student_data->student_image);
-                    if ($image_url) {
-                        echo '<img width="150" src="' . esc_url($image_url) . '" alt="Student Image">';
+                // Retrieve additional information from dm_students table
+                $dm_students_table = $wpdb->prefix . 'dm_students';
+                $student_data = $wpdb->get_row($wpdb->prepare(
+                    "SELECT student_father_name, student_mother_name, student_city, student_state, student_birthdate, student_image FROM $dm_students_table WHERE student_registration_number = %s",
+                    $result->student_registration_number
+                ));
+
+                if ($student_data) {
+                    echo '<br>';
+                    echo 'Father Name: ' . esc_html($student_data->student_father_name) . '<br>';
+                    echo 'Mother Name: ' . esc_html($student_data->student_mother_name) . '<br>';
+                    echo 'Location: ' . esc_html($student_data->student_city) . ', ' . esc_html($student_data->student_state) . '<br>';
+                    echo 'Birthdate: ' . esc_html($student_data->student_birthdate) . '<br>';
+
+                    // Display student image if available
+                    if (!empty($student_data->student_image)) {
+                        $image_url = wp_get_attachment_url($student_data->student_image);
+                        if ($image_url) {
+                            echo '<img width="150" src="' . esc_url($image_url) . '" alt="Student Image">';
+                        }
                     }
                 }
-            }
-            
-            echo '</li>';
+                
+                echo '</div>';
+            echo '</div>';
         }
+        echo '<button id="admit_card_download_btn">Download PDF</button>';
         echo '</ul>';
     } elseif ($student_name_query !== '' || $exam_query !== '' || $registration_number_query !== '') {
         echo '<p>No matching students found.</p>';
     }
     ?>
+    <script>
+        document.getElementById('admit_card_download_btn').addEventListener("click", function(){
+            window.print();
+        })
+    </script>
     <?php
     return ob_get_clean(); // Return the buffered output
 }
-add_shortcode('admit_card', 'admit_card_shortcode');
+add_shortcode('dm_student_admit_card', 'student_admit_card_search');
 
 
