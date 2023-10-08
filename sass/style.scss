@@ -487,6 +487,13 @@ div#dm_admit_card_box {
     }
   }
 }
+.subject_table_admit_card {
+  &:last-child {
+    table {
+      border-left: none;
+    }
+  }
+}
 // subject table list for admit card
 #subject_table_admit_card {
   font-size: 16px;
@@ -542,7 +549,10 @@ div#dm_admit_card_box {
     color: $pColor;
   }
 }
-
+.subject_table_row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
 @media print {
   body {
     position: absolute !important;

@@ -252,20 +252,49 @@ function student_admit_card_search() {
                     echo '</div>';
                     
                     $subjects = explode(', ', esc_html($result->subject_list));
-                        if (!empty($subjects)) {
-                            echo '<table id="subject_table_admit_card">';
-                            echo '<tr><th>Serial</th><th>Name of Subject</th></tr>';
-                            foreach ($subjects as $key => $subject) {
-                                echo '<tr>';
-                                echo '<td>' . ($key + 1) . '</td>';
-                                echo '<td>' . $subject . '</td>';
-                                echo '</tr>';
-                            }
-                            echo '</table>';
+                    if (!empty($subjects)) {
+                        echo '<div class="subject_table_row">'; // Add a container div for the row
+                    
+                        // First Table
+                        echo '<div class="subject_table_admit_card">';
+                        echo '<table>';
+                    
+                        // First Table Header
+                        echo '<thead><tr><th>Serial</th><th>Name of Subject</th></tr></thead>';
+                    
+                        $totalSubjects = count($subjects);
+                        for ($i = 0; $i < $totalSubjects; $i += 2) {
+                            echo '<tr>';
+                            echo '<td>' . ($i + 1) . '</td>';
+                            echo '<td>' . $subjects[$i] . '</td>';
+                            echo '</tr>';
+                        }
+                    
+                        echo '</table>';
+                        echo '</div>'; // Close the first table div
+                    
+                        // Second Table
+                        echo '<div class="subject_table_admit_card">';
+                        echo '<table>';
+                    
+                        // Second Table Header
+                        echo '<thead><tr><th>Serial</th><th>Name of Subject</th></tr></thead>';
+                    
+                        for ($i = 1; $i < $totalSubjects; $i += 2) {
+                            echo '<tr>';
+                            echo '<td>' . ($i + 1) . '</td>';
+                            echo '<td>' . $subjects[$i] . '</td>';
+                            echo '</tr>';
+                        }
+                    
+                        echo '</table>';
+                        echo '</div>'; // Close the second table div
+                    
+                        echo '</div>'; // Close the row container
                         } else {
                             echo 'No subjects available.';
                         }
-                }
+                    }
                 // signature foooter box
                 echo '<div class="signature_footer_box">';
                 echo '
