@@ -130,6 +130,17 @@ function exam_submenu_page_content() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // Add a shortcode for generating admit cards
 function admit_card_shortcode() {
     ob_start(); // Start output buffering
@@ -153,20 +164,31 @@ function admit_card_shortcode() {
             $registration_number_query = sanitize_text_field($_POST['registration_number_query']);
         }
 
-        // Query the dm_students_esar table to search for matching students
+        // Query both the dm_students_esar and dm_students tables to search for matching students
         global $wpdb;
         $esar_table_name = $wpdb->prefix . 'dm_students_esar';
+        $students_table_name = $wpdb->prefix . 'dm_students';
 
-        $sql = $wpdb->prepare(
-            "SELECT * FROM $esar_table_name WHERE student_name LIKE %s AND exam LIKE %s AND student_registration_number LIKE %s",
+        // Search in dm_students_esar table
+        $esar_sql = $wpdb->prepare(
+            "SELECT * FROM $esar_table_name WHERE student_name LIKE %s AND exam LIKE %s",
             '%' . $wpdb->esc_like($student_name_query) . '%',
-            '%' . $wpdb->esc_like($exam_query) . '%',
+            '%' . $wpdb->esc_like($exam_query) . '%'
+        );
+        $esar_results = $wpdb->get_results($esar_sql);
+
+        // Search in dm_students table
+        $students_sql = $wpdb->prepare(
+            "SELECT student_image, student_father_name, student_mother_name, student_city, student_state, student_session FROM $students_table_name WHERE student_registration_number LIKE %s",
             '%' . $wpdb->esc_like($registration_number_query) . '%'
         );
+        $students_results = $wpdb->get_results($students_sql);
 
-        $search_results = $wpdb->get_results($sql);
+        // Merge the results from both tables
+        $search_results = array_merge($esar_results, $students_results);
     }
     ?>
+
     <div class="admit-card-search">
         <form method="post" action="">
             <label for="student_name_query">Search by Student Name:</label>
@@ -186,9 +208,25 @@ function admit_card_shortcode() {
         echo '<ul>';
         foreach ($search_results as $result) {
             echo '<li>';
-            echo 'Student Name: ' . esc_html($result->student_name) . '<br>';
-            echo 'Exam: ' . esc_html($result->exam) . '<br>';
-            echo 'Registration Number: ' . esc_html($result->student_registration_number);
+            if (isset($result->student_name)) {
+                echo 'Student Name: ' . esc_html($result->student_name) . '<br>';
+                echo 'Student Registration Number: ' . esc_html($result->student_registration_number) . '<br>';
+                echo 'Student Roll Number: ' . esc_html($result->student_roll_number) . '<br>';
+                echo 'Class: ' . esc_html($result->class) . '<br>';
+                echo 'Exam: ' . esc_html($result->exam) . '<br>';
+                echo 'Subject List: ' . esc_html($result->subject_list) . '<br>';
+            }
+            if (isset($result->student_image)) {
+                // Fetch and display the student image (for dm_students table)
+                $student_image = wp_get_attachment_image($result->student_image, 'thumbnail');
+                echo 'Student Image: ' . $student_image . '<br>';
+            }
+            if (isset($result->student_father_name)) {
+                echo 'Father\'s Name: ' . esc_html($result->student_father_name) . '<br>';
+                echo 'Mother\'s Name: ' . esc_html($result->student_mother_name) . '<br>';
+                echo 'Location (City, State): ' . esc_html($result->student_city) . ', ' . esc_html($result->student_state) . '<br>';
+                echo 'Session: ' . esc_html($result->student_session) . '<br>';
+            }
             echo '</li>';
         }
         echo '</ul>';
@@ -196,6 +234,7 @@ function admit_card_shortcode() {
         echo '<p>No matching students found.</p>';
     }
     ?>
+
     <?php
     return ob_get_clean(); // Return the buffered output
 }
