@@ -31,17 +31,17 @@ $student_state = sanitize_text_field($_POST['student_state']);
 // $student_previous_institute_qualification = sanitize_text_field($_POST['student_previous_institute_qualification']);
 // $student_previous_institute_remarks = sanitize_textarea_field($_POST['student_previous_institute_remarks']);
 $student_parent_name = sanitize_text_field($_POST['student_parent_name']);
-// $student_parent_relation = sanitize_text_field($_POST['student_parent_relation']);
-// $student_father_name = sanitize_text_field($_POST['student_father_name']);
-// $student_mother_name = sanitize_text_field($_POST['student_mother_name']);
-// $student_parent_occupation = sanitize_text_field($_POST['student_parent_occupation']);
-// $student_parent_income = sanitize_text_field($_POST['student_parent_income']);
-// $student_parent_education = sanitize_text_field($_POST['student_parent_education']);
-// $student_parent_email = sanitize_email($_POST['student_parent_email']);
-// $student_parent_number = sanitize_text_field($_POST['student_parent_number']);
-// $student_parent_address = sanitize_textarea_field($_POST['student_parent_address']);
-// $student_parent_city = sanitize_text_field($_POST['student_parent_city']);
-// $student_parent_state = sanitize_text_field($_POST['student_parent_state']);
+$student_parent_relation = sanitize_text_field($_POST['student_parent_relation']);
+$student_father_name = sanitize_text_field($_POST['student_father_name']);
+$student_mother_name = sanitize_text_field($_POST['student_mother_name']);
+$student_parent_occupation = sanitize_text_field($_POST['student_parent_occupation']);
+$student_parent_income = sanitize_text_field($_POST['student_parent_income']);
+$student_parent_education = sanitize_text_field($_POST['student_parent_education']);
+$student_parent_email = sanitize_email($_POST['student_parent_email']);
+$student_parent_number = sanitize_text_field($_POST['student_parent_number']);
+$student_parent_address = sanitize_textarea_field($_POST['student_parent_address']);
+$student_parent_city = sanitize_text_field($_POST['student_parent_city']);
+$student_parent_state = sanitize_text_field($_POST['student_parent_state']);
 $student_registration_number = sanitize_text_field($_POST['student_registration_number']);
 
 // Now, you have sanitized and formatted values for each of these variables, and you can use them in your application as needed.
@@ -71,18 +71,18 @@ $student_registration_number = sanitize_text_field($_POST['student_registration_
     // 'student_previous_institute_name' => $student_previous_institute_name,
     // 'student_previous_institute_qualification' => $student_previous_institute_qualification,
     // 'student_previous_institute_remarks' => $student_previous_institute_remarks,
-    // 'student_parent_name' => $student_parent_name,
-    // 'student_parent_relation' => $student_parent_relation,
-    // 'student_father_name' => $student_father_name,
-    // 'student_mother_name' => $student_mother_name,
-    // 'student_parent_occupation' => $student_parent_occupation,
-    // 'student_parent_income' => $student_parent_income,
-    // 'student_parent_education' => $student_parent_education,
-    // 'student_parent_email' => $student_parent_email,
-    // 'student_parent_number' => $student_parent_number,
-    // 'student_parent_address' => $student_parent_address,
-    // 'student_parent_city' => $student_parent_city,
-    // 'student_parent_state' => $student_parent_state,
+    'student_parent_name' => $student_parent_name,
+    'student_parent_relation' => $student_parent_relation,
+    'student_father_name' => $student_father_name,
+    'student_mother_name' => $student_mother_name,
+    'student_parent_occupation' => $student_parent_occupation,
+    'student_parent_income' => $student_parent_income,
+    'student_parent_education' => $student_parent_education,
+    'student_parent_email' => $student_parent_email,
+    'student_parent_number' => $student_parent_number,
+    'student_parent_address' => $student_parent_address,
+    'student_parent_city' => $student_parent_city,
+    'student_parent_state' => $student_parent_state,
     'student_registration_number' => $student_registration_number,
 );
 
@@ -122,96 +122,162 @@ $student = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %
 ?>
 
 <div class="wrap">
-    <h2>Edit Student</h2>
-    <form method="post" action="" enctype="multipart/form-data">
+    <h2 style="text-align:center;margin:10px 0px">Edit Student</h2>
+    <form id="dm_student_edit_form" method="post" action="" enctype="multipart/form-data">
         <input type="hidden" name="student_id" value="<?php echo esc_attr($student->id); ?>">
         
-        <!-- Student Registration Number -->
-        <div class="input_box">
-            <label for="student_registration_number">Student Registration Number:</label>
-            <input type="text" name="student_registration_number" id="student_registration_number" value="<?php echo esc_attr($student->student_registration_number); ?>" required>
-        </div>
-        <!-- Student ID Number -->
-        <div class="input_box">
-            <label for="student_id_number">Student ID Number:</label>
-            <input type="text" name="student_id_number" readonly id="student_id_number" value="<?php echo esc_attr($student->student_id_number); ?>" required>
-        </div>
+        <div class="edit_main_form_field">
+                    <!-- Student Registration Number -->
+                    <div class="input_box">
+                        <label for="student_registration_number">Student Registration Number:</label>
+                        <input type="text" name="student_registration_number" id="student_registration_number" value="<?php echo esc_attr($student->student_registration_number); ?>" required>
+                    </div>
+                    <!-- Student ID Number -->
+                    <div class="input_box">
+                        <label for="student_id_number">Student ID Number:</label>
+                        <input type="text" name="student_id_number" readonly id="student_id_number" value="<?php echo esc_attr($student->student_id_number); ?>" required>
+                    </div>
 
-        <!-- First Name -->
-        <div class="input_box">
-            <label for="student_first_name">First Name:</label>
-            <input type="text" name="student_first_name" id="student_first_name" value="<?php echo esc_attr($student->student_first_name); ?>" required>
-        </div>
+                    <!-- First Name -->
+                    <div class="input_box">
+                        <label for="student_first_name">First Name:</label>
+                        <input type="text" name="student_first_name" id="student_first_name" value="<?php echo esc_attr($student->student_first_name); ?>" required>
+                    </div>
 
-        <!-- Last Name -->
-        <div class="input_box">
-            <label for="student_last_name">Last Name:</label>
-            <input type="text" name="student_last_name" id="student_last_name" value="<?php echo esc_attr($student->student_last_name); ?>" required>
-        </div>
+                    <!-- Last Name -->
+                    <div class="input_box">
+                        <label for="student_last_name">Last Name:</label>
+                        <input type="text" name="student_last_name" id="student_last_name" value="<?php echo esc_attr($student->student_last_name); ?>" required>
+                    </div>
 
 
-        <!-- Gender -->
-        <div class="input_box">
-            <label for="student_gender">Gender:</label>
-            <input type="text" name="student_gender" id="student_gender" value="<?php echo esc_attr($student->student_gender); ?>" required>
-        </div>
-        <!-- Birthday -->
-        <div class="input_box">
-            <label for="student_birthdate">Birthday:</label>
-            <input type="date" name="student_birthdate" id="student_birthdate" value="<?php echo esc_attr($student->student_birthdate); ?>" required>
-        </div>
-        <!-- Blood Group -->
-        <div class="input_box">
-            <label for="student_blood_group">Blood Group:</label>
-            <input type="text" name="student_blood_group" id="student_blood_group" value="<?php echo esc_attr($student->student_blood_group); ?>" required>
-        </div>
+                    <!-- Gender -->
+                    <div class="input_box">
+                        <label for="student_gender">Gender:</label>
+                        <input type="text" name="student_gender" id="student_gender" value="<?php echo esc_attr($student->student_gender); ?>" required>
+                    </div>
+                    <!-- Birthday -->
+                    <div class="input_box">
+                        <label for="student_birthdate">Birthday:</label>
+                        <input type="date" name="student_birthdate" id="student_birthdate" value="<?php echo esc_attr($student->student_birthdate); ?>" required>
+                    </div>
+                    <!-- Blood Group -->
+                    <div class="input_box">
+                        <label for="student_blood_group">Blood Group:</label>
+                        <input type="text" name="student_blood_group" id="student_blood_group" value="<?php echo esc_attr($student->student_blood_group); ?>" required>
+                    </div>
 
-        <!-- Phone Number -->
-        <div class="input_box">
-            <label for="student_phone_number">Phone Number:</label>
-            <input type="tel" name="student_phone_number" id="student_phone_number" value="<?php echo esc_attr($student->student_phone_number); ?>" required>
-        </div>
-        <!-- Email Address -->
-        <div class="input_box">
-            <label for="student_email">Email:</label>
-            <input type="email" name="student_email" id="student_email" value="<?php echo esc_attr($student->student_email); ?>" required>
-        </div>
-        <!-- Religion -->
-        <div class="input_box">
-            <label for="student_religion">Religion:</label>
-            <input type="text" name="student_religion" id="student_religion" value="<?php echo esc_attr($student->student_religion); ?>" required>
-        </div>
-        <!-- student_nid -->
-        <div class="input_box">
-            <label for="student_nid">Student NID:</label>
-            <input type="number" name="student_nid" id="student_nid" value="<?php echo esc_attr($student->student_nid); ?>" required>
-        </div>
-        <!-- student_ address -->
-        <div class="input_box">
-            <label for="student_present_address">Present Address:</label>
-            <input type="text" name="student_present_address" id="student_present_address" value="<?php echo esc_attr($student->student_present_address); ?>" required>
-        </div>
-        <!-- student_permanent_address -->
-        <div class="input_box">
-            <label for="student_permanent_address">Permanent Address:</label>
-            <input type="text" name="student_permanent_address" id="student_permanent_address" value="<?php echo esc_attr($student->student_permanent_address); ?>" required>
-        </div>
-        <!-- student_city -->
-        <div class="input_box">
-            <label for="student_city">Student City:</label>
-            <input type="text" name="student_city" id="student_city" value="<?php echo esc_attr($student->student_city); ?>" required>
-        </div>
-        <!-- student_city -->
-        <div class="input_box">
-            <label for="student_state">Student State:</label>
-            <input type="text" name="student_state" id="student_state" value="<?php echo esc_attr($student->student_state); ?>" required>
-        </div>
-            
-        <!-- Parent Name -->
-        <div class="input_box">
-            <label for="student_parent_name">Parent Name:</label>
-            <input type="text" name="student_parent_name" id="student_parent_name" value="<?php echo esc_attr($student->student_parent_name); ?>" required>
-        </div>
+                    <!-- Phone Number -->
+                    <div class="input_box">
+                        <label for="student_phone_number">Phone Number:</label>
+                        <input type="tel" name="student_phone_number" id="student_phone_number" value="<?php echo esc_attr($student->student_phone_number); ?>" required>
+                    </div>
+                    <!-- Email Address -->
+                    <div class="input_box">
+                        <label for="student_email">Email:</label>
+                        <input type="email" name="student_email" id="student_email" value="<?php echo esc_attr($student->student_email); ?>" required>
+                    </div>
+                    <!-- Religion -->
+                    <div class="input_box">
+                        <label for="student_religion">Religion:</label>
+                        <input type="text" name="student_religion" id="student_religion" value="<?php echo esc_attr($student->student_religion); ?>" required>
+                    </div>
+                    <!-- student_nid -->
+                    <div class="input_box">
+                        <label for="student_nid">Student NID:</label>
+                        <input type="number" name="student_nid" id="student_nid" value="<?php echo esc_attr($student->student_nid); ?>" required>
+                    </div>
+                    
+                    <!-- student_city -->
+                    <div class="input_box">
+                        <label for="student_city">Student City:</label>
+                        <input type="text" name="student_city" id="student_city" value="<?php echo esc_attr($student->student_city); ?>" required>
+                    </div>
+                    <!-- student_city -->
+                    <div class="input_box">
+                        <label for="student_state">Student State:</label>
+                        <input type="text" name="student_state" id="student_state" value="<?php echo esc_attr($student->student_state); ?>" required>
+                    </div>
+                    <!-- student_ address -->
+                    <div class="input_box">
+                        <label for="student_present_address">Present Address:</label>
+                        <input type="text" name="student_present_address" id="student_present_address" value="<?php echo esc_attr($student->student_present_address); ?>" required>
+                    </div>
+                    <!-- student_permanent_address -->
+                    <div class="input_box">
+                        <label for="student_permanent_address">Permanent Address:</label>
+                        <input type="text" name="student_permanent_address" id="student_permanent_address" value="<?php echo esc_attr($student->student_permanent_address); ?>" required>
+                    </div>
+                    <!-- Parent Name -->
+                    <div class="input_box">
+                        <label for="student_parent_name">Parent Name:</label>
+                        <input type="text" name="student_parent_name" id="student_parent_name" value="<?php echo esc_attr($student->student_parent_name); ?>" required>
+                    </div>
+                    <!-- Parent Name -->
+                    <div class="input_box">
+                        <label for="student_parent_relation">Parent Relation:</label>
+                        <input type="text" name="student_parent_relation" id="student_parent_relation" value="<?php echo esc_attr($student->student_parent_relation); ?>" required>
+                    </div>
+                    <!-- Parent Name -->
+                    <div class="input_box">
+                        <label for="student_parent_occupation">Occupation:</label>
+                        <input type="text" name="student_parent_occupation" id="student_parent_occupation" value="<?php echo esc_attr($student->student_parent_occupation); ?>" required>
+                    </div>
+                    <!-- Father Name -->
+                    <div class="input_box">
+                        <label for="student_father_name">Father Name:</label>
+                        <input type="text" name="student_father_name" id="student_father_name" value="<?php echo esc_attr($student->student_father_name); ?>" required>
+                    </div>
+
+                    <!-- Mother Name -->
+                    <div class="input_box">
+                        <label for="student_mother_name">Mother Name:</label>
+                        <input type="text" name="student_mother_name" id="student_mother_name" value="<?php echo esc_attr($student->student_mother_name); ?>" required>
+                    </div>
+
+                    <!-- Parent Income -->
+                    <div class="input_box">
+                        <label for="student_parent_income">Income:</label>
+                        <input type="text" name="student_parent_income" id="student_parent_income" value="<?php echo esc_attr($student->student_parent_income); ?>" required>
+                    </div>
+
+                    <!-- Parent Education -->
+                    <div class="input_box">
+                        <label for="student_parent_education">Education:</label>
+                        <input type="text" name="student_parent_education" id="student_parent_education" value="<?php echo esc_attr($student->student_parent_education); ?>" required>
+                    </div>
+
+                    <!-- Parent Email -->
+                    <div class="input_box">
+                        <label for="student_parent_email">Parent Email:</label>
+                        <input type="email" name="student_parent_email" id="student_parent_email" value="<?php echo esc_attr($student->student_parent_email); ?>" required>
+                    </div>
+
+                    <!-- Parent Phone Number -->
+                    <div class="input_box">
+                        <label for="student_parent_number">Parent Phone Number:</label>
+                        <input type="tel" name="student_parent_number" id="student_parent_number" value="<?php echo esc_attr($student->student_parent_number); ?>" required>
+                    </div>
+                    <!-- Parent present address -->
+                    <div class="input_box">
+                        <label for="student_parent_address">Parent Address:</label>
+                        <input type="tel" name="student_parent_address" id="student_parent_address" value="<?php echo esc_attr($student->student_parent_address); ?>" required>
+                    </div>
+                    <!-- Parent City -->
+                    <div class="input_box">
+                        <label for="student_parent_city">Parent City:</label>
+                        <input type="text" name="student_parent_city" id="student_parent_city" value="<?php echo esc_attr($student->student_parent_city); ?>" required>
+                    </div>
+
+                    <!-- Parent State -->
+                    <div class="input_box">
+                        <label for="student_parent_state">Parent State:</label>
+                        <input type="text" name="student_parent_state" id="student_parent_state" value="<?php echo esc_attr($student->student_parent_state); ?>" required>
+                    </div>
+
+
+
+
 
         <!-- Current Student Image -->
         <div class="current_student_image">
@@ -229,6 +295,7 @@ $student = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %
         <div class="input_box">
             <label for="new_student_image">Upload New Student Image:</label>
             <input type="file" name="new_student_image" id="new_student_image">
+        </div>
         </div>
 
         <!-- Continue adding more fields as needed -->

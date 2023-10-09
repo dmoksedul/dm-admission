@@ -1,10 +1,19 @@
 <?php
+
+// display pending admission
 function display_pending_admission() {
     // Retrieve pending admission data from the session variable
     $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
 
     echo '<div class="wrap">';
     echo '<h2>Pending Admission</h2>';
+
+    // Pagination variables
+    $current_page = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
+    $per_page = 10; // Number of items per page
+    $total_pending_admissions = count($pending_admissions);
+    $total_pages = ceil($total_pending_admissions / $per_page);
+    $offset = ($current_page - 1) * $per_page;
 
     $counter = 1; // Initialize the counter to 1
 
@@ -14,8 +23,8 @@ function display_pending_admission() {
 
         echo '<table id="student_list_table_box" class="wp-list-table widefat fixed striped">';
         echo '<thead><tr>';
-        echo '<th>No</th>';
-        echo '<th>Student Image</th>';
+        echo '<th style="width:30px">No</th>';
+        echo '<th style="width:100px">Student Image</th>';
         echo '<th>Student Name</th>';
         echo '<th>Class</th>';
         echo '<th>Section</th>';
@@ -23,11 +32,13 @@ function display_pending_admission() {
         echo '<th>Father Name</th>';
         echo '<th>Location</th>';
         echo '<th>Admission Date</th>';
-        echo '<th>Actions</th>';
+        echo '<th style="width:200px">Actions</th>';
         echo '</tr></thead>';
         echo '<tbody>';
 
-        foreach ($pending_admissions as $index => $pending_admission) {
+        // Display items based on pagination
+        for ($i = $offset; $i < min($offset + $per_page, $total_pending_admissions); $i++) {
+            $pending_admission = $pending_admissions[$i];
             $student_name = isset($pending_admission['student_first_name']) && isset($pending_admission['student_last_name']) ? $pending_admission['student_first_name'] . ' ' . $pending_admission['student_last_name'] : 'N/A';
             $father_name = isset($pending_admission['student_father_name']) ? $pending_admission['student_father_name'] : 'N/A';
             $class = isset($pending_admission['class']) ? $pending_admission['class'] : 'N/A';
@@ -40,7 +51,7 @@ function display_pending_admission() {
             $student_image_id = isset($pending_admission['student_image']) ? $pending_admission['student_image'] : null;
 
             echo '<tr>';
-            echo '<td>' . $counter . '</td>'; // Display the counter
+            echo '<td>' . ($offset + $counter) . '</td>'; // Display the counter
             echo '<td>';
 
             if ($student_image_id) {
@@ -62,11 +73,13 @@ function display_pending_admission() {
 
             // Inside the foreach loop for pending admissions
             echo '<form method="post">';
-            echo '<input type="hidden" name="approve_admission_index" value="' . $index . '">';
+            echo '<input type="hidden" name="approve_admission_index" value="' . $i . '">';
             // Serialize and encode the pending admission data as a hidden field
             echo '<input type="hidden" name="pending_admission_data" value="' . esc_attr(base64_encode(serialize($pending_admission))) . '">';
-            echo '<button type="submit" name="approve_admission" class="button button-primary">Approve</button>';
-            echo '<button type="submit" name="delete_admission" class="button button-secondary">Delete</button>';
+            echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
+            echo '<button type="submit" name="approve_admission" class="button">Approve</button>';
+            echo '<button type="submit" name="delete_admission" class="button danger">Delete</button>';
+            echo '</div>';
             echo '</form>';
             echo '</tr>';
 
@@ -74,6 +87,20 @@ function display_pending_admission() {
         }
 
         echo '</tbody></table>';
+
+        // Pagination
+        echo '<div class="tablenav">';
+        echo '<div id="pagination_box" class="tablenav-pages">';
+        echo paginate_links(array(
+            'base' => add_query_arg('paged', '%#%'),
+            'format' => '',
+            'prev_text' => '&laquo;',
+            'next_text' => '&raquo;',
+            'total' => $total_pages,
+            'current' => $current_page,
+        ));
+        echo '</div>';
+        echo '</div>';
     } else {
         echo '<p>No pending admissions.</p>';
     }

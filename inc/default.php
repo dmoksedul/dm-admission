@@ -25,7 +25,8 @@ function shortcodes_page(){
     <h1>Shortcodes</h1>
     <ul>
         <li>[dm_admission_form]</li>
-        <li>[dm_student_search]</li>
+        <li>[dm_student_id_card]</li>
+        <li>[dm_student_admit_card]</li>
     </ul>
     <?php
 }

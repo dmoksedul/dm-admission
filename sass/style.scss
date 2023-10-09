@@ -1,6 +1,24 @@
 // custom stylesheet
 // color
-$pColor: #056839;
+$pColor: #08a88a;
+.button {
+  border: 1px solid $pColor !important;
+  font-weight: 500;
+  color: $pColor !important;
+  &:hover {
+    background-color: $pColor !important;
+    color: #fff !important;
+  }
+}
+.danger {
+  border: 1px solid red !important;
+  font-weight: 500;
+  color: red !important;
+  &:hover {
+    background-color: red !important;
+    color: #fff !important;
+  }
+}
 
 .button,
 button,
@@ -17,16 +35,44 @@ input[type="submit"] {
     color: $pColor;
   }
 }
-.success-message {
-  background: white;
+.wrap {
+  background-color: #fff;
   padding: 20px;
-  display: inline-block;
-  box-shadow: 0 0 10px #00000040;
   border-radius: 12px;
-  color: $pColor;
+}
+.success-message {
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2509803922);
+  border-radius: 12px;
+  color: #08a88a;
   font-size: 16px;
-  margin: 20px auto;
-  font-weight: 700;
+  font-weight: 500;
+  margin: auto;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #00000070;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    a.button {
+      color: #fff !important;
+      margin: auto;
+    }
+  }
 }
 #dm_student_admission_form {
   input[type="file"] {
@@ -376,6 +422,7 @@ button {
     justify-content: center;
     align-items: center;
     gap: 30px;
+    box-shadow: 0 0 10px #00000025;
     form {
       display: flex;
       justify-content: center;
@@ -680,6 +727,7 @@ div#dm_admit_card_box {
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      gap: 3px;
       label {
         width: 100%;
       }
@@ -690,6 +738,7 @@ div#dm_admit_card_box {
         max-width: 100%;
         padding: 7px 12px;
         border: 1px solid #00000029;
+        background-color: #fff;
       }
     }
   }
@@ -771,5 +820,95 @@ div#pagination_box {
       background-color: $pColor;
       color: #fff;
     }
+  }
+}
+
+// student search form student list page
+form.student_search_student_list {
+  border: 1px solid #00000011;
+  box-shadow: 0 0 10px #00000021;
+  border-radius: 4px;
+  overflow: hidden;
+  input {
+    outline: none !important;
+    border: none !important;
+    width: 100%;
+    min-width: 300px;
+  }
+  input[type="submit"] {
+    min-width: auto !important;
+  }
+}
+
+// student popup box
+#dm_popup_area {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: #00000021;
+  div {
+    padding: 30px;
+    border-radius: 12px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    p {
+      font-size: 30px;
+      font-weight: 600;
+      color: red;
+    }
+    a {
+      text-decoration: none;
+      display: inline-block;
+      margin: auto;
+      background-color: $pColor;
+      padding: 8px 15px;
+      text-align: center;
+      color: #fff;
+      font-weight: 500;
+      border: 1px solid $pColor;
+      &:hover {
+        background-color: #fff;
+        color: $pColor;
+      }
+    }
+  }
+}
+// student Edit form design
+#dm_student_edit_form {
+  background-color: #fff;
+  max-width: 1200px;
+  margin: auto;
+  font-size: 16px;
+  box-shadow: 0 0 10px #00000028;
+  padding: 20px;
+  border-radius: 12px;
+  .edit_main_form_field {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px;
+    input {
+      width: 100%;
+      padding: 3px 10px;
+      border: 1px solid #0000002b;
+      border-radius: 2px;
+      background: #fff;
+      outline: none;
+      font-size: 16px;
+    }
+    label {
+      width: 100%;
+      display: block;
+      padding: 3px 0px;
+    }
+  }
+  .submit_button_box {
+    margin-top: 30px;
   }
 }

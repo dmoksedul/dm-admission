@@ -76,8 +76,8 @@ function display_student_list() {
         echo '<h2>Student List</h2>';
         echo '<div class="student_top_box">';
         // Search form
-        echo '<form method="post">';
-        echo '<input type="text" name="student_search" placeholder="Search by Name, Student ID, or Registration Number" required>';
+        echo '<form method="post" class="student_search_student_list">';
+        echo '<input type="text" name="student_search" placeholder="Name, ID, or Registration No" required>';
         echo '<input type="submit" name="search_students" value="Search">';
         echo '</form>';
         // Add the export CSV button
@@ -88,7 +88,7 @@ function display_student_list() {
         echo '</div>';
         echo '<table id="student_list_table_box" class="wp-list-table widefat fixed">';
         echo '<thead><tr>';
-        echo '<th style="width:50px">No</th>';
+        echo '<th style="width:30px">No</th>';
         echo '<th style="width:90px">Image</th>';
         echo '<th>Name</th>';
         echo '<th>Student ID</th>'; // Add the column for Student ID Number
@@ -96,7 +96,7 @@ function display_student_list() {
         echo '<th>Phone Number</th>';
         echo '<th>Parent Name</th>';
         echo '<th>Location</th>';
-        echo '<th>Actions</th>';
+        echo '<th style="width:150px">Actions</th>';
         echo '</tr></thead>';
         echo '<tbody>';
 
@@ -119,8 +119,21 @@ function display_student_list() {
             echo '<td>' . esc_html($student->student_parent_name) . '</td>';
             echo '<td>' . esc_html($location) . '</td>';
             echo '<td>';
+            echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
             echo '<a href="?page=edit-student&student_id=' . $student->id . '" class="button">Edit</a>';
-            echo '<a href="?page=dm_admission&action=trash&student_id=' . $student->id . '" class="button">Trash</a>';
+            echo '<a href="javascript:void(0);" onclick="confirmTrash(' . $student->id . ');" class="button danger">Trash</a>';
+            // Add this JavaScript code inside your HTML <head> section or enqueue it using wp_enqueue_script in WordPress.
+            echo '</div>';
+            echo '<script>
+            function confirmTrash(studentId) {
+                if (confirm("Are you sure you want to move this student to the trash?")) {
+                    // If the user clicks "OK" in the confirmation popup, redirect to the trash action
+                    window.location.href = "?page=dm_admission&action=trash&student_id=" + studentId;
+                }
+                // If the user clicks "Cancel," do nothing
+            }
+            </script>';
+
             echo '</td>';
 
             echo '</tr>';
@@ -148,9 +161,10 @@ function display_student_list() {
         echo '</div>';
     } else {
         // No students found
-        echo '<p>No students found.</p>';
+        echo '<div id="dm_popup_area"><div><p>No students found.</p><a type="button" href="?page=import-students">Add Student</a></div></div>';
     }
 }
+
 
 
 
@@ -196,34 +210,53 @@ function display_trash_students_list() {
         );
     }
 
+    // Get the current page number from URL
+    $current_page = isset($_GET['paged']) ? absint($_GET['paged']) : 1;
+    $per_page = 10; // Number of items per page
+
+    // Calculate the offset for the SQL query
+    $offset = ($current_page - 1) * $per_page;
+
     // Query to retrieve trashed students
     $trashed_students = $wpdb->get_results(
-        "SELECT * FROM $table_name WHERE trashed = 1 ORDER BY id DESC"
+        "SELECT * FROM $table_name WHERE trashed = 1 ORDER BY id DESC LIMIT $per_page OFFSET $offset"
     );
+
+    // Calculate total number of trashed students
+    $total_trashed_students = $wpdb->get_var(
+        "SELECT COUNT(*) FROM $table_name WHERE trashed = 1"
+    );
+
+    // Calculate total number of pages based on total trashed students and items per page
+    $total_pages = ceil($total_trashed_students / $per_page);
 
     // Display trashed students in a table
     echo '<div class="wrap">';
-    echo '<h2>Trash</h2>';
-    echo '<table class="wp-list-table widefat fixed">';
+    echo '<h2>Trash Students</h2>';
+    echo '<table id="student_list_table_box" class="wp-list-table widefat fixed">';
     echo '<thead><tr>';
-    echo '<th>No</th>';
+    echo '<th style="width:30px">No</th>'; // Serial number column
+    echo '<th>Image</th>';
     echo '<th>Name</th>';
     echo '<th>Student ID</th>';
     echo '<th>Birthday</th>';
     echo '<th>Phone Number</th>';
     echo '<th>Parent Name</th>';
     echo '<th>Location</th>';
-    echo '<th>Actions</th>';
+    echo '<th style="width:200px">Actions</th>';
     echo '</tr></thead>';
     echo '<tbody>';
 
     if ($trashed_students) {
+        $list_number = ($current_page - 1) * $per_page + 1; // Initialize list number
+
         foreach ($trashed_students as $student) {
             $student_name = $student->student_first_name . ' ' . $student->student_last_name;
             $location = $student->student_city . ', ' . $student->student_state;
 
             echo '<tr>';
-            echo '<td>' . esc_html($student->id) . '</td>';
+            echo '<td>' . esc_html($list_number) . '</td>'; // Display the serial number
+            echo '<td><img src="' . esc_url(wp_get_attachment_image_url($student->student_image, 'thumbnail')) . '" alt="' . esc_attr($student_name) . '" width="50"></td>'; // Display the student image
             echo '<td>' . esc_html($student_name) . '</td>';
             echo '<td>' . esc_html($student->student_id_number) . '</td>';
             echo '<td>' . esc_html(date('F j, Y', strtotime($student->student_birthdate))) . '</td>';
@@ -231,18 +264,45 @@ function display_trash_students_list() {
             echo '<td>' . esc_html($student->student_parent_name) . '</td>';
             echo '<td>' . esc_html($location) . '</td>';
             echo '<td>';
-            echo '<a href="?page=trash-students&action=restore&student_id=' . $student->id . '">Restore</a>';
-            echo '<a href="?page=trash-students&action=delete_permanently&student_id=' . $student->id . '">Delete Permanently</a>';
+            echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
+            echo '<a href="?page=trash-students&action=restore&student_id=' . $student->id . '" class="button">Restore</a>';
+            echo '<a href="javascript:void(0);" onclick="confirmDeletePermanent(' . $student->id . ');" class="button danger">Delete</a>';
+            echo '</div>';
+            // Add this JavaScript code inside your HTML <head> section or enqueue it using wp_enqueue_script in WordPress.
+            echo '<script>
+            function confirmDeletePermanent(studentId) {
+                if (confirm("Are you sure you want to delete this student permanently?")) {
+                    // If the user clicks "OK" in the confirmation popup, redirect to the delete permanent action
+                    window.location.href = "?page=trash-students&action=delete_permanently&student_id=" + studentId;
+                }
+                // If the user clicks "Cancel," do nothing
+            }
+            </script>';
+
             echo '</td>';
             echo '</tr>';
+
+            $list_number++; // Increment list number
         }
     } else {
-        echo '<tr><td colspan="8">No trashed students found.</td></tr>';
+        echo '<tr><td colspan="9">No trashed students found.</td></tr>';
     }
-
     echo '</tbody>';
     echo '</table>';
+
+    // Pagination
+    echo '<div class="tablenav">';
+    echo '<div id="pagination_box" class="tablenav-pages">';
+    echo paginate_links(array(
+        'base' => add_query_arg('paged', '%#%'),
+        'format' => '',
+        'prev_text' => '&laquo;',
+        'next_text' => '&raquo;',
+        'total' => $total_pages,
+        'current' => $current_page,
+    ));
+    echo '</div>';
+    echo '</div>';
+
     echo '</div>';
 }
-
-?>

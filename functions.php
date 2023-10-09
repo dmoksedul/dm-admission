@@ -190,6 +190,14 @@ function admission_form_plugin_menu() {
         'exam_students',           // Unique slug for the submenu page
         'exam_students_submenu_page_content' // Callback function to display the content
     );
+    add_submenu_page(
+        'dm_admission',
+        'Trash Students',
+        'Trash Students',
+        'manage_options',
+        'trash-students',
+        'display_trash_students_list'
+    );
     // Add a submenu page for importing students from CSV
     add_submenu_page(
         'dm_admission',                        // Parent menu slug
@@ -198,14 +206,6 @@ function admission_form_plugin_menu() {
         'manage_options',                        // Capability required to access the menu
         'shortcodes',                       // Menu slug (unique identifier)
         'shortcodes_page'                  // Callback function to display the import form
-    );
-    add_submenu_page(
-        'dm_admission',
-        'Trash',
-        'Trash',
-        'manage_options',
-        'trash-students',
-        'display_trash_students_list'
     );
 
 }

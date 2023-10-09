@@ -416,14 +416,14 @@ function handle_admission_form_submission() {
     );
 
     // Check if the student ID number already exists in the session
-    $student_id_number = sanitize_text_field($_POST['student_id_number']);
-    foreach ($_SESSION['pending_admissions'] as $pending_admission) {
-        if ($pending_admission['student_id_number'] === $student_id_number) {
-            // Student ID number already exists in pending admissions, display an error message
-            echo '<div class="error"><p>Student ID number already exists in pending admissions. Please choose a different ID number.</p></div>';
-            return; // Stop processing if there's an error
-        }
-    }
+    // $student_id_number = sanitize_text_field($_POST['student_id_number']);
+    // foreach ($_SESSION['pending_admissions'] as $pending_admission) {
+    //     if ($pending_admission['student_id_number'] === $student_id_number) {
+    //         // Student ID number already exists in pending admissions, display an error message
+    //         echo '<div class="error"><p>Student ID number already exists in pending admissions. Please choose a different ID number.</p></div>';
+    //         return; // Stop processing if there's an error
+    //     }
+    // }
 
     
     // Initialize WordPress media library
@@ -483,5 +483,5 @@ function handle_admission_form_submission() {
     $_SESSION['pending_admissions'][] = $data;
 
     // Display a success message to inform the user that their submission is pending approval.
-    echo '<div class="success-message">Your admission submission was successful. It is pending approval.</div>';
+    echo '<div class="success-message"><div><p>Your admission submission was successful. It is pending approval.</p><a type="button" class="button" href="/">Back to Home </a></div></div>';
 }
