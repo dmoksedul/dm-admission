@@ -112,7 +112,12 @@ function admission_form_shortcode() {
                         </select>
                     </div>
                     <div class="input_box">
-                        <!-- Category -->
+                        <!-- Subject List -->
+                        <label for="subject_list">Subject:</label>
+                        <input value="Bangla, Englissh, ICT" type="text" name="subject_list" id="subject_list" required>
+                    </div>
+                    <div class="input_box">
+                        <!-- session -->
                         <label for="student_session">Session:</label>
                         <select name="student_session" id="student_session" required>
                             <option value="" disabled value="" selected>Select</option>
@@ -376,6 +381,7 @@ function handle_admission_form_submission() {
         'section' => sanitize_text_field($_POST['section']),
         'admission_date' => sanitize_text_field($_POST['admission_date']),
         'category' => sanitize_text_field($_POST['category']),
+        'subject_list' => sanitize_text_field($_POST['subject_list']),
         'student_first_name' => sanitize_text_field($_POST['student_first_name']),
         'student_last_name' => sanitize_text_field($_POST['student_last_name']),
         'student_gender' => sanitize_text_field($_POST['student_gender']),
@@ -408,6 +414,16 @@ function handle_admission_form_submission() {
         'student_id_number' => sanitize_text_field($_POST['student_id_number']), // Add student_id_number field
         // You can add more fields as needed
     );
+
+    // Check if the student ID number already exists in the session
+    $student_id_number = sanitize_text_field($_POST['student_id_number']);
+    foreach ($_SESSION['pending_admissions'] as $pending_admission) {
+        if ($pending_admission['student_id_number'] === $student_id_number) {
+            // Student ID number already exists in pending admissions, display an error message
+            echo '<div class="error"><p>Student ID number already exists in pending admissions. Please choose a different ID number.</p></div>';
+            return; // Stop processing if there's an error
+        }
+    }
 
     
     // Initialize WordPress media library

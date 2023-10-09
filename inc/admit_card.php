@@ -206,7 +206,7 @@ function exam_students_submenu_page_content() {
     ?>
     <div class="wrap">
         <h2>Exam Students List</h2>
-        <table class="wp-list-table widefat fixed striped">
+        <table id="student_list_table_box" class="wp-list-table widefat fixed striped">
             <thead>
                 <tr>
                     <th style="width:50px">No</th>

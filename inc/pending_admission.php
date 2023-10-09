@@ -12,7 +12,7 @@ function display_pending_admission() {
         // Reverse the order of pending admissions
         $pending_admissions = array_reverse($pending_admissions);
 
-        echo '<table class="wp-list-table widefat fixed striped">';
+        echo '<table id="student_list_table_box" class="wp-list-table widefat fixed striped">';
         echo '<thead><tr>';
         echo '<th>No</th>';
         echo '<th>Student Image</th>';

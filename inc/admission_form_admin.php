@@ -1,43 +1,51 @@
 <?php
 // Create the admission form
 function admission_form_page() {
-    $student_blood_group = ''; // Initialize the variable for student_blood_group
-
     if (isset($_POST['add_student'])) {
         global $wpdb;
         $table_name = $wpdb->prefix . 'dm_students';
 
-        // Handle file uploads
-        $uploaded_student_image_id = 0;
-        $uploaded_parent_image_id = 0;
-        $uploaded_document_id = 0;
+        // Check if the student ID number already exists in the database
+        $student_id_number = sanitize_text_field($_POST['student_id_number']);
+        $existing_student = $wpdb->get_row(
+            $wpdb->prepare("SELECT * FROM $table_name WHERE student_id_number = %s", $student_id_number)
+        );
 
-        if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
-            $uploaded_student_image_id = media_handle_upload('student_image', 0);
-        }
+        if ($existing_student) {
+            // Student ID number already exists, display an error message
+            echo '<div class="error"><p>Student ID number already exists. Please choose a different ID number.</p></div>';
+        } else {
+            // Handle file uploads
+            $uploaded_student_image_id = 0;
+            $uploaded_parent_image_id = 0;
+            $uploaded_document_id = 0;
 
-        if (isset($_FILES['student_parent_image']) && $_FILES['student_parent_image']['error'] === 0) {
-            $uploaded_parent_image_id = media_handle_upload('student_parent_image', 0);
-        }
+            if (isset($_FILES['student_image']) && $_FILES['student_image']['error'] === 0) {
+                $uploaded_student_image_id = media_handle_upload('student_image', 0);
+            }
 
-        if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
-            $uploaded_document_id = media_handle_upload('student_documents', 0);
-        }
+            if (isset($_FILES['student_parent_image']) && $_FILES['student_parent_image']['error'] === 0) {
+                $uploaded_parent_image_id = media_handle_upload('student_parent_image', 0);
+            }
 
-        // Check for errors in file uploads
-        if (is_wp_error($uploaded_student_image_id)) {
-            // Handle the error for student image upload, e.g., display an error message
-        }
+            if (isset($_FILES['student_documents']) && $_FILES['student_documents']['error'] === 0) {
+                $uploaded_document_id = media_handle_upload('student_documents', 0);
+            }
 
-        if (is_wp_error($uploaded_parent_image_id)) {
-            // Handle the error for parent image upload, e.g., display an error message
-        }
+            // Check for errors in file uploads
+            if (is_wp_error($uploaded_student_image_id)) {
+                // Handle the error for student image upload, e.g., display an error message
+            }
 
-        if (is_wp_error($uploaded_document_id)) {
-            // Handle the error for document upload, e.g., display an error message
-        }
+            if (is_wp_error($uploaded_parent_image_id)) {
+                // Handle the error for parent image upload, e.g., display an error message
+            }
 
-        // Sanitize and validate form data here
+            if (is_wp_error($uploaded_document_id)) {
+                // Handle the error for document upload, e.g., display an error message
+            }
+
+           // Sanitize and validate form data here
         $data = array(
             'institute_name' => sanitize_text_field($_POST['institute_name']),
             'class' => sanitize_text_field($_POST['class']),
@@ -82,7 +90,8 @@ function admission_form_page() {
 
         $wpdb->insert($table_name, $data);
 
-        // Add success message or redirection here if needed
+            // Add success message or redirection here if needed
+        }
     }
 
 

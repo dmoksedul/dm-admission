@@ -58,13 +58,16 @@ function display_student_list() {
     echo '<div class="student_top_box">';
     // Search form
     echo '<form method="post">';
-    echo '<input type="text" name="student_search" placeholder="Search by Name, Student ID, or Registration Number">';
+    echo '<input type="text" name="student_search" placeholder="Search by Name, Student ID, or Registration Number" required>';
     echo '<input type="submit" name="search_students" value="Search">';
     echo '</form>';
     // Add the export CSV button
-    echo '<a href="?page=student-list&action=export-csv" class="button">Export CSV Format</a>';
+    echo '<div style="display:flex;flex-direction:row; justify-content:center;align-items:center;gap:20px">';
+    echo '<a type="button" href="?page=import-students" class="button">Import Students</a>';
+    echo '<a type="button" href="?page=student-list&action=export-csv" class="button">Export Students</a>';
     echo '</div>';
-    echo '<table class="wp-list-table widefat fixed">';
+    echo '</div>';
+    echo '<table id="student_list_table_box" class="wp-list-table widefat fixed">';
     echo '<thead><tr>';
     echo '<th style="width:50px">No</th>';
     echo '<th style="width:90px">Image</th>';
@@ -98,6 +101,7 @@ function display_student_list() {
         echo '<td>' . esc_html($location) . '</td>';
         echo '<td>';
         echo '<a href="?page=edit-student&student_id=' . $student->id . '" class="button">Edit</a>';
+        echo ' <a href="?page=dm_admission&action=trash&student_id=' . $student->id . '" class="button">Trash</a>'; // Add Trash button
         echo '</td>';
 
         echo '</tr>';
@@ -110,7 +114,7 @@ function display_student_list() {
 
     // Pagination
     echo '<div class="tablenav">';
-    echo '<div class="tablenav-pages">';
+    echo '<div id="pagination_box" class="tablenav-pages">';
     echo paginate_links(array(
         'base' => add_query_arg('paged', '%#%'),
         'format' => '',
