@@ -115,7 +115,8 @@ function admission_form_plugin_menu() {
         'manage_options',        // Capability required to access the menu
         'dm_admission',        // Menu slug (unique identifier)
         'display_student_list',   // Callback function to display the page content
-        'dashicons-id-alt'       // Icon for the menu (you can choose from dashicons)
+        'dashicons-id-alt',       // Icon for the menu (you can choose from dashicons)
+        15,
     );
 
     // Add a submenu page for the student list
@@ -165,11 +166,20 @@ function admission_form_plugin_menu() {
     );
     add_submenu_page(
         'dm_admission', // Parent menu slug (Students)
-        'Exam', // Page title
-        'Exam', // Menu title
+        'Exam Registration', // Page title
+        'Exam Registration', // Menu title
         'manage_options', // Capability required to access
         'exam-submenu-page', // Menu slug
         'exam_submenu_page_content' // Callback function to display content
+    );
+    // Add the submenu page under the "Exam" menu
+    add_submenu_page(
+        'dm_admission', // Parent menu slug (In this example, it's a custom post type "exam")
+        'Exam Students',           // Page title
+        'Exam Students',           // Menu title
+        'manage_options',          // Capability required to access the page
+        'exam_students',           // Unique slug for the submenu page
+        'exam_students_submenu_page_content' // Callback function to display the content
     );
     // Add a submenu page for importing students from CSV
     add_submenu_page(
@@ -217,12 +227,4 @@ include_once('inc/pending_admission.php');
 include_once('inc/admit_card.php');
 
 // ... other includes and functions ...
-
-
-
-
-
-
-
-
 

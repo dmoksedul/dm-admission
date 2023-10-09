@@ -617,6 +617,7 @@ div#dm_admit_card_box {
   margin: auto;
   gap: 20px;
   box-shadow: 0 0 10px #00000010;
+  font-size: 16px;
   label {
     width: 100%;
   }
@@ -640,15 +641,23 @@ div#dm_admit_card_box {
   justify-content: center;
   align-items: center;
   background: #04040461;
+  user-select: none;
   p {
     background: white;
-    font-size: 35px;
+    font-size: 30px;
     padding: 50px;
     top: 35%;
     left: 35%;
     color: red;
     border-radius: 12px;
     box-shadow: 0 0 10px #0000002e;
+    animation: 0.7s popup_animate_student_exam_register infinite linear
+      alternate;
+  }
+  @keyframes popup_animate_student_exam_register {
+    to {
+      transform: scale(1.04);
+    }
   }
   .notfound_close_search {
     display: block;
@@ -679,10 +688,15 @@ div#dm_admit_card_box {
       textarea {
         width: 100%;
         max-width: 100%;
-        padding: 7px;
+        padding: 7px 12px;
         border: 1px solid #00000029;
       }
     }
+  }
+  .submit_box {
+    display: block !important;
+    margin: auto;
+    margin-top: 30px;
   }
   .submit_box {
     width: 100%;
@@ -690,6 +704,13 @@ div#dm_admit_card_box {
       margin: auto;
       margin-top: 30px;
       display: block;
+    }
+  }
+}
+@media screen and (max-width: 768px) {
+  #student_exam_form {
+    div {
+      grid-template-columns: 1fr;
     }
   }
 }

@@ -11,7 +11,7 @@ function export_student_list_csv() {
     $csv_filename = 'dm_student_list.csv';
 
     // Create CSV content
-    $csv_data = "Institute Name,Class,Section,Admission Date,Category,First Name,Last Name,Gender,Birthday,Blood Group,Phone Number,Email,Religion,National ID,Present Address,Permanent Address,City,State,Previous Institute Name,Previous Institute Qualification,Previous Institute Remarks,Parent Name,Parent Relation,Father Name,Mother Name,Parent Occupation,Parent Income,Parent Education,Parent Email,Parent Phone Number,Parent Address,Parent City,Parent State,student_session,student_id_number,student_registration_number,student_roll_number,student_exam,student_subject,student_result\n";
+    $csv_data = "Institute Name,Class,Section,Admission Date,Category,subject_list,First Name,Last Name,Gender,Birthday,Blood Group,Phone Number,Email,Religion,National ID,Present Address,Permanent Address,City,State,Previous Institute Name,Previous Institute Qualification,Previous Institute Remarks,Parent Name,Parent Relation,Father Name,Mother Name,Parent Occupation,Parent Income,Parent Education,Parent Email,Parent Phone Number,Parent Address,Parent City,Parent State,student_session,student_id_number,student_registration_number,student_roll_number\n";
 
     foreach ($students as $student) {
         // Prepare student data for CSV
@@ -21,6 +21,7 @@ function export_student_list_csv() {
             $student->section,
             $student->admission_date,
             $student->category,
+            $student->subject_list,
             $student->student_first_name,
             $student->student_last_name,
             $student->student_gender,
@@ -53,9 +54,6 @@ function export_student_list_csv() {
             $student->student_id_number,
             $student->student_registration_number,
             $student->student_roll_number,
-            $student->student_exam,
-            $student->student_subject,
-            $student->student_result,
         );
 
         // Escape and format data for CSV
@@ -80,5 +78,4 @@ function export_student_list_csv() {
 if (isset($_GET['page']) && $_GET['page'] === 'student-list' && isset($_GET['action']) && $_GET['action'] === 'export-csv') {
     export_student_list_csv();
 }
-
 ?>
