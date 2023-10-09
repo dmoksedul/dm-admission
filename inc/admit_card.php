@@ -138,6 +138,7 @@ function exam_submenu_page_content() {
         <form id="exam_student_search_box" method="post" action="">
             <input type="text" name="student_id_or_registration" placeholder="Student ID or Registration No" id="student_id_or_registration" required>
             <input type="submit" name="search_student" value="Apply">
+            <!-- <button type="submit" style="display:flex; justify-content:center; align-items:center;gap:10px" name="search_student">Apply <i class="fas fa-angle-right"></i></button> -->
         </form>
         <?php if ($message) : ?>
             <p><?php echo esc_html($message); ?></p>
@@ -194,7 +195,7 @@ function exam_submenu_page_content() {
 }
 
 
-// Callback function to display the submenu page content
+// Callback function to display the submenu page content list of students
 function exam_students_submenu_page_content() {
     global $wpdb;
 

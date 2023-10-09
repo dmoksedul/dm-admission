@@ -10,6 +10,12 @@ function enqueue_custom_admin_scripts_and_styles() {
 add_action('admin_enqueue_scripts', 'enqueue_custom_admin_scripts_and_styles');
 add_action('wp_enqueue_scripts', 'enqueue_custom_admin_scripts_and_styles');
 
+function enqueue_fontawesome() {
+    wp_enqueue_style('font-awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css', array(), '5.15.3', 'all');
+}
+
+add_action('admin_enqueue_scripts', 'enqueue_fontawesome');
+
 
 
 

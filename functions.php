@@ -115,7 +115,7 @@ function admission_form_plugin_menu() {
         'manage_options',        // Capability required to access the menu
         'dm_admission',        // Menu slug (unique identifier)
         'display_student_list',   // Callback function to display the page content
-        'dashicons-id-alt',       // Icon for the menu (you can choose from dashicons)
+        'dashicons-book-alt',       // Icon for the menu (you can choose from dashicons)
         15,
     );
 

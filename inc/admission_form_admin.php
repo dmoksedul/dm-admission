@@ -206,7 +206,7 @@ function admission_form_page() {
                 </div>
 
                 <!-- Student Details -->
-                <h3>Student Details:</h3>
+                <h3><i class="fas fa-user-edit"></i> Student Details:</h3>
                 <div class="form_details_box student_details_box">
                     <div class="input_box">
                         <!-- Student First Name -->
@@ -316,7 +316,7 @@ function admission_form_page() {
                 </div>
 
                 <!-- Previous Institute Details -->
-                <h3>Previous Institute Details:</h3>
+                <h3><i class="fas fa-history"></i> Previous Institute Details:</h3>
                 <div class="form_details_box previous_institute_box">
                     <!-- Student Previous Institute Name -->
                     <div class="input_box">
@@ -340,7 +340,7 @@ function admission_form_page() {
                 </div>
 
                 <!-- Parent Details -->
-                <h3>Parent Details:</h3>
+                <h3><i class="fas fa-user-secret"></i> Parent Details:</h3>
                 <div class="form_details_box parent_details_box">
                     <!-- Parent Name -->
                     <div class="input_box">
@@ -427,7 +427,7 @@ function admission_form_page() {
                     </div>
                 </div>
                 <!-- Upload Document -->
-                <h3>Upload Document:</h3>
+                <h3><i class="fas fa-file-alt"></i> Upload Document:</h3>
                 <div class="document_box">
                     <!-- Upload Student Documents -->
                     <div class="input_box">
