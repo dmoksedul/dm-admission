@@ -1,13 +1,12 @@
 <?php
-
-
 // Callback function to display the submenu page content
 function exam_submenu_page_content() {
     global $wpdb;
 
     // Initialize variables for student data
-    $student_id_number = '';
+    $student_id_or_registration = ''; // Combined search input
     $student_name = '';
+    $student_id_number = '';
     $student_registration_number = '';
     $student_phone_number = '';
     $subject_list = '';
@@ -21,10 +20,19 @@ function exam_submenu_page_content() {
 
     // Check if the search form has been submitted
     if (isset($_POST['search_student'])) {
-        $student_id = sanitize_text_field($_POST['student_id']);
-        // Query the dm_students table to retrieve student data based on $student_id
+        $student_id_or_registration = sanitize_text_field($_POST['student_id_or_registration']);
+        
+        // Query the dm_students table to retrieve student data based on ID number or registration number
         $table_name = $wpdb->prefix . 'dm_students';
-        $student_data = $wpdb->get_row("SELECT student_id_number, student_first_name, student_last_name, student_registration_number, student_phone_number, subject_list, class, student_roll_number FROM $table_name WHERE student_id_number = '$student_id'");
+        $student_data = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT student_id_number, student_first_name, student_last_name, student_registration_number, student_phone_number, subject_list, class, student_roll_number 
+                FROM $table_name 
+                WHERE student_id_number = %s OR student_registration_number = %s",
+                $student_id_or_registration,
+                $student_id_or_registration
+            )
+        );
 
         // If a student is found, store the data in variables
         if ($student_data) {
@@ -36,19 +44,44 @@ function exam_submenu_page_content() {
             $student_class = $student_data->class;
             $student_roll_number = $student_data->student_roll_number; // Assign student roll number
 
-            // Check if the student exists in the dm_students_esar table
+            // Check if the student exists in the dm_students_esar table based on multiple criteria
             $esar_table_name = $wpdb->prefix . 'dm_students_esar';
-            $existing_student = $wpdb->get_row("SELECT * FROM $esar_table_name WHERE student_id_number = '$student_id'");
+
+            // Get the selected exam name
+            // $exam_name = sanitize_text_field($_POST['exam_name']);
+
+            // Check if a record with the same combination exists
+            $existing_student = $wpdb->get_row(
+                $wpdb->prepare(
+                    "SELECT * FROM $esar_table_name 
+                    WHERE student_id_number = %s 
+                    AND student_registration_number = %s 
+                    AND class = %s 
+                    AND exam = %s",
+                    $student_id_number,
+                    $student_registration_number,
+                    $student_class,
+                    $exam_name
+                )
+            );
 
             if ($existing_student) {
-                $message = 'Student already listed in dm_students_esar.';
+                $message = 'Student with ID number ' . $student_id_number . ', registration number ' . $student_registration_number . ', class ' . $student_class . ', and exam ' . $exam_name . ' is already listed in dm_students_esar.';
+                $disableSubmit = true; // Disable the submit button
             } else {
                 // Enable the submit button only when the student is not listed
                 $disableSubmit = false;
             }
         } else {
-            $message = 'Student not found.';
+            echo '<div class="not_found_message"><p>Student not found. <button onclick="window.location.reload();" class="notfound_close_search">Try Again..</button></p></div>';
         }
+        ?>
+        <script>
+            function close_windows_search_exam_student(){
+                alert('fd')
+            }
+        </script>
+        <?php
     }
 
     // Handle inserting data into 'dm_students_esar' table
@@ -63,63 +96,103 @@ function exam_submenu_page_content() {
         $exam_name = sanitize_text_field($_POST['exam_name']);
         $student_roll_number = sanitize_text_field($_POST['student_roll_number']); // Get student roll number
 
-        // Insert data into the dm_students_esar table
+        // Check if a record with the same combination exists
         $esar_table_name = $wpdb->prefix . 'dm_students_esar';
 
-        $data = array(
-            'student_id_number' => $student_id_number,
-            'student_name' => $student_name,
-            'student_registration_number' => $student_registration_number,
-            'student_phone_number' => $student_phone_number,
-            'subject_list' => $subject_list,
-            'class' => $student_class,
-            'exam' => $exam_name,
-            'student_roll_number' => $student_roll_number, // Add student roll number to the data
-            // Add other fields and their values as needed
+        $existing_student = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM $esar_table_name 
+                WHERE student_id_number = %s 
+                AND student_registration_number = %s 
+                AND class = %s 
+                AND exam = %s",
+                $student_id_number,
+                $student_registration_number,
+                $student_class,
+                $exam_name
+            )
         );
 
-        $wpdb->insert($esar_table_name, $data);
+        if ($existing_student) {
+            $message = 'Student with ID number ' . $student_id_number . ', registration number ' . $student_registration_number . ', class ' . $student_class . ', and exam ' . $exam_name . ' is already listed in dm_students_esar.';
+            $disableSubmit = true; // Disable the submit button
+        } else {
+            // Insert data into the dm_students_esar table
+            $data = array(
+                'student_id_number' => $student_id_number,
+                'student_name' => $student_name,
+                'student_registration_number' => $student_registration_number,
+                'student_phone_number' => $student_phone_number,
+                'subject_list' => $subject_list,
+                'class' => $student_class,
+                'exam' => $exam_name,
+                'student_roll_number' => $student_roll_number,
+                // Add other fields and their values as needed
+            );
 
-        // Display a success message or handle errors
-        $message = 'Data inserted successfully into dm_students_esar table.';
-        $disableSubmit = true;
+            $wpdb->insert($esar_table_name, $data);
+
+            // Display a success message or handle errors
+            $message = 'Data inserted successfully into dm_students_esar table.';
+            $disableSubmit = true;
+        }
     }
 
     // Display the search form and search result
     ?>
     <div class="wrap">
-        <h2>Exam</h2>
-        <form method="post" action="">
-            <label for="student_id">Search Student by ID:</label>
-            <input type="text" name="student_id" id="student_id" required>
+        <h2>Exam Registration:</h2>
+        <form id="exam_student_search_box" method="post" action="">
+            <input type="text" name="student_id_or_registration" placeholder="ID or Registration" id="student_id_or_registration" required>
             <input type="submit" name="search_student" value="Apply">
         </form>
         <?php if ($message) : ?>
             <p><?php echo esc_html($message); ?></p>
         <?php endif; ?>
         <h3>Search Result:</h3>
-        <form method="post" action="">
-            <label for="student_id_number">Student ID Number:</label>
-            <input type="text" name="student_id_number" id="student_id_number" value="<?php echo esc_attr($student_id_number); ?>" readonly>
-            <label for="student_name">Student Name:</label>
-            <input type="text" name="student_name" id="student_name" value="<?php echo esc_attr($student_name); ?>" readonly>
-            <label for="student_registration_number">Student Registration Number:</label>
-            <input type="text" name="student_registration_number" id="student_registration_number" value="<?php echo esc_attr($student_registration_number); ?>" readonly>
-            <label for="student_phone_number">Student Phone Number:</label>
-            <input type="text" name="student_phone_number" id="student_phone_number" value="<?php echo esc_attr($student_phone_number); ?>" readonly>
-            <label for="subject_list">Subject List:</label>
-            <input type="text" name="subject_list" id="subject_list" value="<?php echo esc_attr($subject_list); ?>" readonly>
-            <label for="student_class">Class:</label>
-            <input type="text" name="student_class" id="student_class" value="<?php echo esc_attr($student_class); ?>" readonly>
-            <label for="exam_name">Exam Name:</label>
-            <select name="exam_name" id="exam_name" required>
-            <option value="" selected disabled>Select </option>
-            <option value="Half Year">Half Year </option>
-            <option value="Anual">Anual </option>
-        </select>
-            <label for="student_roll_number">Student Roll Number:</label>
-            <input type="text" name="student_roll_number" id="student_roll_number" value="<?php echo esc_attr($student_roll_number); ?>" readonly>
+        <form id="student_exam_form" method="post" action="">
+            <div>
+                <div>
+                <label for="student_id_number">Student ID Number:</label>
+                <input type="text" name="student_id_number" id="student_id_number" value="<?php echo esc_attr($student_id_number); ?>" readonly>
+                </div>
+                <div>
+                <label for="student_name">Student Name:</label>
+                <input type="text" name="student_name" id="student_name" value="<?php echo esc_attr($student_name); ?>" readonly>
+                </div>
+                <div>
+                <label for="student_registration_number">Student Registration Number:</label>
+                <input type="text" name="student_registration_number" id="student_registration_number" value="<?php echo esc_attr($student_registration_number); ?>" readonly>
+                </div>
+                <div>
+                <label for="student_phone_number">Student Phone Number:</label>
+                <input type="text" name="student_phone_number" id="student_phone_number" value="<?php echo esc_attr($student_phone_number); ?>" readonly>
+                </div>
+                <div>
+                <label for="subject_list">Subject List:</label>
+                <input type="text" name="subject_list" id="subject_list" value="<?php echo esc_attr($subject_list); ?>" readonly>
+                </div>
+                <div>
+                <label for="student_class">Class:</label>
+                <input type="text" name="student_class" id="student_class" value="<?php echo esc_attr($student_class); ?>" readonly>
+                </div>
+                <div>
+                <label for="exam_name">Exam Name:</label>
+                <select name="exam_name" id="exam_name" required>
+                    <option value="" selected disabled>Select</option>
+                    <option value="Half Year">Half Year</option>
+                    <option value="Annual">Annual</option>
+                </select>
+                </div>
+                <div>
+                <label for="student_roll_number">Student Roll Number:</label>
+                <input type="text" name="student_roll_number" id="student_roll_number" value="<?php echo esc_attr($student_roll_number); ?>" readonly>
+                </div>
+                
+            </div class="submit_box">
             <input type="submit" name="insert_student_data" value="Add Student" <?php if ($disableSubmit) echo 'disabled'; ?>>
+            </div>
+            </div>
         </form>
     </div>
     <?php
@@ -132,6 +205,10 @@ function exam_submenu_page_content() {
 
 
 
+
+
+
+// student admit card print functions here
 
 // Add a shortcode for generating admit cards
 function student_admit_card_search() {

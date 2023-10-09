@@ -15,7 +15,7 @@ function display_edit_student_form() {
 
         if ($student) {
             // Include the edit student form template
-            include('edit-student-form.php');
+            include('student_edit_form.php');
         } else {
             // Display an error message if the student doesn't exist
             echo '<div class="wrap">';
@@ -31,3 +31,6 @@ function display_edit_student_form() {
         echo '</div>';
     }
 }
+
+
+// edit form

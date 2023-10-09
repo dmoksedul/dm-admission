@@ -20,10 +20,15 @@ function display_student_list() {
     // Calculate the offset for the SQL query
     $offset = ($current_page - 1) * $per_page;
 
-    // Modify your SQL query to search for students by name and limit the results per page
+    // Modify your SQL query to search for students by name, student ID number, or student registration number and limit the results per page
     $students = $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT * FROM $table_name WHERE student_first_name LIKE '%%%s%%' OR student_last_name LIKE '%%%s%%' ORDER BY id DESC LIMIT %d, %d",
+            "SELECT * FROM $table_name 
+            WHERE 
+            (student_first_name LIKE '%%%s%%' OR student_last_name LIKE '%%%s%%' OR student_id_number LIKE '%%%s%%' OR student_registration_number LIKE '%%%s%%') 
+            ORDER BY id DESC LIMIT %d, %d",
+            $search_query,
+            $search_query,
             $search_query,
             $search_query,
             $offset,
@@ -34,7 +39,11 @@ function display_student_list() {
     // Calculate the total number of students matching the search query
     $total_students = $wpdb->get_var(
         $wpdb->prepare(
-            "SELECT COUNT(*) FROM $table_name WHERE student_first_name LIKE '%%%s%%' OR student_last_name LIKE '%%%s%%'",
+            "SELECT COUNT(*) FROM $table_name 
+            WHERE 
+            (student_first_name LIKE '%%%s%%' OR student_last_name LIKE '%%%s%%' OR student_id_number LIKE '%%%s%%' OR student_registration_number LIKE '%%%s%%')",
+            $search_query,
+            $search_query,
             $search_query,
             $search_query
         )
@@ -49,11 +58,11 @@ function display_student_list() {
     echo '<div class="student_top_box">';
     // Search form
     echo '<form method="post">';
-    echo '<input type="text" name="student_search" placeholder="First Name">';
+    echo '<input type="text" name="student_search" placeholder="Search by Name, Student ID, or Registration Number">';
     echo '<input type="submit" name="search_students" value="Search">';
     echo '</form>';
     // Add the export CSV button
-    echo '<a href="?page=student-list&action=export-csv" class="button">Export CSV Formate</a>';
+    echo '<a href="?page=student-list&action=export-csv" class="button">Export CSV Format</a>';
     echo '</div>';
     echo '<table class="wp-list-table widefat fixed">';
     echo '<thead><tr>';
@@ -115,6 +124,4 @@ function display_student_list() {
 
     echo '</div>';
 }
-
-
 ?>
