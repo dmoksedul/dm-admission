@@ -336,18 +336,84 @@ function display_trash_students_list() {
             echo '<td>';
             echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
             echo '<a href="?page=trash-students&action=restore&student_id=' . $student->id . '" class="button">Restore</a>';
-            echo '<a href="javascript:void(0);" onclick="confirmDeletePermanent(' . $student->id . ');" class="button danger">Delete</a>';
+            echo '<a href="javascript:void(0);" onclick="showCustomDeleteConfirmation(' . $student->id . ');" class="button danger">Delete</a>';
+
             echo '</div>';
-            // Add this JavaScript code inside your HTML <head> section or enqueue it using wp_enqueue_script in WordPress.
-            echo '<script>
-            function confirmDeletePermanent(studentId) {
-                if (confirm("Are you sure you want to delete this student permanently?")) {
-                    // If the user clicks "OK" in the confirmation popup, redirect to the delete permanent action
-                    window.location.href = "?page=trash-students&action=delete_permanently&student_id=" + studentId;
-                }
-                // If the user clicks "Cancel," do nothing
-            }
-            </script>';
+            // Add this JavaScript code to show the custom confirmation dialog
+    echo '
+    <script>
+    // Function to show a custom confirmation popup for the "Delete" action
+    function showCustomDeleteConfirmation(studentId) {
+        // Create a main parent div with a class name
+        var mainParentDiv = document.createElement("div");
+        mainParentDiv.className = "custom-confirm-wrapper";
+    
+        // Create a custom dialog box element
+        var customDialog = document.createElement("div");
+        customDialog.className = "dm_custom_confirm_box";
+    
+        // Create a div for the button group and apply a class name
+        var buttonGroup = document.createElement("div");
+        buttonGroup.className = "dm_popup_box_button_group";
+    
+        // Add dialog content
+        customDialog.innerHTML = "<p style=\"font-size:22px;font-weight:500\">Are you sure you want to delete this student permanently?</p>";
+    
+        // Add "Yes" and "No" buttons
+        var yesButton = document.createElement("button");
+        yesButton.className = "danger";
+        yesButton.textContent = "Yes";
+        yesButton.addEventListener("click", function() {
+            // If "Yes" is clicked, redirect to the delete permanent action
+            window.location.href = "?page=trash-students&action=delete_permanently&student_id=" + studentId;
+            closeCustomConfirmation();
+        });
+        buttonGroup.appendChild(yesButton);
+    
+        var noButton = document.createElement("button");
+        noButton.textContent = "No";
+        noButton.addEventListener("click", function() {
+            // If "No" is clicked, close the custom dialog
+            closeCustomConfirmation();
+        });
+        buttonGroup.appendChild(noButton);
+    
+        // Append the button group to the custom dialog
+        customDialog.appendChild(buttonGroup);
+    
+        // Append the custom dialog to the main parent div
+        mainParentDiv.appendChild(customDialog);
+    
+        // Append the main parent div to the body
+        document.body.appendChild(mainParentDiv);
+    
+        // Style the main parent div and custom dialog with CSS (you can define your styles)
+        mainParentDiv.style.position = "fixed";
+        mainParentDiv.style.top = "0";
+        mainParentDiv.style.left = "0";
+        mainParentDiv.style.width = "100%";
+        mainParentDiv.style.height = "100%";
+        mainParentDiv.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        mainParentDiv.style.display = "flex";
+        mainParentDiv.style.justifyContent = "center";
+        mainParentDiv.style.alignItems = "center";
+        mainParentDiv.style.zIndex = "9999";
+    
+        customDialog.style.backgroundColor = "#fff";
+        customDialog.style.padding = "20px";
+        customDialog.style.border = "1px solid #ccc";
+        customDialog.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.2)";
+    }
+    
+    function closeCustomConfirmation() {
+        // Find and remove the main parent div element
+        var mainParentDiv = document.querySelector(".custom-confirm-wrapper");
+        if (mainParentDiv) {
+            mainParentDiv.remove();
+        }
+    }
+    </script>
+    ';
 
             echo '</td>';
             echo '</tr>';

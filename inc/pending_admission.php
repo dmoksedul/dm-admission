@@ -1,5 +1,6 @@
 <?php
-// Display pending admission
+
+// display pending admission
 function display_pending_admission() {
     // Retrieve pending admission data from the session variable
     $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
@@ -77,7 +78,7 @@ function display_pending_admission() {
             echo '<input type="hidden" name="pending_admission_data" value="' . esc_attr(base64_encode(serialize($pending_admission))) . '">';
             echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
             echo '<button type="submit" name="approve_admission" class="button">Approve</button>';
-            echo '<button type="submit" name="delete_admission" class="button danger" onclick="return confirm(\'Are you sure you want to delete this admission?\')">Delete</button>'; // Confirmation dialog added here
+            echo '<button type="submit" name="delete_admission" class="button danger" onclick="return confirm(\'Are you sure you want to delete this admission?\')">Delete</button>';
             echo '</div>';
             echo '</form>';
             echo '</tr>';
@@ -138,17 +139,14 @@ add_action('init', 'approve_admission_submission');
 
 function delete_admission_submission() {
     if (isset($_POST['delete_admission'])) {
-        // Check if the user confirmed the deletion
-        if (isset($_POST['confirm_delete']) && $_POST['confirm_delete'] === 'yes') {
-            $index = intval($_POST['delete_admission_index']); // Correct the index name
+        $index = intval($_POST['approve_admission_index']); // Change this line to use the correct index name 'delete_admission_index'
 
-            // Remove the item from the session variable
-            if (isset($_SESSION['pending_admissions'][$index])) {
-                unset($_SESSION['pending_admissions'][$index]);
+        // Remove the item from the session variable
+        if (isset($_SESSION['pending_admissions'][$index])) {
+            unset($_SESSION['pending_admissions'][$index]);
 
-                // Reindex the session array to remove gaps in the index
-                $_SESSION['pending_admissions'] = array_values($_SESSION['pending_admissions']);
-            }
+            // Reindex the session array to remove gaps in the index
+            $_SESSION['pending_admissions'] = array_values($_SESSION['pending_admissions']);
         }
     }
 }
