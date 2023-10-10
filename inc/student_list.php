@@ -123,8 +123,80 @@ function display_student_list() {
             echo '<a href="?page=edit-student&student_id=' . $student->id . '" class="button">Edit</a>';
             // Modify your "Trash" button to include a JavaScript confirmation dialog
             echo '<a href="javascript:void(0);" onclick="showCustomConfirmation(' . $student->id . ');" class="button danger">Trash</a>';
-
-
+            echo '
+            <script>
+            function showCustomConfirmation(studentId) {
+                // Create a main parent div with a class name
+                var mainParentDiv = document.createElement("div");
+                mainParentDiv.className = "custom-confirm-wrapper";
+            
+                // Create a custom dialog box element
+                var customDialog = document.createElement("div");
+                customDialog.className = "dm_custom_confirm_box";
+            
+                // Create a div for the button group and apply a class name
+                var buttonGroup = document.createElement("div");
+                buttonGroup.className = "dm_popup_box_button_group";
+            
+                // Add dialog content
+                customDialog.innerHTML = "<p style=\"font-size:22px;font-weight:500\">Are you sure move to trash?</p>";
+            
+                // Add "Yes" and "No" buttons
+                var yesButton = document.createElement("button");
+                yesButton.className = "danger";
+                yesButton.textContent = "Yes";
+                yesButton.addEventListener("click", function() {
+                    // If "Yes" is clicked, redirect to the trash action
+                    window.location.href = "?page=dm_admission&action=trash&student_id=" + studentId;
+                    closeCustomConfirmation();
+                });
+                buttonGroup.appendChild(yesButton);
+            
+                var noButton = document.createElement("button");
+                noButton.textContent = "No";
+                noButton.addEventListener("click", function() {
+                    // If "No" is clicked, close the custom dialog
+                    closeCustomConfirmation();
+                });
+                buttonGroup.appendChild(noButton);
+            
+                // Append the button group to the custom dialog
+                customDialog.appendChild(buttonGroup);
+            
+                // Append the custom dialog to the main parent div
+                mainParentDiv.appendChild(customDialog);
+            
+                // Append the main parent div to the body
+                document.body.appendChild(mainParentDiv);
+            
+                // Style the main parent div and custom dialog with CSS (you can define your styles)
+                mainParentDiv.style.position = "fixed";
+                mainParentDiv.style.top = "0";
+                mainParentDiv.style.left = "0";
+                mainParentDiv.style.width = "100%";
+                mainParentDiv.style.height = "100%";
+                mainParentDiv.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+                mainParentDiv.style.display = "flex";
+                mainParentDiv.style.justifyContent = "center";
+                mainParentDiv.style.alignItems = "center";
+                mainParentDiv.style.zIndex = "9999";
+            
+                customDialog.style.backgroundColor = "#fff";
+                customDialog.style.padding = "20px";
+                customDialog.style.border = "1px solid #ccc";
+                customDialog.style.boxShadow = "0 2px 10px rgba(0, 0, 0, 0.2)";
+            }
+            
+            function closeCustomConfirmation() {
+                // Find and remove the main parent div element
+                var mainParentDiv = document.querySelector(".custom-confirm-wrapper");
+                if (mainParentDiv) {
+                    mainParentDiv.remove();
+                }
+            }
+            </script>
+            ';
+            
             echo '</td>';
 
             echo '</tr>';
@@ -156,81 +228,14 @@ function display_student_list() {
     }
 }
 
-?>
-<script>
-   function showCustomConfirmation(studentId) {
-    // Create a main parent div with a class name
-    var mainParentDiv = document.createElement('div');
-    mainParentDiv.className = 'custom-confirm-wrapper';
 
-    // Create a custom dialog box element
-    var customDialog = document.createElement('div');
-    customDialog.className = 'dm_custom_confirm_box';
-
-    // Create a div for the button group and apply a class name
-    var buttonGroup = document.createElement('div');
-    buttonGroup.className = 'dm_popup_box_button_group';
-
-    // Add dialog content
-    customDialog.innerHTML = '<p style="font-size:22px;font-weight:500">Are you sure move to trash?</p>';
-
-    // Add "Yes" and "No" buttons
-    var yesButton = document.createElement('button');
-    yesButton.className = 'danger';
-    yesButton.textContent = 'Yes';
-    yesButton.addEventListener('click', function() {
-        // If "Yes" is clicked, redirect to the trash action
-        window.location.href = "?page=dm_admission&action=trash&student_id=" + studentId;
-        closeCustomConfirmation();
-    });
-    buttonGroup.appendChild(yesButton);
-
-    var noButton = document.createElement('button');
-    noButton.textContent = 'No';
-    noButton.addEventListener('click', function() {
-        // If "No" is clicked, close the custom dialog
-        closeCustomConfirmation();
-    });
-    buttonGroup.appendChild(noButton);
-
-    // Append the button group to the custom dialog
-    customDialog.appendChild(buttonGroup);
-
-    // Append the custom dialog to the main parent div
-    mainParentDiv.appendChild(customDialog);
-
-    // Append the main parent div to the body
-    document.body.appendChild(mainParentDiv);
-
-    // Style the main parent div and custom dialog with CSS (you can define your styles)
-    mainParentDiv.style.position = 'fixed';
-    mainParentDiv.style.top = '0';
-    mainParentDiv.style.left = '0';
-    mainParentDiv.style.width = '100%';
-    mainParentDiv.style.height = '100%';
-    mainParentDiv.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    mainParentDiv.style.display = 'flex';
-    mainParentDiv.style.justifyContent = 'center';
-    mainParentDiv.style.alignItems = 'center';
-    mainParentDiv.style.zIndex = '9999';
-
-    customDialog.style.backgroundColor = '#fff';
-    customDialog.style.padding = '20px';
-    customDialog.style.border = '1px solid #ccc';
-    customDialog.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
+function enqueue_custom_script() {
+    // Enqueue the custom JavaScript file
+    wp_enqueue_script('custom-script', plugins_url('/js/script.js', __FILE__), array(), '1.0', true);
 }
 
-function closeCustomConfirmation() {
-    // Find and remove the main parent div element
-    var mainParentDiv = document.querySelector('.custom-confirm-wrapper');
-    if (mainParentDiv) {
-        mainParentDiv.remove();
-    }
-}
-
-
-</script>
-<?php
+// Hook the function to the appropriate action
+add_action('wp_enqueue_scripts', 'enqueue_custom_script');
 
 
 // Function to display the Trash page list and handle Trash actions
