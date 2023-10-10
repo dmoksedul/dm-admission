@@ -232,6 +232,14 @@ function admission_form_plugin_menu() {
         'shortcodes',                       // Menu slug (unique identifier)
         'shortcodes_page'                  // Callback function to display the import form
     );
+    add_submenu_page(
+        'dm_admission',             // Parent menu slug
+        'Pending Info',          // Page title
+        'Pending Info',          // Menu title
+        'manage_options',           // Capability required to access the menu
+        'pending-student-details',          // Menu slug (unique identifier)
+        'display_pending_student_details_page'   // Callback function to display student details
+    );
 
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-// display pending admission
+// Display pending admission
 function display_pending_admission() {
     // Retrieve pending admission data from the session variable
     $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
@@ -32,7 +32,7 @@ function display_pending_admission() {
         echo '<th>Father Name</th>';
         echo '<th>Location</th>';
         echo '<th>Admission Date</th>';
-        echo '<th style="width:200px">Actions</th>';
+        echo '<th style="width:250px">Actions</th>';
         echo '</tr></thead>';
         echo '<tbody>';
 
@@ -79,6 +79,9 @@ function display_pending_admission() {
             echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
             echo '<button type="submit" name="approve_admission" class="button">Approve</button>';
             echo '<button type="submit" name="delete_admission" class="button danger" onclick="return confirm(\'Are you sure you want to delete this admission?\')">Delete</button>';
+            // Add a "View" button with a link to the student details page
+            $student_id = isset($pending_admission['id']) ? $pending_admission['id'] : 0;
+            echo '<a href="' . admin_url('admin.php?page=pending-student-details&student_id=' . $student_id) . '" class="button">View</a>';
             echo '</div>';
             echo '</form>';
             echo '</tr>';
@@ -151,4 +154,134 @@ function delete_admission_submission() {
     }
 }
 add_action('init', 'delete_admission_submission');
-?>
+
+
+
+function display_pending_student_details_page() {
+    if (isset($_GET['student_id'])) {
+        $student_id = intval($_GET['student_id']);
+
+        // Retrieve pending admission data from the session variable
+        $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
+
+        // Check if the student ID is valid
+        if ($student_id >= 0 && $student_id < count($pending_admissions)) {
+            $student_data = $pending_admissions[$student_id];
+
+            echo '<div class="wrap">';
+            echo '<h2 style="text-align:center;margin:20px 10px">Pending Student Details</h2>';
+
+            // Use a container div to control the layout
+            echo '<div class="student-details-container">';
+
+            echo '<div class="student_header_image_box">';
+            // Display student image
+            echo '<div class="student_image_box">';
+            $student_image_id = isset($student_data['student_image']) ? $student_data['student_image'] : null;
+            if ($student_image_id) {
+                $student_image_url = wp_get_attachment_image_src($student_image_id, 'full');
+                if ($student_image_url) {
+                    echo '<img width="150" src="' . esc_url($student_image_url[0]) . '" alt="Student Image">';
+                    echo '<h2>Student Image<h2/>';
+                }
+            } else {
+                echo 'Image not available';
+            }
+            // echo '</div>';
+
+            // // Display parent image
+            // echo '<div class="student_image_box">';
+            // $parent_image_id = isset($student_data['student_parent_image']) ? $student_data['student_parent_image'] : null;
+            // if ($parent_image_id) {
+            //     $parent_image_url = wp_get_attachment_image_src($parent_image_id, 'full');
+            //     if ($parent_image_url) {
+            //         echo '<img width="150" src="' . esc_url($parent_image_url[0]) . '" alt="Parent Image">';
+            //         echo '<h2>Parent Image<h2/>';
+            //     }
+            // } else {
+            //     echo 'Parent image not available';
+            // }
+            // echo '</div>';
+
+            // // Display student documents
+            // echo '<div class="pending_student_detail">';
+            // $student_documents_id = isset($student_data['student_documents']) ? $student_data['student_documents'] : null;
+            // if ($student_documents_id) {
+            //     $student_documents_url = wp_get_attachment_url($student_documents_id);
+            //     if ($student_documents_url) {
+            //         echo '<a class="button" href="' . esc_url($student_documents_url) . '" target="_blank">View Documents</a>';
+            //     }
+            // } else {
+            //     echo 'No documents available';
+            // }
+            echo '</div>';
+            echo '</div>';
+
+            // Display other student details
+            $fields_to_display = array(
+                'institute_name',
+                'class',
+                'section',
+                'admission_date',
+                'category',
+                'subject_list',
+                'student_first_name',
+                'student_last_name',
+                'student_gender',
+                'student_birthdate',
+                'student_blood_group',
+                'student_phone_number',
+                'student_email',
+                'student_religion',
+                'student_nid',
+                'student_present_address',
+                'student_permanent_address',
+                'student_city',
+                'student_state',
+                'student_previous_institute_name',
+                'student_previous_institute_qualification',
+                'student_previous_institute_remarks',
+                'student_parent_name',
+                'student_parent_relation',
+                'student_father_name',
+                'student_mother_name',
+                'student_parent_occupation',
+                'student_parent_income',
+                'student_parent_education',
+                'student_parent_email',
+                'student_parent_number',
+                'student_parent_address',
+                'student_parent_city',
+                'student_parent_state',
+                'student_session',
+                'student_id_number'
+            );
+            echo '<div class="pending_student_detail_box">';
+
+            foreach ($fields_to_display as $field) {
+                
+                echo '<div class="student-detail">';
+                echo '<strong>' . ucwords(str_replace('_', ' ', $field)) . ':</strong>';
+                $field_value = isset($student_data[$field]) ? $student_data[$field] : 'N/A';
+                echo '<span>' . esc_html($field_value) . '</span>';
+                echo '</div>';
+            }
+
+            echo '</div>'; // Close the student-details-container
+            echo '</div>'; // Close the student-details-container
+
+            echo '</div>'; // Close the wrap div
+        } else {
+            echo '<div class="wrap">';
+            echo '<h2>Student Not Found</h2>';
+            echo '<p>The requested student could not be found.</p>';
+            echo '</div>';
+        }
+    } else {
+        echo '<div class="wrap">';
+        echo '<h2>Invalid Request</h2>';
+        echo '<p>Invalid student ID.</p>';
+        echo '</div>';
+    }
+}
+

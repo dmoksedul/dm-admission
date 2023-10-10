@@ -983,3 +983,63 @@ li#toplevel_page_dm_admission {
     }
   }
 }
+
+// pending student detail desgn
+.student-details-container {
+  max-width: 1200px;
+  padding: 50px;
+  box-shadow: 0 0 10px #00000036;
+  margin: auto;
+  border-radius: 12px;
+}
+.student_header_image_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  .student_image_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 150px;
+      height: 150px;
+      border-radius: 100%;
+      box-shadow: 0 0 10px #00000038;
+    }
+  }
+}
+.pending_student_detail_box {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px;
+  font-size: 16px;
+  .student-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    strong {
+      font-weight: 400;
+    }
+    span {
+      background-color: white;
+      border: 1px solid #0c0c0c26;
+      padding: 10px;
+      border-radius: 2px;
+      margin-top: 3px;
+    }
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .pending_student_detail_box {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .pending_student_detail_box {
+    grid-template-columns: 1fr;
+  }
+}
