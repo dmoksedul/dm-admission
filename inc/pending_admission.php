@@ -77,11 +77,12 @@ function display_pending_admission() {
             // Serialize and encode the pending admission data as a hidden field
             echo '<input type="hidden" name="pending_admission_data" value="' . esc_attr(base64_encode(serialize($pending_admission))) . '">';
             echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
-            echo '<button type="submit" name="approve_admission" class="button">Approve</button>';
-            echo '<button type="submit" name="delete_admission" class="button danger" onclick="return confirm(\'Are you sure you want to delete this admission?\')">Delete</button>';
             // Add a "View" button with a link to the student details page
             $student_id = isset($pending_admission['id']) ? $pending_admission['id'] : 0;
             echo '<a href="' . admin_url('admin.php?page=pending-student-details&student_id=' . $student_id) . '" class="button">View</a>';
+            echo '<button type="submit" name="approve_admission" class="button">Approve</button>';
+            echo '<button type="submit" name="delete_admission" class="button danger" onclick="return confirm(\'Are you sure you want to delete this admission?\')">Delete</button>';
+            
             echo '</div>';
             echo '</form>';
             echo '</tr>';

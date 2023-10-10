@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: DM Admission
-Description: A plugin to display an admission form and save data to the database.
+Description: This is a school and college student admission, exam, result, id card, admit card and certificate functional Plugin.
 Version: 1.0
 Author: Moksedul Islam
 Author URI: https://moksedul.dev/
