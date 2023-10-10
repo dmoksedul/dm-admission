@@ -77,7 +77,7 @@ function display_pending_admission() {
             echo '<input type="hidden" name="pending_admission_data" value="' . esc_attr(base64_encode(serialize($pending_admission))) . '">';
             echo '<div style="display:flex; flex-direction:row;justify-content:center;align-items:center;gap:20px; width:100%">';
             echo '<button type="submit" name="approve_admission" class="button">Approve</button>';
-            echo '<button type="submit" name="delete_admission" class="button danger">Delete</button>';
+            echo '<button type="submit" name="delete_admission" class="button danger" onclick="return confirm(\'Are you sure you want to delete this admission?\')">Delete</button>'; // Confirmation dialog added here
             echo '</div>';
             echo '</form>';
             echo '</tr>';
@@ -138,38 +138,19 @@ add_action('init', 'approve_admission_submission');
 
 function delete_admission_submission() {
     if (isset($_POST['delete_admission'])) {
-        $index = intval($_POST['approve_admission_index']); // Change this line to use the correct index name 'delete_admission_index'
+        // Check if the user confirmed the deletion
+        if (isset($_POST['confirm_delete']) && $_POST['confirm_delete'] === 'yes') {
+            $index = intval($_POST['delete_admission_index']); // Correct the index name
 
-        // Remove the item from the session variable
-        if (isset($_SESSION['pending_admissions'][$index])) {
-            unset($_SESSION['pending_admissions'][$index]);
+            // Remove the item from the session variable
+            if (isset($_SESSION['pending_admissions'][$index])) {
+                unset($_SESSION['pending_admissions'][$index]);
 
-            // Reindex the session array to remove gaps in the index
-            $_SESSION['pending_admissions'] = array_values($_SESSION['pending_admissions']);
+                // Reindex the session array to remove gaps in the index
+                $_SESSION['pending_admissions'] = array_values($_SESSION['pending_admissions']);
+            }
         }
     }
 }
 add_action('init', 'delete_admission_submission');
-
-// function add_pending_admission_count_to_menu() {
-//     $count = get_pending_admission_count();
-//     $menu_label = 'Pending Admission';
-
-//     // Modify the menu label to include the count
-//     if ($count > 0) {
-//         $menu_label .= ' <span class="update-plugins count-' . $count . '"><span class="plugin-count">' . $count . '</span></span>';
-//     }
-
-//     // Add the submenu page for "Pending Admission"
-//     add_submenu_page(
-//         'dm_admission',             // Parent menu slug
-//         'Pending Admission',        // Page title
-//         $menu_label,                // Menu title with count
-//         'manage_options',           // Capability required to access the menu
-//         'pending-admission',        // Menu slug (unique identifier)
-//         'display_pending_admission' // Callback function to display the pending admission content
-//     );
-// }
-
-// // Hook the function to add the menu item
-// add_action('admin_menu', 'add_pending_admission_count_to_menu');
+?>
