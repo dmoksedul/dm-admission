@@ -108,11 +108,28 @@ function admission_form_plugin_deactivation() {
     $wpdb->query($sql);
 }
 
+function get_pending_admission_count() {
+    $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
+    return count($pending_admissions);
+}
+
+
+
 // Add a top-level menu page for your plugin
 function admission_form_plugin_menu() {
+    $countMain = get_pending_admission_count();
+    $countSub = get_pending_admission_count(); // Count for the submenu
+
+    $menu_label = 'DM Admission';
+
+    // Modify the menu label to include the count for the main menu
+    if ($countMain > 0) {
+        $menu_label .= ' <span class="update-plugins count-' . $countMain . '"><span class="plugin-count">' . $countMain . '</span></span>';
+    }
+
     add_menu_page(
-        'DM Admission', // Page title
-        'DM Admission',        // Menu title
+        $menu_label, // Page title
+        $menu_label,        // Menu title
         'manage_options',        // Capability required to access the menu
         'dm_admission',        // Menu slug (unique identifier)
         'display_student_list',   // Callback function to display the page content
@@ -128,6 +145,13 @@ function admission_form_plugin_menu() {
         'display_student_list'
     );
 
+    // Modify the menu label to include the count for the submenu
+    if ($countSub > 0) {
+        $menu_labelSub = 'Pending Admission <span class="update-plugins count-' . $countSub . '"><span class="plugin-count">' . $countSub . '</span></span>';
+    } else {
+        $menu_labelSub = 'Pending Admission';
+    }
+
     // Add a submenu page for the student list
     add_submenu_page(
         'dm_admission',       // Parent menu slug
@@ -138,15 +162,16 @@ function admission_form_plugin_menu() {
         'display_student_list'  // Callback function to display the student
     );
     
-     // Add a submenu page for pending admissions
-     add_submenu_page(
-        'dm_admission',             // Parent menu slug (should match the top-level menu slug)
-        'Pending Admission',          // Page title
-        'Pending Admission',          // Menu title
-        'manage_options',             // Capability required to access the menu
-        'pending-admission',          // Menu slug (unique identifier)
-        'display_pending_admission'   // Callback function to display the pending admission content
+    // Add the submenu page for "Pending Admission"
+    add_submenu_page(
+        'dm_admission',             // Parent menu slug
+        'Pending Admission',        // Page title
+        $menu_labelSub,             // Menu title with count for the submenu
+        'manage_options',           // Capability required to access the menu
+        'pending-admission',        // Menu slug (unique identifier)
+        'display_pending_admission' // Callback function to display the pending admission content
     );
+    
     add_submenu_page(
         'your-main-menu-slug', // Parent menu slug
         'Edit Student',         // Page title
@@ -209,7 +234,9 @@ function admission_form_plugin_menu() {
     );
 
 }
+
 add_action('admin_menu', 'admission_form_plugin_menu');
+
 // default settings linking
 include_once('inc/default.php');
 

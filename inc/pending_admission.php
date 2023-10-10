@@ -1,6 +1,5 @@
 <?php
-
-// display pending admission
+// Display pending admission
 function display_pending_admission() {
     // Retrieve pending admission data from the session variable
     $pending_admissions = isset($_SESSION['pending_admissions']) ? $_SESSION['pending_admissions'] : array();
@@ -151,4 +150,26 @@ function delete_admission_submission() {
     }
 }
 add_action('init', 'delete_admission_submission');
-?>
+
+// function add_pending_admission_count_to_menu() {
+//     $count = get_pending_admission_count();
+//     $menu_label = 'Pending Admission';
+
+//     // Modify the menu label to include the count
+//     if ($count > 0) {
+//         $menu_label .= ' <span class="update-plugins count-' . $count . '"><span class="plugin-count">' . $count . '</span></span>';
+//     }
+
+//     // Add the submenu page for "Pending Admission"
+//     add_submenu_page(
+//         'dm_admission',             // Parent menu slug
+//         'Pending Admission',        // Page title
+//         $menu_label,                // Menu title with count
+//         'manage_options',           // Capability required to access the menu
+//         'pending-admission',        // Menu slug (unique identifier)
+//         'display_pending_admission' // Callback function to display the pending admission content
+//     );
+// }
+
+// // Hook the function to add the menu item
+// add_action('admin_menu', 'add_pending_admission_count_to_menu');
