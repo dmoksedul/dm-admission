@@ -915,16 +915,45 @@ form.student_search_student_list {
 
 // plugin menu
 
-#adminmenu {
-  li {
-    ul {
-      li {
-        a {
-          display: flex !important;
-          flex-direction: row;
-          justify-content: space-between;
-          align-items: center;
-        }
+// #adminmenu {
+//   li {
+//     ul {
+//       li {
+//         a {
+//           display: flex !important;
+//           flex-direction: row;
+//           justify-content: space-between;
+//           align-items: center;
+//           padding: 7px !important;
+//           padding-right: 16px;
+//           padding-left: 14px;
+//         }
+//       }
+//     }
+//   }
+// }
+li#toplevel_page_dm_admission {
+  a {
+    display: flex;
+    .wp-menu-name {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      padding: 0px;
+    }
+  }
+  ul {
+    li {
+      a {
+        display: flex !important;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 7px !important;
+        padding-right: 16px;
+        padding-left: 14px;
       }
     }
   }
