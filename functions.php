@@ -240,6 +240,14 @@ function admission_form_plugin_menu() {
         'shortcodes',                       // Menu slug (unique identifier)
         'shortcodes_page'                  // Callback function to display the import form
     );
+    add_submenu_page(
+        'dm_admission', // Parent menu (use 'edit.php?post_type=page' for Pages)
+        'Results', // Page title
+        'Results', // Submenu title
+        'manage_options', // Capability required to access
+        'student-results', // Menu slug
+        'display_student_results_page' // Callback function to display the page content
+    );
 
 }
 
@@ -267,6 +275,12 @@ include_once('inc/edit_student.php');
 include_once('inc/search.php');
 
 // student edit page linking
+include_once('inc/exam.php');
+
+// student edit page linking
+include_once('inc/results.php');
+
+// student edit page linking
 include_once('inc/id_card.php');
 
 // student edit page linking
@@ -277,6 +291,9 @@ include_once('inc/pending_admission.php');
 
 // Include the search_results_page.php file
 include_once('inc/admit_card.php');
+
+// Itrash_students.php file
+include_once('inc/trash_students.php');
 
 // ... other includes and functions ...
 
