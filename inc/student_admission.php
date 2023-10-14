@@ -114,7 +114,7 @@ function admission_form_shortcode() {
                     <div class="input_box">
                         <!-- Subject List -->
                         <label for="subject_list">Subject:</label>
-                        <input value="Bangla, Englissh, ICT" type="text" name="subject_list" id="subject_list" required>
+                        <input value="Bangla 1st, Bangla 2nd, English 1st, English 2nd, Math, Religion, ICT, Physics, Chemistry, Biology, Higher Math, General Science, Bangladesh and Global Studies" type="text" name="subject_list" id="subject_list" required>
                     </div>
                     <div class="input_box">
                         <!-- session -->

@@ -997,4 +997,9 @@ li#toplevel_page_dm_admission ul li a {
   .pending_student_detail_box {
     grid-template-columns: 1fr;
   }
+}
+@media print {
+  #dm_result_sheed_box {
+    visibility: visible !important;
+  }
 }/*# sourceMappingURL=style.min.css.map */

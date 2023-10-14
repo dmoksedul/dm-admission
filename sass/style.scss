@@ -1043,3 +1043,13 @@ li#toplevel_page_dm_admission {
     grid-template-columns: 1fr;
   }
 }
+
+// result sheed box
+#dm_result_sheed_box {
+}
+
+@media print {
+  #dm_result_sheed_box {
+    visibility: visible !important;
+  }
+}
