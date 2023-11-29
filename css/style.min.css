@@ -1041,4 +1041,22 @@ li#toplevel_page_dm_admission ul li a {
   #dm_result_sheed_box {
     visibility: visible !important;
   }
+}
+div#dm_result_sheed_box {
+  max-width: 800px;
+  margin: auto;
+  padding: 0px 20px;
+  border: 1px solid rgba(0, 0, 0, 0.0196078431);
+  border-radius: 2px;
+  padding-bottom: 30px;
+}
+div#dm_result_sheed_box .institute_logo {
+  padding: 30px 0px;
+  margin-bottom: 0px;
+}
+div#dm_result_sheed_box h3 {
+  text-align: center;
+  margin-bottom: 50px;
+  font-size: 22px;
+  font-weight: 600;
 }/*# sourceMappingURL=style.min.css.map */

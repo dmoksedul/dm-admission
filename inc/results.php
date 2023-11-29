@@ -179,24 +179,29 @@ function display_student_results_page() {
 }
 
 
+// Function to get student details by registration number and roll number
 function get_student_details_by_registration_and_roll($registration_number, $roll_number) {
     global $wpdb;
 
-    // Define the table name for the dm_students_esar database
-    $table_name = $wpdb->prefix . 'dm_students_esar';
+    // Define the table names
+    $table_name_esar = $wpdb->prefix . 'dm_students_esar';
+    $table_name_students = $wpdb->prefix . 'dm_students';
 
     // Retrieve the student details based on the registration number and roll number
     $student_details = $wpdb->get_row(
         $wpdb->prepare(
-            "SELECT student_name, student_registration_number, student_roll_number, subject_list
-            FROM $table_name
-            WHERE student_registration_number = %s AND student_roll_number = %s",
-            $registration_number, $roll_number
+            "SELECT esar.student_name, esar.student_registration_number, esar.student_roll_number, esar.subject_list, students.student_father_name, students.student_mother_name, students.student_birthdate, students.student_gender, students.category, students.student_session
+            FROM $table_name_esar as esar
+            LEFT JOIN $table_name_students as students ON esar.student_registration_number = students.student_registration_number
+            WHERE esar.student_registration_number = %s AND esar.student_roll_number = %s",
+            $registration_number,
+            $roll_number
         )
     );
 
     return $student_details;
 }
+
 
 
 
@@ -258,9 +263,11 @@ function calculate_gpa_points($grade) {
 }
 
 function display_student_results_shortcode() {
+    $plugin_dir_path = plugin_dir_path(__FILE__);
+    $institute_logo = plugin_dir_url($plugin_dir_path) . 'assets/img/banner.png';
     ob_start();
     // Content to display on the page
-    echo '<div class="wrap" id="dm_result_sheed_box">';
+    echo '<div class="wrap">';
 
     if (isset($_POST['search_student'])) {
         $registration_number = sanitize_text_field($_POST['student_registration_number']);
@@ -273,12 +280,63 @@ function display_student_results_shortcode() {
         $student_results = get_student_results_by_registration_number($registration_number);
 
         if ($student_details_esar && $student_results) {
-            // Display student personal information first
-            echo '<div id="student_result_personal_information">';
-            echo '<p>Student Name: ' . esc_html($student_details_esar->student_name) . '</p>';
-            echo '<p>Registration Number: ' . esc_html($student_details_esar->student_registration_number) . '</p>';
-            echo '<p>Roll Number: ' . esc_html($student_details_esar->student_roll_number) . '</p>';
+            echo '<div id="dm_result_sheed_box">';
+            echo '<div class="institute_logo">';
+            echo '<img src="' . esc_url($institute_logo) . '"/>';
             echo '</div>';
+            echo '<div>';
+            echo '<h3>SSC Equivalent Examination - 2023</h3>';
+            echo '</div>';
+            // Display student personal information and overall results in the same table
+            echo '<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">';
+            // echo '<thead style="background-color: #f2f2f2;">';
+            // echo '<tr>';
+            // echo '<th style="border: 1px solid #ddd; padding: 8px;">Info</th>';
+            // echo '<th style="border: 1px solid #ddd; padding: 8px;">Details</th>';
+            // echo '</tr>';
+            // echo '</thead>';
+            echo '<tbody>';
+
+            // Display student personal information
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Roll Number</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_roll_number) . '</td>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Registration Number</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_registration_number) . '</td>';
+            echo '</tr>';
+
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Name of Student</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_name) . '</td>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Fathers Name</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_father_name) . '</td>';
+            echo '</tr>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Mothers Name</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_mother_name) . '</td>';
+            echo '</tr>';
+            
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Gender</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_gender) . '</td>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Group</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->category) . '</td>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Session</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_session) . '</td>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Date of Birth</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . esc_html($student_details_esar->student_birthdate) . '</td>';
+            echo '</tr>';
 
             // Calculate overall results
             $hasFailed = false;
@@ -308,16 +366,25 @@ function display_student_results_shortcode() {
             $overall_gpa = ($num_subjects > 0) ? ($overall_gpa_points / $num_subjects) : 0;
             $passed = (!$hasFailed);
 
-            // Display overall results, showing "Failed" if any subject has failed
-            echo '<h3>Overall Results:</h3>';
-            echo '<p>Overall GPA: ' . number_format($overall_gpa, 2) . '</p>';
-            echo '<p>Status: ' . ($passed ? 'Passed' : 'Failed') . '</p>';
+            // Display overall results in the same table
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Result (GPA)</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">' . number_format($overall_gpa, 2) . '</td>';
+            echo '</tr>';
+            echo '<tr>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px;">Status</td>';
+            echo '<td style="border: 1px solid #ddd; padding: 8px; font-weight:600; color: ' . ($passed ? 'green' : 'red') . ';">' . ($passed ? 'Passed' : 'Failed') . '</td>';
+            echo '</tr>';
+
+            // Close the combined table
+            echo '</tbody>';
+            echo '</table>';
 
             // Display subject list
-            echo '<h3>Subject Results:</h3>';
+            echo '<h5 style="text-align:center;margin-top:50px;">Subject-Wise Grade/Marks</h5>';
             echo '<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">';
             echo '<thead style="background-color: #f2f2f2;">';
-            echo '<tr>';
+            echo '<tr style="background: #32AE56;color:#fff">';
             echo '<th style="border: 1px solid #ddd; padding: 8px;">Serial Number</th>';
             echo '<th style="border: 1px solid #ddd; padding: 8px;">Subject Name</th>';
             echo '<th style="border: 1px solid #ddd; padding: 8px;">Grade</th>';
@@ -352,6 +419,7 @@ function display_student_results_shortcode() {
 
             echo '</tbody>';
             echo '</table>';
+            echo '</div>';
         } else {
             echo '<p>No student found or no results available.</p>';
         }
@@ -371,6 +439,7 @@ function display_student_results_shortcode() {
     echo '</div>';
     return ob_get_clean();
 }
+
 
 
 

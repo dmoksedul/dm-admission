@@ -1089,3 +1089,22 @@ li#toplevel_page_dm_admission {
     visibility: visible !important;
   }
 }
+
+div#dm_result_sheed_box {
+  max-width: 800px;
+  margin: auto;
+  padding: 0px 20px;
+  border: 1px solid #00000005;
+  border-radius: 2px;
+  padding-bottom: 30px;
+  .institute_logo {
+    padding: 30px 0px;
+    margin-bottom: 0px;
+  }
+  h3 {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+}
