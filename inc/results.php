@@ -261,7 +261,6 @@ function display_student_results_shortcode() {
     ob_start();
     // Content to display on the page
     echo '<div class="wrap" id="dm_result_sheed_box">';
-    echo '<h2>Search Student Results</h2>';
 
     if (isset($_POST['search_student'])) {
         $registration_number = sanitize_text_field($_POST['student_registration_number']);
@@ -280,7 +279,7 @@ function display_student_results_shortcode() {
 
             echo '<h3>Subject Results:</h3>';
             echo '<table collapse style="border-collapse: collapse; width: 100%;">';
-            echo '<thead><tr><th>Serial Number</th><th>Subject Name</th><th>Grade</th></tr></thead>';
+            echo '<thead><tr><th>Serial Number</th><th>Subject Code</th><th>Subject Name</th><th>Grade</th></tr></thead>';
             echo '<tbody>';
 
             $hasFailed = false; // Flag to track if any subject has failed
@@ -319,6 +318,7 @@ function display_student_results_shortcode() {
                 // Display subject details in a table row, including serial number
                 echo '<tr>';
                 echo '<td>' . $serial_number . '</td>';
+                echo '<td>' . $subject_key . '</td>'; // Subject Code
                 echo '<td>' . $subject_name . '</td>';
                 echo '<td>' . $grade . '</td>';
                 echo '</tr>';
@@ -344,13 +344,15 @@ function display_student_results_shortcode() {
         }
     } else {
         // Display the search form
+        echo '<div id="dm_result_search_box">';
         echo '<form method="post" action="">';
         echo '<label for="student_registration_number">Registration Number:</label>';
-        echo '<input type="text" name="student_registration_number" id="student_registration_number"><br>';
+        echo '<input type="text" name="student_registration_number" id="student_registration_number" required><br>';
         echo '<label for="student_roll_number">Roll Number:</label>';
-        echo '<input type="text" name="student_roll_number" id="student_roll_number"><br>';
+        echo '<input type="text" name="student_roll_number" id="student_roll_number" required><br>';
         echo '<input type="submit" name="search_student" value="Search">';
         echo '</form>';
+        echo '</div>';
     }
 
     echo '</div>';
