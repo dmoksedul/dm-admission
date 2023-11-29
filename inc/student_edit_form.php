@@ -43,6 +43,7 @@ $student_parent_address = sanitize_textarea_field($_POST['student_parent_address
 $student_parent_city = sanitize_text_field($_POST['student_parent_city']);
 $student_parent_state = sanitize_text_field($_POST['student_parent_state']);
 $student_registration_number = sanitize_text_field($_POST['student_registration_number']);
+$student_roll_number = sanitize_text_field($_POST['student_roll_number']);
 
 // Now, you have sanitized and formatted values for each of these variables, and you can use them in your application as needed.
 
@@ -84,6 +85,7 @@ $student_registration_number = sanitize_text_field($_POST['student_registration_
     'student_parent_city' => $student_parent_city,
     'student_parent_state' => $student_parent_state,
     'student_registration_number' => $student_registration_number,
+    'student_roll_number' => $student_roll_number,
 );
 
 
@@ -131,6 +133,10 @@ $student = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %
                     <div class="input_box">
                         <label for="student_registration_number">Student Registration Number:</label>
                         <input type="text" name="student_registration_number" id="student_registration_number" value="<?php echo esc_attr($student->student_registration_number); ?>" required>
+                    </div>
+                    <div class="input_box">
+                        <label for="student_roll_number">Student Roll Number:</label>
+                        <input type="text" name="student_roll_number" id="student_roll_number" value="<?php echo esc_attr($student->student_roll_number); ?>" required>
                     </div>
                     <!-- Student ID Number -->
                     <div class="input_box">

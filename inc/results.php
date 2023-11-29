@@ -273,72 +273,85 @@ function display_student_results_shortcode() {
         $student_results = get_student_results_by_registration_number($registration_number);
 
         if ($student_details_esar && $student_results) {
+            // Display student personal information first
+            echo '<div id="student_result_personal_information">';
             echo '<p>Student Name: ' . esc_html($student_details_esar->student_name) . '</p>';
             echo '<p>Registration Number: ' . esc_html($student_details_esar->student_registration_number) . '</p>';
             echo '<p>Roll Number: ' . esc_html($student_details_esar->student_roll_number) . '</p>';
+            echo '</div>';
 
-            echo '<h3>Subject Results:</h3>';
-            echo '<table collapse style="border-collapse: collapse; width: 100%;">';
-            echo '<thead><tr><th>Serial Number</th><th>Subject Code</th><th>Subject Name</th><th>Grade</th></tr></thead>';
-            echo '<tbody>';
-
-            $hasFailed = false; // Flag to track if any subject has failed
-
+            // Calculate overall results
+            $hasFailed = false;
             $overall_gpa_points = 0;
             $num_subjects = 0;
-
             $serial_number = 1;
 
             foreach ($student_results as $subject_key => $subject_mark) {
-                // Skip subjects with blank marks
                 if (empty($subject_mark)) {
                     continue;
                 }
 
-                // Calculate the grade based on marks
                 $grade = calculate_grade($subject_mark);
 
-                // If the grade is "F," set the flag to true
                 if ($grade == 'F') {
                     $hasFailed = true;
                 }
 
-                // Calculate GPA points based on the grade
                 $gpa_points = calculate_gpa_points($grade);
 
-                // Sum GPA points for all subjects
                 $overall_gpa_points += $gpa_points;
                 $num_subjects++;
-
-                // Convert the subject key to a human-readable subject name
-                $subject_name = ucfirst(str_replace('_', ' ', $subject_key));
-                // Remove "Subject" text
-                $subject_name = str_replace('Subject ', '', $subject_name);
-
-                // Display subject details in a table row, including serial number
-                echo '<tr>';
-                echo '<td>' . $serial_number . '</td>';
-                echo '<td>' . $subject_key . '</td>'; // Subject Code
-                echo '<td>' . $subject_name . '</td>';
-                echo '<td>' . $grade . '</td>';
-                echo '</tr>';
 
                 $serial_number++;
             }
 
-            // Calculate the overall GPA by taking the average of GPA points
             $overall_gpa = ($num_subjects > 0) ? ($overall_gpa_points / $num_subjects) : 0;
-
-            // Determine if the student passed or failed based on the flag
-            $passed = (!$hasFailed); // Student passes if no subject has an "F" grade
-
-            echo '</tbody>';
-            echo '</table>';
+            $passed = (!$hasFailed);
 
             // Display overall results, showing "Failed" if any subject has failed
             echo '<h3>Overall Results:</h3>';
             echo '<p>Overall GPA: ' . number_format($overall_gpa, 2) . '</p>';
             echo '<p>Status: ' . ($passed ? 'Passed' : 'Failed') . '</p>';
+
+            // Display subject list
+            echo '<h3>Subject Results:</h3>';
+            echo '<table style="border-collapse: collapse; width: 100%; border: 1px solid #ddd;">';
+            echo '<thead style="background-color: #f2f2f2;">';
+            echo '<tr>';
+            echo '<th style="border: 1px solid #ddd; padding: 8px;">Serial Number</th>';
+            echo '<th style="border: 1px solid #ddd; padding: 8px;">Subject Name</th>';
+            echo '<th style="border: 1px solid #ddd; padding: 8px;">Grade</th>';
+            echo '</tr>';
+            echo '</thead>';
+            echo '<tbody>';
+
+            $serial_number = 1;
+
+            foreach ($student_results as $subject_key => $subject_mark) {
+                if (empty($subject_mark)) {
+                    continue;
+                }
+
+                $grade = calculate_grade($subject_mark);
+                $gpa_points = calculate_gpa_points($grade);
+
+                $overall_gpa_points += $gpa_points;
+                $num_subjects++;
+
+                $subject_name = ucfirst(str_replace('_', ' ', $subject_key));
+                $subject_name = str_replace('Subject ', '', $subject_name);
+
+                echo '<tr>';
+                echo '<td style="border: 1px solid #ddd; padding: 8px;">' . $serial_number . '</td>';
+                echo '<td style="border: 1px solid #ddd; padding: 8px;">' . $subject_name . '</td>';
+                echo '<td style="border: 1px solid #ddd; padding: 8px;">' . $grade . '</td>';
+                echo '</tr>';
+
+                $serial_number++;
+            }
+
+            echo '</tbody>';
+            echo '</table>';
         } else {
             echo '<p>No student found or no results available.</p>';
         }
@@ -347,9 +360,9 @@ function display_student_results_shortcode() {
         echo '<div id="dm_result_search_box">';
         echo '<form method="post" action="">';
         echo '<label for="student_registration_number">Registration Number:</label>';
-        echo '<input type="text" name="student_registration_number" id="student_registration_number" required><br>';
+        echo '<input type="text" name="student_registration_number" id="student_registration_number"><br>';
         echo '<label for="student_roll_number">Roll Number:</label>';
-        echo '<input type="text" name="student_roll_number" id="student_roll_number" required><br>';
+        echo '<input type="text" name="student_roll_number" id="student_roll_number"><br>';
         echo '<input type="submit" name="search_student" value="Search">';
         echo '</form>';
         echo '</div>';
@@ -358,6 +371,7 @@ function display_student_results_shortcode() {
     echo '</div>';
     return ob_get_clean();
 }
+
 
 
 // Register shortcode to display student results
